@@ -1,0 +1,95 @@
+name: tintpin14_app
+description: "A new Flutter project."
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.4
+
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_screenutil: ^5.9.3
+  auto_animated: ^3.2.0
+  get_storage: ^2.1.1
+  get: ^4.7.2
+  intl: ^0.20.2
+  url_launcher: ^6.3.1
+  dotlottie_loader: ^0.0.5
+  lottie: ^3.3.1
+  rxdart: ^0.28.0
+  dio: ^5.8.0+1
+  get_it: ^8.0.3
+  dropdown_button2: ^2.3.9
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
+  provider: ^6.1.5
+  pinput: ^5.0.1
+  custom_navigation_bar: ^0.8.2
+  image_picker: ^1.1.2
+  camera: ^0.11.0+1
+  permission_handler: ^11.0.0
+
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_gen_runner:
+  build_runner: ^2.4.6
+
+flutter_gen:
+  output: lib/gen/ 
+  line_length: 80
+
+    # Optional
+  integrations:
+    flutter_svg: false
+    rive: false
+    lottie: false
+
+  colors:
+    inputs:
+      - assets/color/colors.xml
+
+    outputs:
+      class_name: AppColors
+  
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/lottie/
+    - assets/images/
+  
+  fonts:
+   
+    - family: Poppins
+      fonts:
+        - asset:  assets/fonts/Poppins-Regular.ttf
+    # - family: DMSans
+    #   fonts:
+    #     - asset:  assets/fonts/DMSans-Regular.ttf
+    # - family: Chakra Petch
+    #   fonts:
+    #     - asset:  assets/fonts/ChakraPetch-Regular.ttf
+    # - family: NunitoSans
+    #   fonts:
+    #     - asset:  assets/fonts/NunitoSans-Regular.ttf
+    - family: HelveticaNeue
+      fonts:
+        - asset:  assets/fonts/HelveticaNeueLight.ttf
+    - family: Arial
+      fonts:
+      - asset:  assets/fonts/ARIAL.ttf
