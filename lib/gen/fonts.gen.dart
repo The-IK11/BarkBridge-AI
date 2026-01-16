@@ -17,6 +17,9 @@ class FontFamily {
   /// Font family: HelveticaNeue
   static const String helveticaNeue = 'HelveticaNeue';
 
+  /// Font family: Manrope
+  static const String manrope = 'Manrope';
+
   /// Font family: Poppins
   static const String poppins = 'Poppins';
 }

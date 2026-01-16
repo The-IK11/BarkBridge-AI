@@ -1,5 +1,6 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,6 +16,7 @@ import 'networks/dio/dio.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   //await _requestPermissions();
   await GetStorage.init();
   diSetup();
@@ -82,7 +84,16 @@ class UtilScreenMobile extends StatelessWidget {
             ),
             debugShowCheckedModeBanner: false,
             builder: (context, widget) {
-              return MediaQuery(data: MediaQuery.of(context), child: widget!);
+              //return MediaQuery(data: MediaQuery.of(context), child: widget!);
+              return AnnotatedRegion<SystemUiOverlayStyle>(
+                value: const SystemUiOverlayStyle(
+                  statusBarColor: Colors.transparent,
+                  statusBarIconBrightness:
+                      Brightness.light, // Android: White icons
+                  statusBarBrightness: Brightness.dark, // iOS: White icons
+                ),
+                child: MediaQuery(data: MediaQuery.of(context), child: widget!),
+              );
             },
             navigatorKey: NavigationService.navigatorKey,
             onGenerateRoute: RouteGenerator.generateRoute,

@@ -73,6 +73,7 @@ class _AuthCommonTextFormFieldState extends State<AuthCommonTextFormField> {
       constraints: BoxConstraints(minHeight: 48.h),
       width: widget.width ?? double.infinity,
       child: TextFormField(
+        cursorColor: AppColors.cB8B8C3,
         onChanged: (value) {
           final error = widget.validator?.call(value);
           setState(() => hasError = error != null);
@@ -84,7 +85,7 @@ class _AuthCommonTextFormFieldState extends State<AuthCommonTextFormField> {
           fontSize: 16.sp,
           fontWeight: FontWeight.w500,
           color:
-              widget.textColor ?? (hasError ? Colors.red : AppColors.c000000),
+              widget.textColor ?? (hasError ? Colors.red : AppColors.cB8B8C3),
         ),
         readOnly: !widget.isEnabled,
         autovalidateMode:
@@ -113,7 +114,7 @@ class _AuthCommonTextFormFieldState extends State<AuthCommonTextFormField> {
           filled: true,
           hintText: widget.hintText,
           hintStyle: TextFontStyle.textStylec14c02505FChakraPetch700.copyWith(
-            color: widget.hintTextColor ?? AppColors.c838383,
+            color: widget.hintTextColor ?? AppColors.cB8B8C3,
           ),
           suffixIcon: widget.isObscure
               ? IconButton(

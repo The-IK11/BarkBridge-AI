@@ -22,7 +22,7 @@ final class WelcomeScreen extends StatelessWidget {
               //   size: 150.sp,
               //   color: AppColors.allPrimaryColor,
               // ),
-              child: Image.asset(Assets.icons.welcomeLogo.path),
+              child: Image.asset(Assets.icons.googleIcon.path),
             ),
           ),
         ),

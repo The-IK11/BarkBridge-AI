@@ -278,3 +278,173 @@
 //     return Scaffold();
 //   }
 // }
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tintpin14_app/common_widgets/glow_background.dart';
+import 'package:tintpin14_app/gen/colors.gen.dart';
+// Import your custom clipper and bar here
+
+class NavigationScreen extends StatefulWidget {
+  const NavigationScreen({super.key});
+
+  @override
+  State<NavigationScreen> createState() => _NavigationScreenState();
+}
+
+class _NavigationScreenState extends State<NavigationScreen> {
+  int _selectedIndex = 1; // Start with Home (Center) selected
+
+  // List of screens for the navigation
+  final List<Widget> _screens = [
+    const Center(
+      child: Text("Analytics Screen", style: TextStyle(color: Colors.white)),
+    ),
+    const Center(
+      child: Text("Home Screen", style: TextStyle(color: Colors.white)),
+    ),
+    const Center(
+      child: Text("Profile Screen", style: TextStyle(color: Colors.white)),
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GlowBackground(
+      // backgroundColor: const Color(0xFF050511),
+      // extendBody:
+      //     true, // This allows the screen content to go behind the Nav Bar
+      child: _screens[_selectedIndex],
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class CustomBottomNavBar extends StatelessWidget {
+  final int currentIndex;
+  final Function(int) onTap;
+
+  const CustomBottomNavBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 110.h,
+      color: Colors.transparent,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          // 1. The Wavy Background
+          ClipPath(
+            clipper: BottomNavClipper(),
+            child: Container(
+              height: 100.h,
+              color: AppColors.c0E1D50, // Dark Navy
+              padding: EdgeInsets.symmetric(horizontal: 45.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Analytics Icon
+                  GestureDetector(
+                    onTap: () => onTap(0),
+                    child: Icon(
+                      Icons.analytics_outlined,
+                      color: currentIndex == 0 ? Colors.white : Colors.white38,
+                      size: 28.sp,
+                    ),
+                  ),
+                  // Profile Icon
+                  GestureDetector(
+                    onTap: () => onTap(2),
+                    child: Icon(
+                      Icons.person_outline,
+                      color: currentIndex == 2 ? Colors.white : Colors.white38,
+                      size: 28.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // 2. The Floating Home Button (Diamond Shape)
+          Positioned(
+            top: 5.h,
+            left: 190.w,
+            child: GestureDetector(
+              onTap: () => onTap(1),
+              child: Container(
+                width: 65.w,
+                height: 65.w,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF2E3BFF).withOpacity(0.4),
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF2E3BFF), Color(0xFF0015FF)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(22.r),
+                ),
+                // Rotate the container to create the Diamond
+                transform: Matrix4.rotationZ(0.785),
+                child: Transform.rotate(
+                  angle: -0.785, // Rotate icon back so it's upright
+                  child: Icon(
+                    Icons.home_filled,
+                    color: Colors.white,
+                    size: 32.sp,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BottomNavClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    // Must be named getClip
+    Path path = Path();
+    path.moveTo(0, 25);
+
+    // Left Peak
+    path.quadraticBezierTo(size.width * 0.20, 0, size.width * 0.35, 25);
+
+    // The Center Dip (Where the Diamond sits)
+    path.quadraticBezierTo(size.width * 0.5, 55, size.width * 0.65, 25);
+
+    // Right Peak
+    path.quadraticBezierTo(size.width * 0.80, 0, size.width, 25);
+
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
