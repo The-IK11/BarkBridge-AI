@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
 import 'package:tintpin14_app/navigation_screen.dart';
 
@@ -26,11 +27,11 @@ class GlowBackground extends StatelessWidget {
           // 1. TOP RIGHT GLOW (Cyan/Blue)
           // ---------------------------------------------
           Positioned(
-            top: -100,
-            right: -100,
+            top: -100.h,
+            right: -100.w,
             child: Container(
-              width: 400,
-              height: 400,
+              width: 400.w,
+              height: 400.h,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
@@ -48,11 +49,11 @@ class GlowBackground extends StatelessWidget {
           // 2. BOTTOM LEFT GLOW (Deep Blue/Purple)
           // ---------------------------------------------
           Positioned(
-            bottom: -100,
-            left: -100,
+            bottom: -100.h,
+            left: -100.w,
             child: Container(
-              width: 400,
-              height: 400,
+              width: 400.w,
+              height: 400.h,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(

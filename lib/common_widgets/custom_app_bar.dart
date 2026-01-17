@@ -52,6 +52,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Assets.icons.backIcon.path,
                   width: 20.w,
                   height: 20.h,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -60,7 +61,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: TextFontStyle.textstyle16c6C757DHelveticalNenu400.copyWith(
-          color: AppColors.c000000,
+          color: AppColors.cFFFFFF,
           fontWeight: FontWeight.w600,
         ),
       ),

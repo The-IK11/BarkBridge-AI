@@ -486,4 +486,39 @@ class TextFontStyle {
     fontSize: 11.sp,
     fontWeight: FontWeight.w400,
   );
+  static final textstyle20cFFFFFFManrope600 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.cFFFFFF,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+  );
+  static final textstyle15c5465A6Manrope400 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.c5465A6,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static final textstyle16cFFFFFFManrope500 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.cFFFFFF,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static final textstyle16c5465A6Manrope500 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.c5465A6,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static final textstyle14cFFFFFFManrope500 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.cFFFFFF,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+  );
 }

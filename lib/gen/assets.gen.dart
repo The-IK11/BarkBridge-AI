@@ -62,6 +62,9 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/bird_ring.lottie
   String get birdRing => 'assets/lottie/bird_ring.lottie';
 
+  /// File path: assets/lottie/camera_background.json
+  String get cameraBackground => 'assets/lottie/camera_background.json';
+
   /// File path: assets/lottie/cart_is_empty.json
   String get cartIsEmpty => 'assets/lottie/cart_is_empty.json';
 
@@ -128,6 +131,7 @@ class $AssetsLottieGen {
     wedeAnimation,
     addToCart,
     birdRing,
+    cameraBackground,
     cartIsEmpty,
     emptyScreen,
     favourite,

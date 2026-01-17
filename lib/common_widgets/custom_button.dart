@@ -35,7 +35,7 @@ class CustomButton extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.r),
               ),
-              minimumSize: Size(double.infinity, 54.h),
+              minimumSize: Size(double.infinity, 50.h),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -45,8 +45,9 @@ class CustomButton extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   text,
-                  style: TextFontStyle.textStylec16c4B5563ChakraPetch400
-                      .copyWith(
+                  style:
+                      textStyle ??
+                      TextFontStyle.textStylec16c4B5563ChakraPetch400.copyWith(
                         color: AppColors.cFFFFFF,
                         fontWeight: FontWeight.bold,
                       ),
