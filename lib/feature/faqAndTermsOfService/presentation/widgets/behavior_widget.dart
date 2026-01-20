@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
+import 'package:tintpin14_app/feature/faqAndTermsOfService/presentation/widgets/accordion_item_widget.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
 
 class Behavior extends StatelessWidget {
@@ -9,13 +10,19 @@ class Behavior extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        settingContent("What is Bark Bridge?"),
+        // Using a custom widget to handle state
+        const AccordionItem(
+          title: "What is Bark Bridge?",
+          content:
+              "Expectation-Based Reason\nI enjoyed trying the app, but it didn't fully match my expectations or needs over time. As a result, I've decided to remove my account and explore other options.",
+          isExpanded: true, // Example: start first one as expanded
+        ),
         dividerLine(),
-        settingContent("Why does Bark Bridge need video?"),
+        const AccordionItem(title: "Why does Bark Bridge need video?"),
         dividerLine(),
-        settingContent("When should I use Bark Bridge?"),
+        const AccordionItem(title: "When should I use Bark Bridge?"),
         dividerLine(),
-        settingContent("What can Bridge tell me about my dog?"),
+        const AccordionItem(title: "What can Bridge tell me about my dog?"),
         dividerLine(),
       ],
     );

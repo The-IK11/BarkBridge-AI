@@ -5,7 +5,7 @@ import 'package:tintpin14_app/common_widgets/auth_common_text_form_field.dart';
 import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/feature/faqAndTermsOfService/presentation/widgets/behavior.dart';
+import 'package:tintpin14_app/feature/faqAndTermsOfService/presentation/widgets/behavior_widget.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
 
 class FaqScreen extends StatefulWidget {
@@ -86,17 +86,17 @@ class _FaqScreenState extends State<FaqScreen> {
                     child: _tabBarItem("Emotions", selectedTab == 2),
                   ),
                 ),
-                SizedBox(width: 5.w),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectedTab = 3;
-                      });
-                    },
-                    child: _tabBarItem("Video", selectedTab == 3),
-                  ),
-                ),
+                // SizedBox(width: 5.w),
+                // Expanded(
+                //   child: InkWell(
+                //     onTap: () {
+                //       setState(() {
+                //         selectedTab = 3;
+                //       });
+                //     },
+                //     child: _tabBarItem("Video", selectedTab == 3),
+                //   ),
+                // ),
                 SizedBox(width: 5.w),
                 Expanded(
                   child: InkWell(
