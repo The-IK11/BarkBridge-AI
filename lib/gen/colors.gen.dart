@@ -59,23 +59,38 @@ class AppColors {
   /// Color: #FF041228
   static const Color c041228 = Color(0xFF041228);
 
+  /// Color: #FF0454CB
+  static const Color c0454CB = Color(0xFF0454CB);
+
   /// Color: #FF071731
   static const Color c071731 = Color(0xFF071731);
 
   /// Color: #FF0A0A0A
   static const Color c0A0A0A = Color(0xFF0A0A0A);
 
+  /// Color: #FF0A1C3C
+  static const Color c0A1C3C = Color(0xFF0A1C3C);
+
   /// Color: #FF0D542B
   static const Color c0D542B = Color(0xFF0D542B);
 
+  /// Color: #FF0E1D50
+  static const Color c0E1D50 = Color(0xFF0E1D50);
+
   /// Color: #FF101828
   static const Color c101828 = Color(0xFF101828);
+
+  /// Color: #FF111F47
+  static const Color c111F47 = Color(0xFF111F47);
 
   /// Color: #FF121212
   static const Color c121212 = Color(0xFF121212);
 
   /// Color: #FF141B34
   static const Color c141B34 = Color(0xFF141B34);
+
+  /// Color: #FF141F2A
+  static const Color c141F2A = Color(0xFF141F2A);
 
   /// Color: #FF155DFC
   static const Color c155DFC = Color(0xFF155DFC);
@@ -92,6 +107,9 @@ class AppColors {
   /// Color: #FF1C398E
   static const Color c1C398E = Color(0xFF1C398E);
 
+  /// Color: #FF1D2031
+  static const Color c1D2031 = Color(0xFF1D2031);
+
   /// Color: #FF1E2939
   static const Color c1E2939 = Color(0xFF1E2939);
 
@@ -104,6 +122,24 @@ class AppColors {
   /// Color: #FF222222
   static const Color c222222 = Color(0xFF222222);
 
+  /// Color: #FF2400FF
+  static const Color c2400FF = Color(0xFF2400FF);
+
+  /// Color: #FF2401FF
+  static const Color c2401FF = Color(0xFF2401FF);
+
+  /// Color: #FF2606ED
+  static const Color c2606ED = Color(0xFF2606ED);
+
+  /// Color: #FF2707EE
+  static const Color c2707EE = Color(0xFF2707EE);
+
+  /// Color: #FF2709E0
+  static const Color c2709E0 = Color(0xFF2709E0);
+
+  /// Color: #FF282B3C
+  static const Color c282B3C = Color(0xFF282B3C);
+
   /// Color: #FF2B2C3F
   static const Color c2B2C3F = Color(0xFF2B2C3F);
 
@@ -112,6 +148,9 @@ class AppColors {
 
   /// Color: #FF2D3643
   static const Color c2D3643 = Color(0xFF2D3643);
+
+  /// Color: #FF2F29FF
+  static const Color c2F29FF = Color(0xFF2F29FF);
 
   /// Color: #FF3333338
   static const Color c333333 = Color(0xFF3333338);
@@ -127,6 +166,12 @@ class AppColors {
 
   /// Color: #FF3882F6
   static const Color c3882F6 = Color(0xFF3882F6);
+
+  /// Color: #FF3B53FF
+  static const Color c3B53FF = Color(0xFF3B53FF);
+
+  /// Color: #FF46558F
+  static const Color c46558F = Color(0xFF46558F);
 
   /// Color: #FF4A148C
   static const Color c4A148C = Color(0xFF4A148C);
@@ -152,6 +197,9 @@ class AppColors {
   /// Color: #FF53EAFD
   static const Color c53EAFD = Color(0xFF53EAFD);
 
+  /// Color: #FF5465A6
+  static const Color c5465A6 = Color(0xFF5465A6);
+
   /// Color: #FF5A9AE6
   static const Color c5A9AE6 = Color(0xFF5A9AE6);
 
@@ -163,6 +211,9 @@ class AppColors {
 
   /// Color: #FF615FFF
   static const Color c615FFF = Color(0xFF615FFF);
+
+  /// Color: #FF626262
+  static const Color c626262 = Color(0xFF626262);
 
   /// Color: #FF6A1B9A
   static const Color c6A1B9A = Color(0xFF6A1B9A);
@@ -188,6 +239,9 @@ class AppColors {
   /// Color: #FF74A8E4
   static const Color c74A8E4 = Color(0xFF74A8E4);
 
+  /// Color: #FF778DFF
+  static const Color c778DFF = Color(0xFF778DFF);
+
   /// Color: #FF787878
   static const Color c787878 = Color(0xFF787878);
 
@@ -211,6 +265,12 @@ class AppColors {
 
   /// Color: #FF861043
   static const Color c861043 = Color(0xFF861043);
+
+  /// Color: #FF86A1FF
+  static const Color c86A1FF = Color(0xFF86A1FF);
+
+  /// Color: #FF898996
+  static const Color c898996 = Color(0xFF898996);
 
   /// Color: #FF8A8B96
   static const Color c8A8B96 = Color(0xFF8A8B96);
@@ -242,6 +302,9 @@ class AppColors {
   /// Color: #FF9F7AEA
   static const Color c9F7AEA = Color(0xFF9F7AEA);
 
+  /// Color: #FFA2A3A9
+  static const Color cA2A3A9 = Color(0xFFA2A3A9);
+
   /// Color: #FFA3004C
   static const Color cA3004C = Color(0xFFA3004C);
 
@@ -257,6 +320,12 @@ class AppColors {
   /// Color: #FFB794F4
   static const Color cB794F4 = Color(0xFFB794F4);
 
+  /// Color: #FFB8B8C3
+  static const Color cB8B8C3 = Color(0xFFB8B8C3);
+
+  /// Color: #FFB8BBCC
+  static const Color cB8BBCC = Color(0xFFB8BBCC);
+
   /// Color: #FFB9F8CF
   static const Color cB9F8CF = Color(0xFFB9F8CF);
 
@@ -266,6 +335,9 @@ class AppColors {
   /// Color: #FFC27AFF
   static const Color cC27AFF = Color(0xFFC27AFF);
 
+  /// Color: #FFC2C2C2
+  static const Color cC2C2C2 = Color(0xFFC2C2C2);
+
   /// Color: #FFD1D5DB
   static const Color cD1D5DB = Color(0xFFD1D5DB);
 
@@ -274,6 +346,9 @@ class AppColors {
 
   /// Color: #FFD4E5F8
   static const Color cD4E5F8 = Color(0xFFD4E5F8);
+
+  /// Color: #FFD9DAE4
+  static const Color cD9DAE4 = Color(0xFFD9DAE4);
 
   /// Color: #FFDAA356
   static const Color cDAA356 = Color(0xFFDAA356);
@@ -311,6 +386,9 @@ class AppColors {
   /// Color: #FFE60076
   static const Color cE60076 = Color(0xFFE60076);
 
+  /// Color: #FFE6E6E8
+  static const Color cE6E6E8 = Color(0xFFE6E6E8);
+
   /// Color: #FFE6F0FA
   static const Color cE6F0FA = Color(0xFFE6F0FA);
 
@@ -326,8 +404,14 @@ class AppColors {
   /// Color: #FFE8F4FD
   static const Color cE8F4FD = Color(0xFFE8F4FD);
 
+  /// Color: #FFE93820
+  static const Color cE93820 = Color(0xFFE93820);
+
   /// Color: #FFE9F6FE
   static const Color cE9F6FE = Color(0xFFE9F6FE);
+
+  /// Color: #FFEA2B21
+  static const Color cEA2B21 = Color(0xFFEA2B21);
 
   /// Color: #FFEC4899
   static const Color cEC4899 = Color(0xFFEC4899);
@@ -389,6 +473,9 @@ class AppColors {
   /// Color: #FFF6339A
   static const Color cF6339A = Color(0xFFF6339A);
 
+  /// Color: #FFF6982B
+  static const Color cF6982B = Color(0xFFF6982B);
+
   /// Color: #FFF6F6F6
   static const Color cF6F6F6 = Color(0xFFF6F6F6);
 
@@ -424,6 +511,9 @@ class AppColors {
 
   /// Color: #FFFCFCFC
   static const Color cFCFCFC = Color(0xFFFCFCFC);
+
+  /// Color: #FFFD5900
+  static const Color cFD5900 = Color(0xFFFD5900);
 
   /// Color: #FFFDA5D5
   static const Color cFDA5D5 = Color(0xFFFDA5D5);

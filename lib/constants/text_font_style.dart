@@ -15,6 +15,7 @@ class TextFontStyle {
     'Inter',
     'Roboto',
     'Noto Sans',
+    'Manrope',
   ];
 
   static const String _fontFamilyChakraPetch = "Chakra Petch";
@@ -22,6 +23,7 @@ class TextFontStyle {
   static const String _fontFamilyUrbanist = "Urbanist";
   static const String _fontFamilyHelveticaNeue = "HelveticaNeue";
   static const String _fontFamilyArial = "Arial";
+  static const String _fontFamilyManrope = "Manrope";
 
   static final textStylec16c4B5563ChakraPetch400 = TextStyle(
     fontFamily: _fontFamilyChakraPetch,
@@ -432,6 +434,90 @@ class TextFontStyle {
     fontFamily: _fontFamilyHelveticaNeue,
     fontFamilyFallback: _fontFamilyFallBackChakraPetch,
     color: AppColors.c6A7282,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static final textstyle28cFFFFFFManrope700 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.cFFFFFF,
+    fontSize: 28.sp,
+    fontWeight: FontWeight.w700,
+  );
+  static final textstyle16c898996Manrope400 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.c898996,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static final textstyle14c626262Manrope500 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.c626262,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static final textstyle16c2F29FFManrope400 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.c2F29FF,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static final textstyle14c898996Manrope400 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.c898996,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static final textstyle20cFFFFFFManrope700 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.cFFFFFF,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w700,
+  );
+  static final textstyle11cB8BBCCManrope400 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.cB8BBCC,
+    fontSize: 11.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static final textstyle20cFFFFFFManrope600 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.cFFFFFF,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+  );
+  static final textstyle15c5465A6Manrope400 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.c5465A6,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static final textstyle16cFFFFFFManrope500 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.cFFFFFF,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static final textstyle16c5465A6Manrope500 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.c5465A6,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static final textstyle14cFFFFFFManrope500 = TextStyle(
+    fontFamily: _fontFamilyManrope,
+    fontFamilyFallback: _fontFamilyFallBackChakraPetch,
+    color: AppColors.cFFFFFF,
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
   );

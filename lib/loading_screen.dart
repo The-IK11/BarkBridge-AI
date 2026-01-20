@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
+import 'package:tintpin14_app/feature/onboarding/screens/onboarding_screen.dart';
+import 'package:tintpin14_app/navigation_screen.dart';
 
 import 'constants/app_constants.dart';
 import 'feature/home/presentations/home_screen.dart';
@@ -51,8 +54,8 @@ class _LoadingState extends State<Loading> {
       return isLoggedIn
           ? const HomeScreen()
           : appData.read(kKeyFirstTime)
-          ? const WelcomeScreen()
-          : const WelcomeScreen();
+          ? const OnboardingScreen()
+          : const NavigationScreen();
     }
   }
 }
