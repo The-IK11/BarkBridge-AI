@@ -3,8 +3,11 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/state_manager.dart';
 import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
+import 'package:tintpin14_app/feature/home/presentations/ai_response_screen.dart';
 import 'package:tintpin14_app/feature/home/presentations/widgets/speedometer_guage.dart';
 import 'package:tintpin14_app/navigation_screen.dart';
 
@@ -113,6 +116,7 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
                       "Upload",
                       style: TextStyle(color: Colors.white54, fontSize: 12.sp),
                     ),
+                    SizedBox(height: 5.h),
                     Text(
                       "$_percentage%",
                       style: TextStyle(
@@ -135,16 +139,28 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
             height: 50.h,
             margin: EdgeInsets.only(bottom: 120.h), // Space for Nav Bar
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(() => AiResponseScreen());
+              },
               style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Color(0xFF2E3BFF), width: 1.5),
+                side: BorderSide(
+                  color: _percentage == 100
+                      ? Color(0xFF2E3BFF)
+                      : Color(0xFF2E3BFF).withAlpha(50),
+                  width: 1.5,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.r),
                 ),
               ),
               child: Text(
                 "Let's go",
-                style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                style: TextStyle(
+                  color: _percentage == 100
+                      ? Colors.white
+                      : Colors.white.withAlpha(30),
+                  fontSize: 16.sp,
+                ),
               ),
             ),
           ),

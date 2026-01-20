@@ -7,6 +7,7 @@ import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
+import 'package:tintpin14_app/feature/profile/presentation/screens/account_details_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/setting_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/widgets/upgradePlanBanner.dart';
@@ -117,15 +118,20 @@ class ProfileScreen extends StatelessWidget {
               ),
               //SizedBox(height: 25.h),
               dividerLine(),
-              ListTile(
-                leading: Text(
-                  "Account Details",
-                  style: TextFontStyle.textstyle16cFFFFFFManrope500,
-                ),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 20.sp,
-                  color: AppColors.c5465A6,
+              InkWell(
+                onTap: () {
+                  Get.to(() => AccountDetailsScreen());
+                },
+                child: ListTile(
+                  leading: Text(
+                    "Account Details",
+                    style: TextFontStyle.textstyle16cFFFFFFManrope500,
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20.sp,
+                    color: AppColors.c5465A6,
+                  ),
                 ),
               ),
               dividerLine(),

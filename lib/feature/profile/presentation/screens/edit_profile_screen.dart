@@ -7,6 +7,7 @@ import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/change_password_screen.dart';
+import 'package:tintpin14_app/gen/assets.gen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
 
 class EditProfileScreen extends StatelessWidget {
@@ -24,6 +25,46 @@ class EditProfileScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kToolbarHeight + 20.h),
+
+            Center(
+              child: Stack(
+                children: [
+                  Container(
+                    height: 123.h,
+                    width: 123.w,
+                    padding: EdgeInsets.all(10.sp),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.c86A1FF.withAlpha(50),
+                    ),
+
+                    child: ClipOval(
+                      child: Image.asset(
+                        Assets.images.errorImage.path,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    right: 5,
+                    child: Container(
+                      height: 30.h,
+                      width: 30.w,
+                      decoration: BoxDecoration(
+                        color: AppColors.c2606ED,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.camera_alt_outlined,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
             // Email Field
             _buildLabel("Your Name"),
             AuthCommonTextFormField(

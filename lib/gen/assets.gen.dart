@@ -26,6 +26,10 @@ class $AssetsIconsGen {
   AssetGenImage get backIcon =>
       const AssetGenImage('assets/icons/backIcon.png');
 
+  /// File path: assets/icons/button_icon.png
+  AssetGenImage get buttonIcon =>
+      const AssetGenImage('assets/icons/button_icon.png');
+
   /// File path: assets/icons/google_icon.png
   AssetGenImage get googleIcon =>
       const AssetGenImage('assets/icons/google_icon.png');
@@ -35,6 +39,7 @@ class $AssetsIconsGen {
     appbarBackIcon,
     appleIcon,
     backIcon,
+    buttonIcon,
     googleIcon,
   ];
 }

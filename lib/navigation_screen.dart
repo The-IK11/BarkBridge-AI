@@ -282,6 +282,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
+import 'package:tintpin14_app/feature/home/presentations/ai_response_screen.dart';
 import 'package:tintpin14_app/feature/home/presentations/home_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/profile_screen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
@@ -299,9 +300,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   // List of screens for the navigation
   final List<Widget> _screens = [
-    const Center(
-      child: Text("Analytics Screen", style: TextStyle(color: Colors.white)),
-    ),
+    const AiResponseScreen(),
     HomeScreen(),
     ProfileScreen(),
   ];

@@ -71,8 +71,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               },
             ),
             SizedBox(height: 20.h),
-            HexagonButton(
-              onPressed: () {
+            // HexagonButton(
+            //   onPressed: () {
+            //     setState(() {
+            //       if (currentTab < 3) {
+            //         currentTab++;
+            //       } else {
+            //         Get.to(() => NavigationScreen());
+            //       }
+            //     });
+            //   },
+            // ),
+            InkWell(
+              onTap: () {
                 setState(() {
                   if (currentTab < 3) {
                     currentTab++;
@@ -81,6 +92,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   }
                 });
               },
+              child: Image.asset(
+                Assets.icons.buttonIcon.path,
+                width: 85.w,
+                height: 85.h,
+              ),
             ),
 
             SizedBox(height: 50.h),
