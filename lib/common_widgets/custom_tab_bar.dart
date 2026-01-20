@@ -1,0 +1,40 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tintpin14_app/gen/colors.gen.dart';
+
+class CustomTabBar extends StatelessWidget {
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+  final int length;
+
+  const CustomTabBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+    this.length = 4,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: List.generate(
+        length,
+        (index) => Expanded(
+          child: GestureDetector(
+            onTap: () => onTap(index),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 4.w),
+              height: index == currentIndex ? 7.h : 3.h,
+              decoration: BoxDecoration(
+                color: index == currentIndex
+                    ? AppColors.cFFFFFF
+                    : AppColors.c111F47,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

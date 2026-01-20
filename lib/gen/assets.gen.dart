@@ -46,8 +46,35 @@ class $AssetsImagesGen {
   AssetGenImage get errorImage =>
       const AssetGenImage('assets/images/error_image.png');
 
+  /// File path: assets/images/onboarding1_image.png
+  AssetGenImage get onboarding1Image =>
+      const AssetGenImage('assets/images/onboarding1_image.png');
+
+  /// File path: assets/images/onboarding2_image.png
+  AssetGenImage get onboarding2Image =>
+      const AssetGenImage('assets/images/onboarding2_image.png');
+
+  /// File path: assets/images/onboarding3_image.png
+  AssetGenImage get onboarding3Image =>
+      const AssetGenImage('assets/images/onboarding3_image.png');
+
+  /// File path: assets/images/onboarding4_image.png
+  AssetGenImage get onboarding4Image =>
+      const AssetGenImage('assets/images/onboarding4_image.png');
+
+  /// File path: assets/images/splash_image.png
+  AssetGenImage get splashImage =>
+      const AssetGenImage('assets/images/splash_image.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [errorImage];
+  List<AssetGenImage> get values => [
+    errorImage,
+    onboarding1Image,
+    onboarding2Image,
+    onboarding3Image,
+    onboarding4Image,
+    splashImage,
+  ];
 }
 
 class $AssetsLottieGen {

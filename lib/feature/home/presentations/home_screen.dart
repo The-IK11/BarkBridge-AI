@@ -1,11 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/state_manager.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
+import 'package:tintpin14_app/feature/home/presentations/file_upload_speed_screen.dart';
 import 'package:tintpin14_app/gen/assets.gen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:image_picker/image_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +21,36 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // 1. Create an instance of ImagePicker
+  final ImagePicker _picker = ImagePicker();
+
+  // 2. Main Logic Function
+  Future<void> _handleVideoSelection(
+    BuildContext context,
+    ImageSource source,
+  ) async {
+    try {
+      // Pick video based on source (Camera or Gallery)
+      final XFile? video = await _picker.pickVideo(
+        source: source,
+        maxDuration: const Duration(minutes: 5), // Optional limit
+      );
+
+      if (video != null) {
+        // Close the dialog box first
+        if (mounted) Navigator.of(context).pop();
+
+        // Navigate to the next screen and pass the file
+        // Ensure FileUploadSpeedScreen accepts a 'File?' or 'String path'
+        print(video.path);
+        Get.to(() => FileUploadSpeedScreen(videoFile: File(video.path)));
+      }
+    } catch (e) {
+      debugPrint("Error picking video: $e");
+      // Optional: Show a snackbar if permission is denied
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
@@ -141,7 +177,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: AppColors.cFFFFFF,
                         ),
                         text: "Upload Video",
-                        onPressed: () {},
+                        onPressed: () {
+                          _handleVideoSelection(context, ImageSource.gallery);
+                        },
                       ),
                     ),
                     SizedBox(width: 10.w),
@@ -152,7 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          _handleVideoSelection(context, ImageSource.camera);
+                        },
                       ),
                     ),
                   ],
