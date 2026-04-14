@@ -14,7 +14,7 @@ PostRx postRegister = PostRx(
   empty: {},
   dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
   endPoint: Endpoints.postRegister(),
-  toastSetting: ToastSetting.error,
+  toastSetting: ToastSetting.both,
   onSuccess: (data) async {
     // User registration successful
   },
@@ -27,7 +27,7 @@ PostRx postRegisterOtpResend = PostRx(
   empty: {},
   dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
   endPoint: Endpoints.postRegisterOtpResend(),
-  toastSetting: ToastSetting.error,
+  toastSetting: ToastSetting.both,
   onSuccess: (data) async {
     // OTP resent successfully for registration
   },
@@ -40,7 +40,7 @@ PostRx postRegisterOtpVerify = PostRx(
   empty: {},
   dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
   endPoint: Endpoints.postRegisterOtpVerify(),
-  toastSetting: ToastSetting.error,
+  toastSetting: ToastSetting.both,
   onSuccess: (data) async {
     // OTP verified successfully for registration
   },
@@ -55,7 +55,7 @@ PostRx postLogin = PostRx(
   empty: {},
   dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
   endPoint: Endpoints.postLogin(),
-  toastSetting: ToastSetting.error,
+  toastSetting: ToastSetting.both,
   onSuccess: (data) async {
     // User login successful
   },
@@ -68,7 +68,7 @@ PostRx postLoginEmailVerify = PostRx(
   empty: {},
   dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
   endPoint: Endpoints.postLoginEmailVerify(),
-  toastSetting: ToastSetting.error,
+  toastSetting: ToastSetting.both,
   onSuccess: (data) async {
     // Email verified successfully for login
   },
@@ -83,7 +83,7 @@ PostRx postLoginResetPassword = PostRx(
   empty: {},
   dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
   endPoint: Endpoints.postLoginResetPassword(),
-  toastSetting: ToastSetting.error,
+  toastSetting: ToastSetting.both,
   onSuccess: (data) async {
     // Password reset initiated successfully
   },
@@ -96,7 +96,7 @@ PostRx postLoginOtpResend = PostRx(
   empty: {},
   dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
   endPoint: Endpoints.postLoginOtpResend(),
-  toastSetting: ToastSetting.error,
+  toastSetting: ToastSetting.both,
   onSuccess: (data) async {
     // OTP resent successfully for password reset
   },
@@ -109,7 +109,7 @@ PostRx postLoginOtpVerify = PostRx(
   empty: {},
   dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
   endPoint: Endpoints.postLoginOtpVerify(),
-  toastSetting: ToastSetting.error,
+  toastSetting: ToastSetting.both,
   onSuccess: (data) async {
     // OTP verified successfully for password reset
   },
@@ -124,7 +124,7 @@ PostRx postSocialLogin = PostRx(
   empty: {},
   dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
   endPoint: Endpoints.postSocialLogin(),
-  toastSetting: ToastSetting.error,
+  toastSetting: ToastSetting.both,
   onSuccess: (data) async {
     // Social login successful
   },

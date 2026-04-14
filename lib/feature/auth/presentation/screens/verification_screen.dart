@@ -14,8 +14,12 @@ import 'package:tintpin14_app/navigation_screen.dart';
 
 class VerificationScreen extends StatefulWidget {
   final String verificationType; // "signup" or "reset_password"
-
-  const VerificationScreen({super.key, required this.verificationType});
+  final String email;
+  const VerificationScreen({
+    super.key,
+    required this.verificationType,
+    required this.email,
+  });
 
   @override
   State<VerificationScreen> createState() => _VerificationScreenState();
@@ -59,7 +63,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: "We have sent code to your whatsapp number ",
+                    text: "We have sent code on",
                     style: TextFontStyle.textstyle14c898996Manrope400,
                   ),
                   TextSpan(

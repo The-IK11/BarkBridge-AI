@@ -75,7 +75,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               text: "Continue",
               onPressed: () {
                 Get.to(
-                  () => VerificationScreen(verificationType: "reset_password"),
+                  () => VerificationScreen(
+                    verificationType: "reset_password",
+                    email: emailController.text,
+                  ),
                 );
               },
             ),

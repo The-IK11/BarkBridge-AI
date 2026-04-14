@@ -11,6 +11,9 @@ import 'package:tintpin14_app/feature/auth/presentation/screens/sign_up_screen.d
 import 'package:tintpin14_app/gen/assets.gen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
 import 'package:flutter/gestures.dart';
+import 'package:tintpin14_app/helpers/loading_helper.dart';
+import 'package:tintpin14_app/navigation_screen.dart';
+import 'package:tintpin14_app/networks/api_access.dart';
 
 // Ensure you import the GlowBackground widget created above
 
@@ -117,7 +120,19 @@ class _SignInScreenState extends State<SignInScreen> {
               CustomButton(
                 buttonType: ButtonType.primary,
                 text: "Sign In",
-                onPressed: () {},
+                onPressed: () async {
+                  await postLogin
+                      .postData(
+                        data: {
+                          "email": emailController.text,
+                          "password": passwordController.text,
+                        },
+                      )
+                      .waitingForFutureWithoutBg()
+                      .then((v) {
+                        Get.offAll(() => NavigationScreen());
+                      });
+                },
               ),
 
               SizedBox(height: 30.h),

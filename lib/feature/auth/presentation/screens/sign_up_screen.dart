@@ -11,6 +11,8 @@ import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.d
 import 'package:tintpin14_app/feature/auth/presentation/screens/verification_screen.dart';
 import 'package:tintpin14_app/gen/assets.gen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/helpers/loading_helper.dart';
+import 'package:tintpin14_app/networks/api_access.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -146,8 +148,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
               CustomButton(
                 buttonType: ButtonType.primary,
                 text: "Sign Up Now",
-                onPressed: () {
-                  Get.to(() => VerificationScreen(verificationType: "signup"));
+                onPressed: () async {
+                  await postRegister
+                      .postData(
+                        data: {
+                          "email": emailController.text,
+                          "password": passwordController.text,
+                          'confirm_password': passwordController.text,
+                        },
+                      )
+                      .waitingForFutureWithoutBg()
+                      .then((v) {
+                        Get.to(
+                          () => VerificationScreen(
+                            verificationType: "signup",
+                            email: emailController.toString(),
+                          ),
+                        );
+                      });
                 },
               ),
 
