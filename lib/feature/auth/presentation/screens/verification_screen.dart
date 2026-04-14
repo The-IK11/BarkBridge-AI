@@ -7,11 +7,15 @@ import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/custom_otp.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/feature/auth/presentation/screens/reset_password_screen.dart';
+import 'package:tintpin14_app/feature/auth/presentation/screens/set_new_password_screen.dart';
+import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/navigation_screen.dart';
 
 class VerificationScreen extends StatefulWidget {
-  VerificationScreen({super.key});
+  final String verificationType; // "signup" or "reset_password"
+
+  const VerificationScreen({super.key, required this.verificationType});
 
   @override
   State<VerificationScreen> createState() => _VerificationScreenState();
@@ -100,7 +104,13 @@ class _VerificationScreenState extends State<VerificationScreen> {
             CustomButton(
               text: "Verify",
               onPressed: () {
-                Get.to(() => ResetPasswordScreen());
+                if (widget.verificationType == "reset_password") {
+                  // Navigate to sign in screen after password reset
+                  Get.offAll(const SignInScreen());
+                } else {
+                  // Navigate to NavigationScreen for signup flow
+                  Get.to(NavigationScreen());
+                }
               },
             ),
           ],

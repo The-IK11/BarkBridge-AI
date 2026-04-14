@@ -7,11 +7,31 @@ import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/feature/auth/presentation/screens/set_new_password_screen.dart';
+import 'package:tintpin14_app/feature/auth/presentation/screens/verification_screen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
 
-class ResetPasswordScreen extends StatelessWidget {
+class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
+
+  @override
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+}
+
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+  late TextEditingController emailController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
@@ -45,17 +65,18 @@ class ResetPasswordScreen extends StatelessWidget {
             // Email Field
             _buildLabel("Email"),
             AuthCommonTextFormField(
-              controller: TextEditingController(),
+              controller: emailController,
               hintText: "Type your email",
               fillcolor: AppColors.cFFFFFF.withAlpha(8),
-              borderColor: AppColors.cE6E6E8,
               radius: BorderRadius.circular(16.r),
             ),
             SizedBox(height: 30.h),
             CustomButton(
               text: "Continue",
               onPressed: () {
-                Get.to(() => SetNewPasswordScreen());
+                Get.to(
+                  () => VerificationScreen(verificationType: "reset_password"),
+                );
               },
             ),
           ],

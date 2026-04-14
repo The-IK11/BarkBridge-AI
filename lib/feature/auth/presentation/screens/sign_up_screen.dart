@@ -21,6 +21,26 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   bool checkBoxValue = false;
+  late TextEditingController emailController;
+  late TextEditingController phoneController;
+  late TextEditingController passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    phoneController = TextEditingController();
+    passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    phoneController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
@@ -47,21 +67,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // Email Field
               _buildLabel("Email"),
               AuthCommonTextFormField(
-                controller: TextEditingController(),
+                controller: emailController,
                 hintText: "Type your email",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                borderColor: AppColors.cE6E6E8,
                 radius: BorderRadius.circular(16.r),
               ),
               SizedBox(height: 20.h),
 
-              // Password Field
+              // Phone Number Field
               _buildLabel("Phone number"),
               AuthCommonTextFormField(
-                controller: TextEditingController(),
+                controller: phoneController,
                 hintText: "Type your phone number",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                borderColor: AppColors.cE6E6E8,
                 radius: BorderRadius.circular(16.r),
                 //isObscure: true,
               ),
@@ -71,10 +89,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // Password Field
               _buildLabel("Password"),
               AuthCommonTextFormField(
-                controller: TextEditingController(),
+                controller: passwordController,
                 hintText: "Type your password",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                borderColor: AppColors.cE6E6E8,
                 radius: BorderRadius.circular(16.r),
                 isObscure: true,
               ),
@@ -93,8 +110,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                     // Note: MaterialStateBorderSide is deprecated in newer Flutter versions;
                     // check below if you need the update.
-                    side: MaterialStateBorderSide.resolveWith((states) {
-                      if (states.contains(MaterialState.selected)) {
+                    side: WidgetStateBorderSide.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
                         return const BorderSide(color: Colors.blue, width: 2);
                       }
                       return const BorderSide(color: Colors.grey, width: 2);
@@ -130,7 +147,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 buttonType: ButtonType.primary,
                 text: "Sign Up Now",
                 onPressed: () {
-                  Get.to(() => VerificationScreen());
+                  Get.to(() => VerificationScreen(verificationType: "signup"));
                 },
               ),
 
@@ -157,12 +174,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 buttonType: ButtonType.secondary,
                 text: "Sign in with Apple",
                 onPressed: () {},
+                iconColor: AppColors.cFFFFFF,
                 imageUrl: Assets.icons.appleIcon.path,
               ),
               SizedBox(height: 16.h),
               CustomButton(
                 buttonType: ButtonType.secondary,
-                text: "Sign in with Apple",
+                text: "Sign in with Google",
                 onPressed: () {},
                 imageUrl: Assets.icons.googleIcon.path,
               ), // Or use an asset icon
@@ -175,7 +193,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     style: TextFontStyle.textstyle16c898996Manrope400,
                     children: [
                       TextSpan(
-                        text: "Sign up",
+                        text: "Sign in",
                         style: TextFontStyle.textstyle16c898996Manrope400
                             .copyWith(color: AppColors.cFFFFFF),
                         recognizer: TapGestureRecognizer()

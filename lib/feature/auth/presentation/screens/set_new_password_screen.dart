@@ -8,9 +8,33 @@ import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
 import 'package:tintpin14_app/navigation_screen.dart';
+import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
 
-class SetNewPasswordScreen extends StatelessWidget {
+class SetNewPasswordScreen extends StatefulWidget {
   const SetNewPasswordScreen({super.key});
+
+  @override
+  State<SetNewPasswordScreen> createState() => _SetNewPasswordScreenState();
+}
+
+class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
+  late TextEditingController newPasswordController;
+  late TextEditingController confirmPasswordController;
+
+  @override
+  void initState() {
+    super.initState();
+    newPasswordController = TextEditingController();
+    confirmPasswordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
@@ -44,20 +68,18 @@ class SetNewPasswordScreen extends StatelessWidget {
             // Password Field
             _buildLabel("New Password"),
             AuthCommonTextFormField(
-              controller: TextEditingController(),
+              controller: newPasswordController,
               hintText: "Type New password",
               fillcolor: AppColors.cFFFFFF.withAlpha(8),
-              borderColor: AppColors.cE6E6E8,
               radius: BorderRadius.circular(16.r),
               isObscure: true,
             ),
             SizedBox(height: 20.h),
             _buildLabel("Confirm Password"),
             AuthCommonTextFormField(
-              controller: TextEditingController(),
+              controller: confirmPasswordController,
               hintText: "Retype New password",
               fillcolor: AppColors.cFFFFFF.withAlpha(8),
-              borderColor: AppColors.cE6E6E8,
               radius: BorderRadius.circular(16.r),
               isObscure: true,
             ),
@@ -111,12 +133,7 @@ class SetNewPasswordScreen extends StatelessWidget {
                   style: TextFontStyle.textstyle11cB8BBCCManrope400,
                 ),
                 SizedBox(height: 54.h),
-                CustomButton(
-                  text: "Done",
-                  onPressed: () {
-                    Get.to(NavigationScreen());
-                  },
-                ),
+                CustomButton(text: "Done", onPressed: () {}),
               ],
             ),
           ),

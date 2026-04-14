@@ -6,6 +6,7 @@ import 'package:tintpin14_app/common_widgets/auth_common_text_form_field.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
+import 'package:tintpin14_app/feature/auth/presentation/screens/reset_password_screen.dart';
 import 'package:tintpin14_app/feature/auth/presentation/screens/sign_up_screen.dart';
 import 'package:tintpin14_app/gen/assets.gen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
@@ -13,8 +14,30 @@ import 'package:flutter/gestures.dart';
 
 // Ensure you import the GlowBackground widget created above
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
+
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +76,10 @@ class SignInScreen extends StatelessWidget {
               // Email Field
               _buildLabel("Email"),
               AuthCommonTextFormField(
-                controller: TextEditingController(),
+                controller: emailController,
                 hintText: "Type your email",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                borderColor: AppColors.cE6E6E8,
+
                 radius: BorderRadius.circular(16.r),
               ),
 
@@ -65,10 +88,10 @@ class SignInScreen extends StatelessWidget {
               // Password Field
               _buildLabel("Password"),
               AuthCommonTextFormField(
-                controller: TextEditingController(),
+                controller: passwordController,
                 hintText: "Type your password",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                borderColor: AppColors.cE6E6E8,
+
                 radius: BorderRadius.circular(16.r),
                 isObscure: true,
               ),
@@ -78,9 +101,14 @@ class SignInScreen extends StatelessWidget {
               // Forgot Password
               Align(
                 alignment: Alignment.center,
-                child: Text(
-                  "Forgot password?",
-                  style: TextFontStyle.textstyle16c2F29FFManrope400,
+                child: TextButton(
+                  onPressed: () {
+                    Get.to(() => ResetPasswordScreen());
+                  },
+                  child: Text(
+                    "Forgot password?",
+                    style: TextFontStyle.textstyle16c2F29FFManrope400,
+                  ),
                 ),
               ),
 
@@ -116,12 +144,13 @@ class SignInScreen extends StatelessWidget {
                 buttonType: ButtonType.secondary,
                 text: "Sign in with Apple",
                 onPressed: () {},
+                iconColor: AppColors.cFFFFFF,
                 imageUrl: Assets.icons.appleIcon.path,
               ),
               SizedBox(height: 16.h),
               CustomButton(
                 buttonType: ButtonType.secondary,
-                text: "Sign in with Apple",
+                text: "Sign in with Google",
                 onPressed: () {},
                 imageUrl: Assets.icons.googleIcon.path,
               ), // Or use an asset icon
@@ -141,7 +170,7 @@ class SignInScreen extends StatelessWidget {
                             .copyWith(color: AppColors.cFFFFFF),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            Get.to(() => SignUpScreen());
+                            Get.offAll(() => SignUpScreen());
                           },
                       ),
                     ],

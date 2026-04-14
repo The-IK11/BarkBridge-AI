@@ -137,7 +137,9 @@ class _AuthCommonTextFormFieldState extends State<AuthCommonTextFormField> {
             borderRadius:
                 widget.radius ?? BorderRadius.all(Radius.circular(32.r)),
             borderSide: BorderSide(
-              color: widget.borderColor ?? AppColors.cF5F5F5,
+              color:
+                  widget.borderColor ??
+                  const Color.fromARGB(105, 141, 141, 144),
               width: 1.w,
             ),
           ),
@@ -145,7 +147,9 @@ class _AuthCommonTextFormFieldState extends State<AuthCommonTextFormField> {
             borderRadius:
                 widget.radius ?? BorderRadius.all(Radius.circular(32.r)),
             borderSide: BorderSide(
-              color: widget.borderColor ?? AppColors.cF5F5F5,
+              color:
+                  widget.borderColor ??
+                  const Color.fromARGB(105, 141, 141, 144),
               width: 1.w,
             ),
           ),
