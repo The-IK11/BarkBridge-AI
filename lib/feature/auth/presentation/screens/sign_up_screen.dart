@@ -23,25 +23,30 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   bool checkBoxValue = false;
-  late TextEditingController emailController;
-  late TextEditingController phoneController;
-  late TextEditingController passwordController;
-  late TextEditingController confirmPasswordController;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
-    confirmPasswordController = TextEditingController();
-    passwordController = TextEditingController();
+    nameController;
+    emailController;
+    phoneController;
+    passwordController;
+    confirmPasswordController;
   }
 
   @override
   void dispose() {
+    nameController.dispose();
     emailController.dispose();
-
+    phoneController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -170,9 +175,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   await postRegister
                       .postData(
                         data: {
+                          "name": nameController.text,
                           "email": emailController.text,
+                          "phone": phoneController.text,
                           "password": passwordController.text,
-                          'confirm_password': passwordController.text,
+                          "password_confirmation":
+                              confirmPasswordController.text,
+                          "agree_to_terms": checkBoxValue ? 1 : 0,
                         },
                       )
                       .waitingForFutureWithoutBg()
