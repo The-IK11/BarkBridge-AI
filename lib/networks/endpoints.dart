@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-const String url = "https://tintpin.thewarriors.team/";
+const String url = "https://tintpin.thewarriors.team/api";
 
 final class NetworkConstants {
   NetworkConstants._();
