@@ -31,7 +31,7 @@ final class Endpoints {
 
   // Auth - Registration
   static String postRegister() => "/users/register";
-  static String postRegisterOtpResend() => "/users/register/otp-resend";
+  static String postRegisterOtpResend() => "/users/register/otp-resend?";
   static String postRegisterOtpVerify() => "/users/register/otp-verify";
 
   // Auth - Login
