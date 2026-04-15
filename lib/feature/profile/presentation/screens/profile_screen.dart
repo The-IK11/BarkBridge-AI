@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
+import 'package:tintpin14_app/common_widgets/custom_network_image.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
@@ -34,53 +35,22 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: kToolbarHeight + 20.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 160.h,
-                    width: 160.w,
-                    padding: EdgeInsets.all(18.w),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border(
-                        left: BorderSide(color: AppColors.c0454CB, width: 1.w),
-                        right: BorderSide(color: AppColors.c0454CB, width: 1.w),
-                      ),
-                    ),
-                    child: Container(
-                      width: 123.w,
-                      height: 123.h,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.c86A1FF,
-                      ),
-                      child: Container(
-                        width: 105.w,
-                        height: 105.h,
-                        padding: EdgeInsets.all(10.sp),
-                        decoration: BoxDecoration(shape: BoxShape.circle),
-                        child: ClipOval(
-                          child: Image.asset(
-                            Assets.images.errorImage.path,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 30.h),
+              avatar(),
+              SizedBox(height: 15.h),
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(vertical: 20.h),
                 decoration: BoxDecoration(
-                  color: AppColors.c778DFF.withAlpha(8),
+                  color: AppColors.c778DFF.withAlpha(30),
                   borderRadius: BorderRadius.circular(24.r),
                   border: Border.all(
                     width: 1.w,
-                    color: AppColors.cFFFFFF.withAlpha(50),
+                    color: const Color.fromARGB(
+                      255,
+                      148,
+                      142,
+                      142,
+                    ).withAlpha(50),
                   ),
                 ),
                 child: Column(
@@ -176,6 +146,84 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Stack avatar() {
+    return Stack(
+      children: [
+        Container(
+          height: 170.h,
+          width: 230.w,
+          padding: EdgeInsets.all(18.w),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Assets.images.avatarEillipes.path),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Positioned(
+          left: 28.w,
+          child: Container(
+            height: 170.h,
+            width: 180.w,
+            padding: EdgeInsets.all(18.w),
+            decoration: BoxDecoration(
+              // shape: BoxShape.circle,
+              image: DecorationImage(
+                image: AssetImage(Assets.images.avatarBorder.path),
+                fit: BoxFit.cover,
+              ),
+            ),
+
+            child: Container(
+              margin: EdgeInsets.all(20.sp),
+              width: 123.w,
+              height: 123.h,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  width: 4.6.w,
+                  color: Color.fromARGB(255, 37, 48, 89),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 72.w,
+          top: 39.h,
+          child: CustomNetworkImage(
+            isCircular: true,
+            width: 85.w,
+            height: 85.h,
+            imageUrl: '',
+            fit: BoxFit.cover,
+          ),
+        ),
+
+        // Positioned(
+        //   left: 130.w,
+        //   top: 100.h,
+        //   child: InkWell(
+        //     onTap: () {},
+        //     child: Container(
+        //       width: 30.w,
+        //       height: 30.h,
+        //       decoration: BoxDecoration(
+        //         shape: BoxShape.circle,
+        //         color: const Color.fromARGB(255, 9, 58, 232),
+        //       ),
+        //       child: Icon(
+        //         Icons.camera_alt_outlined,
+        //         size: 18.sp,
+        //         color: AppColors.cFFFFFF,
+        //       ),
+        //     ),
+        //   ),
+        // ),
+      ],
     );
   }
 
