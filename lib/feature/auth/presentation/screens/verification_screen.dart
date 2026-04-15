@@ -70,7 +70,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: "We have sent code on",
+                    text: "We have sent code on ",
                     style: TextFontStyle.textstyle14c898996Manrope400,
                   ),
                   TextSpan(
@@ -138,7 +138,12 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       .waitingForFutureWithoutBg()
                       .then((v) {
                         if (v) {
-                          Get.offAll(SetNewPasswordScreen());
+                          Get.to(
+                            SetNewPasswordScreen(
+                              email: widget.email,
+                              otp: _controllers.map((c) => c.text).join(),
+                            ),
+                          );
                         }
                       });
                 } else {
@@ -152,7 +157,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       .waitingForFutureWithoutBg()
                       .then((v) {
                         if (v) {
-                          Get.to(NavigationScreen());
+                          Get.offAll(NavigationScreen());
                         }
                       });
                 }

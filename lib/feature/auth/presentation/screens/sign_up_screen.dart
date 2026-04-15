@@ -207,7 +207,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Get.to(
                           () => VerificationScreen(
                             verificationType: "signup",
-                            email: emailController.toString(),
+                            email: emailController.text,
                           ),
                         );
                       });
