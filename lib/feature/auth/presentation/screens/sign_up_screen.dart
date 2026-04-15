@@ -26,19 +26,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late TextEditingController emailController;
   late TextEditingController phoneController;
   late TextEditingController passwordController;
+  late TextEditingController confirmPasswordController;
 
   @override
   void initState() {
     super.initState();
     emailController = TextEditingController();
-    phoneController = TextEditingController();
+    passwordController = TextEditingController();
+    confirmPasswordController = TextEditingController();
     passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
     emailController.dispose();
-    phoneController.dispose();
+
     passwordController.dispose();
     super.dispose();
   }
@@ -65,22 +67,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 style: TextFontStyle.textstyle16c898996Manrope400,
               ),
               SizedBox(height: 40.h),
-
-              // Email Field
-              _buildLabel("Email"),
+              _buildLabel("Name"),
               AuthCommonTextFormField(
                 controller: emailController,
-                hintText: "Type your email",
+                hintText: "Enter your name",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
                 radius: BorderRadius.circular(16.r),
               ),
               SizedBox(height: 20.h),
-
+              // Email Field
+              _buildLabel("Email"),
+              AuthCommonTextFormField(
+                controller: emailController,
+                hintText: "Enter your email",
+                fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                radius: BorderRadius.circular(16.r),
+              ),
+              SizedBox(height: 20.h),
               // Phone Number Field
-              _buildLabel("Phone number"),
+              _buildLabel("Phone Number"),
               AuthCommonTextFormField(
                 controller: phoneController,
-                hintText: "Type your phone number",
+                hintText: "Enter your phone number",
+                fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                radius: BorderRadius.circular(16.r),
+                //isObscure: true,
+              ),
+              SizedBox(height: 20.h),
+              // Phone Number Field
+              _buildLabel("Password"),
+              AuthCommonTextFormField(
+                controller: passwordController,
+                hintText: "Type your password",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
                 radius: BorderRadius.circular(16.r),
                 //isObscure: true,
@@ -91,8 +109,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // Password Field
               _buildLabel("Password"),
               AuthCommonTextFormField(
-                controller: passwordController,
-                hintText: "Type your password",
+                controller: confirmPasswordController,
+                hintText: "Re-type your password",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
                 radius: BorderRadius.circular(16.r),
                 isObscure: true,
