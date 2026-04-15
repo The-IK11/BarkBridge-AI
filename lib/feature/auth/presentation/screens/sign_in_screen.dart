@@ -6,6 +6,7 @@ import 'package:tintpin14_app/common_widgets/auth_common_text_form_field.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
+import 'package:tintpin14_app/constants/validator.dart';
 import 'package:tintpin14_app/feature/auth/presentation/screens/reset_password_screen.dart';
 import 'package:tintpin14_app/feature/auth/presentation/screens/sign_up_screen.dart';
 import 'package:tintpin14_app/gen/assets.gen.dart';
@@ -79,6 +80,8 @@ class _SignInScreenState extends State<SignInScreen> {
               // Email Field
               _buildLabel("Email"),
               AuthCommonTextFormField(
+                validator: emailValidator,
+
                 controller: emailController,
                 hintText: "Type your email",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
@@ -91,6 +94,7 @@ class _SignInScreenState extends State<SignInScreen> {
               // Password Field
               _buildLabel("Password"),
               AuthCommonTextFormField(
+                validator: passwordValidator,
                 controller: passwordController,
                 hintText: "Type your password",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),

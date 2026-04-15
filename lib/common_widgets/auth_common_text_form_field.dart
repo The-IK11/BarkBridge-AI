@@ -73,7 +73,7 @@ class _AuthCommonTextFormFieldState extends State<AuthCommonTextFormField> {
       constraints: BoxConstraints(minHeight: 48.h),
       width: widget.width ?? double.infinity,
       child: TextFormField(
-        cursorColor: AppColors.cB8B8C3,
+        cursorColor: Colors.white,
         onChanged: (value) {
           final error = widget.validator?.call(value);
           setState(() => hasError = error != null);

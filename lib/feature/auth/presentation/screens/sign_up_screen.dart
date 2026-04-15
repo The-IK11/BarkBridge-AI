@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 import 'package:get/utils.dart';
 import 'package:tintpin14_app/common_widgets/auth_common_text_form_field.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
+import 'package:tintpin14_app/common_widgets/custom_toast.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
+import 'package:tintpin14_app/constants/validator.dart';
 import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
 import 'package:tintpin14_app/feature/auth/presentation/screens/verification_screen.dart';
 import 'package:tintpin14_app/gen/assets.gen.dart';
@@ -74,7 +76,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height: 40.h),
               _buildLabel("Name"),
               AuthCommonTextFormField(
-                controller: emailController,
+                validator: emptyValidator,
+                controller: nameController,
                 hintText: "Enter your name",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
                 radius: BorderRadius.circular(16.r),
@@ -83,6 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // Email Field
               _buildLabel("Email"),
               AuthCommonTextFormField(
+                validator: emailValidator,
                 controller: emailController,
                 hintText: "Enter your email",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
@@ -92,6 +96,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // Phone Number Field
               _buildLabel("Phone Number"),
               AuthCommonTextFormField(
+                keyBoardType: TextInputType.phone,
+                validator: validatePhoneNumber,
                 controller: phoneController,
                 hintText: "Enter your phone number",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
@@ -102,6 +108,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // Phone Number Field
               _buildLabel("Password"),
               AuthCommonTextFormField(
+                validator: passwordValidator,
                 controller: passwordController,
                 hintText: "Type your password",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
@@ -114,6 +121,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // Password Field
               _buildLabel("Password"),
               AuthCommonTextFormField(
+                validator: (value) =>
+                    confirmPasswordValidator(value, passwordController.text),
                 controller: confirmPasswordController,
                 hintText: "Re-type your password",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
@@ -123,24 +132,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               SizedBox(height: 24.h),
               Row(
-                // Align items to the top or center so text lines up with checkbox
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Checkbox(
-                    value: checkBoxValue,
-                    onChanged: (value) {
-                      setState(() {
-                        checkBoxValue = !checkBoxValue;
-                      });
-                    },
-                    // Note: MaterialStateBorderSide is deprecated in newer Flutter versions;
-                    // check below if you need the update.
-                    side: WidgetStateBorderSide.resolveWith((states) {
-                      if (states.contains(WidgetState.selected)) {
-                        return const BorderSide(color: Colors.blue, width: 2);
-                      }
-                      return const BorderSide(color: Colors.grey, width: 2);
-                    }),
+                  SizedBox(
+                    width: 24.w,
+                    height: 24.h,
+                    child: Checkbox(
+                      value: checkBoxValue,
+                      onChanged: (value) {
+                        setState(() {
+                          checkBoxValue = !checkBoxValue;
+                        });
+                      },
+
+                      side: WidgetStateBorderSide.resolveWith((states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return const BorderSide(color: Colors.blue, width: 2);
+                        }
+                        return const BorderSide(color: Colors.grey, width: 2);
+                      }),
+                    ),
                   ),
                   SizedBox(width: 10.w),
 
@@ -172,6 +183,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 buttonType: ButtonType.primary,
                 text: "Sign Up Now",
                 onPressed: () async {
+                  if (checkBoxValue == false) {
+                    customToastMessage(
+                      "Terms and Conditions",
+                      "You must agree to the terms and conditions to proceed.",
+                    );
+                    return; // Stop further execution if terms are not agreed
+                  }
                   await postRegister
                       .postData(
                         data: {

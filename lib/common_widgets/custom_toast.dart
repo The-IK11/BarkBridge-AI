@@ -5,8 +5,11 @@ import 'package:get/get.dart';
 import '../gen/colors.gen.dart';
 
 SnackbarController customToastMessage(String title, String description) {
-  return Get.snackbar(title, description,
-      snackPosition: SnackPosition.TOP,
-      backgroundColor: const Color(0xff444444),
-      colorText: AppColors.cFFFFFF,);
+  return Get.snackbar(
+    title,
+    description,
+    snackPosition: SnackPosition.TOP,
+    backgroundColor: const Color.fromARGB(255, 38, 51, 100),
+    colorText: AppColors.cFFFFFF,
+  );
 }
