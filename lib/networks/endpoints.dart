@@ -46,4 +46,11 @@ final class Endpoints {
 
   // Auth - Social Login
   static String postSocialLogin() => "/social-login";
+
+  // User Profile
+  static String getUserData() => "/user";
+  static String postUpdateUserData() => "/user/update";
+  static String postDeleteAccount() => "/user/delete-account";
+  static String postLogout() => "/user/logout";
+  static String postUpdatePassword() => "/user/update-password";
 }

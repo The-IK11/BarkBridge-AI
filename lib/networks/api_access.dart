@@ -1,7 +1,11 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:tintpin14_app/networks/api_clint/delete/enum.dart';
+import 'package:tintpin14_app/networks/api_clint/delete/rx.dart';
 import 'package:tintpin14_app/networks/api_clint/post/enum.dart';
 import 'package:tintpin14_app/networks/api_clint/post/rx.dart';
+import 'package:tintpin14_app/networks/api_clint/get/rx.dart';
 import 'package:tintpin14_app/networks/endpoints.dart';
+import 'package:tintpin14_app/feature/profile/model/profile_model.dart';
 
 // PostOnboardingRx postOnboardingRX = PostOnboardingRx(
 //   empty: {},
@@ -127,6 +131,67 @@ PostRx postSocialLogin = PostRx(
   toastSetting: ToastSetting.both,
   onSuccess: (data) async {
     // Social login successful
+  },
+  onError: (message) async {
+    // Error message will be displayed automatically via toast
+  },
+);
+
+// ============ User Profile ============
+
+GetRx<GetProfileDataModel> getUser = GetRx<GetProfileDataModel>(
+  empty: GetProfileDataModel(),
+  dataFetcher: BehaviorSubject<GetProfileDataModel>(),
+  endpoint: Endpoints.getUserData(),
+  fromJson: GetProfileDataModel.fromJson,
+);
+
+PostRx postUpdateUser = PostRx(
+  empty: {},
+  dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
+  endPoint: Endpoints.postUpdateUserData(),
+  toastSetting: ToastSetting.both,
+  onSuccess: (data) async {
+    // User updated successfully
+  },
+  onError: (message) async {
+    // Error message will be displayed automatically via toast
+  },
+);
+
+DeleteRx postDeleteAccount = DeleteRx(
+  empty: {},
+  dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
+  deleteEndPoint: Endpoints.postDeleteAccount(),
+  toastSetting: DeleteToastSetting.both,
+  onSuccess: (data) async {
+    // Account deleted successfully
+  },
+  onError: (message) async {
+    // Error message will be displayed automatically via toast
+  },
+);
+
+PostRx postLogout = PostRx(
+  empty: {},
+  dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
+  endPoint: Endpoints.postLogout(),
+  toastSetting: ToastSetting.both,
+  onSuccess: (data) async {
+    // Logout successful
+  },
+  onError: (message) async {
+    // Error message will be displayed automatically via toast
+  },
+);
+
+PostRx postUpdatePassword = PostRx(
+  empty: {},
+  dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
+  endPoint: Endpoints.postUpdatePassword(),
+  toastSetting: ToastSetting.both,
+  onSuccess: (data) async {
+    // Password updated successfully
   },
   onError: (message) async {
     // Error message will be displayed automatically via toast
