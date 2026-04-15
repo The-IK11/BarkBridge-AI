@@ -7,8 +7,11 @@ import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
+import 'package:tintpin14_app/constants/validator.dart';
 import 'package:tintpin14_app/feature/auth/presentation/screens/verification_screen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/helpers/loading_helper.dart';
+import 'package:tintpin14_app/networks/api_access.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -18,12 +21,12 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  late TextEditingController emailController;
+  final TextEditingController emailController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    emailController = TextEditingController();
+    emailController;
   }
 
   @override
@@ -65,21 +68,29 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             // Email Field
             _buildLabel("Email"),
             AuthCommonTextFormField(
+              validator: emailValidator,
               controller: emailController,
-              hintText: "Type your email",
+              hintText: "Enter your email",
               fillcolor: AppColors.cFFFFFF.withAlpha(8),
               radius: BorderRadius.circular(16.r),
             ),
             SizedBox(height: 30.h),
             CustomButton(
               text: "Continue",
-              onPressed: () {
-                Get.to(
-                  () => VerificationScreen(
-                    verificationType: "reset_password",
-                    email: emailController.text,
-                  ),
-                );
+              onPressed: () async {
+                await postLoginEmailVerify
+                    .postData(data: {"email": emailController.text})
+                    .waitingForFutureWithoutBg()
+                    .then((v) {
+                      if (v) {
+                        Get.to(
+                          () => VerificationScreen(
+                            verificationType: "reset_password",
+                            email: emailController.text,
+                          ),
+                        );
+                      }
+                    });
               },
             ),
           ],

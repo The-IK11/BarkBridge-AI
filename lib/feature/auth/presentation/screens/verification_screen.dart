@@ -104,9 +104,15 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   TextSpan(
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
-                        await postRegisterOtpResend
-                            .postData(data: {"email": widget.email})
-                            .waitingForFutureWithoutBg();
+                        if (widget.verificationType == "reset_password") {
+                          await postLoginOtpResend
+                              .postData(data: {"email": widget.email})
+                              .waitingForFutureWithoutBg();
+                        } else {
+                          await postRegisterOtpResend
+                              .postData(data: {"email": widget.email})
+                              .waitingForFutureWithoutBg();
+                        }
                       },
                     text: "Resend",
                     style: TextFontStyle.textstyle14c898996Manrope400.copyWith(
@@ -121,25 +127,35 @@ class _VerificationScreenState extends State<VerificationScreen> {
             CustomButton(
               text: "Verify",
               onPressed: () async {
-                await postRegisterOtpVerify
-                    .postData(
-                      data: {
-                        "otp": _controllers.map((c) => c.text).join(),
-                        "email": widget.email,
-                      },
-                    )
-                    .waitingForFutureWithoutBg()
-                    .then((v) {
-                      if (v) {
-                        if (widget.verificationType == "reset_password") {
-                          // Navigate to sign in screen after password reset
-                          Get.offAll(const ResetPasswordScreen());
-                        } else {
-                          // Navigate to NavigationScreen for signup flow
+                if (widget.verificationType == "reset_password") {
+                  await postLoginOtpVerify
+                      .postData(
+                        data: {
+                          "otp": _controllers.map((c) => c.text).join(),
+                          "email": widget.email,
+                        },
+                      )
+                      .waitingForFutureWithoutBg()
+                      .then((v) {
+                        if (v) {
+                          Get.offAll(SetNewPasswordScreen());
+                        }
+                      });
+                } else {
+                  await postRegisterOtpVerify
+                      .postData(
+                        data: {
+                          "otp": _controllers.map((c) => c.text).join(),
+                          "email": widget.email,
+                        },
+                      )
+                      .waitingForFutureWithoutBg()
+                      .then((v) {
+                        if (v) {
                           Get.to(NavigationScreen());
                         }
-                      }
-                    });
+                      });
+                }
               },
             ),
           ],
