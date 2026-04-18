@@ -150,7 +150,7 @@ PostRx postSocialLogin = PostRx(
 
 // ============ User Profile ============
 
-GetRx<GetProfileDataModel> getUser = GetRx<GetProfileDataModel>(
+GetRx<GetProfileDataModel> getUserData = GetRx<GetProfileDataModel>(
   empty: GetProfileDataModel(),
   dataFetcher: BehaviorSubject<GetProfileDataModel>(),
   endpoint: Endpoints.getUserData(),

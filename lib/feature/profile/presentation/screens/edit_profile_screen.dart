@@ -4,14 +4,45 @@ import 'package:get/route_manager.dart';
 import 'package:tintpin14_app/common_widgets/auth_common_text_form_field.dart';
 import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
+import 'package:tintpin14_app/common_widgets/custom_network_image.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
+import 'package:tintpin14_app/feature/profile/model/profile_model.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/change_password_screen.dart';
 import 'package:tintpin14_app/gen/assets.gen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
 
-class EditProfileScreen extends StatelessWidget {
-  const EditProfileScreen({super.key});
+class EditProfileScreen extends StatefulWidget {
+  final UserData? userData;
+
+  const EditProfileScreen({super.key, this.userData});
+
+  @override
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends State<EditProfileScreen> {
+  late TextEditingController nameController;
+  late TextEditingController emailController;
+  late TextEditingController phoneController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers with user data
+    nameController = TextEditingController(text: widget.userData?.name ?? '');
+    emailController = TextEditingController(text: widget.userData?.email ?? '');
+    phoneController = TextEditingController(text: widget.userData?.phone ?? '');
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
@@ -25,7 +56,6 @@ class EditProfileScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kToolbarHeight + 20.h),
-
             Center(
               child: Stack(
                 children: [
@@ -37,12 +67,10 @@ class EditProfileScreen extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: AppColors.c86A1FF.withAlpha(50),
                     ),
-
-                    child: ClipOval(
-                      child: Image.asset(
-                        Assets.images.errorImage.path,
-                        fit: BoxFit.contain,
-                      ),
+                    child: CustomNetworkImage(
+                      isCircular: true,
+                      imageUrl: widget.userData?.avatar ?? '',
+                      fit: BoxFit.cover,
                     ),
                   ),
                   Positioned(
@@ -64,29 +92,30 @@ class EditProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-
-            // Email Field
+            // Name Field
             _buildLabel("Your Name"),
             AuthCommonTextFormField(
-              controller: TextEditingController(),
+              controller: nameController,
               hintText: "Type your name",
               fillcolor: AppColors.cFFFFFF.withAlpha(8),
               borderColor: AppColors.cE6E6E8,
               radius: BorderRadius.circular(16.r),
             ),
             SizedBox(height: 25.h),
+            // Email Field
             _buildLabel("Your Email"),
             AuthCommonTextFormField(
-              controller: TextEditingController(),
+              controller: emailController,
               hintText: "Type your email",
               fillcolor: AppColors.cFFFFFF.withAlpha(8),
               borderColor: AppColors.cE6E6E8,
               radius: BorderRadius.circular(16.r),
             ),
             SizedBox(height: 25.h),
+            // Phone Field
             _buildLabel("Your Phone Number"),
             AuthCommonTextFormField(
-              controller: TextEditingController(),
+              controller: phoneController,
               hintText: "Type your number",
               fillcolor: AppColors.cFFFFFF.withAlpha(8),
               borderColor: AppColors.cE6E6E8,
@@ -104,6 +133,7 @@ class EditProfileScreen extends StatelessWidget {
       ),
     );
   }
+
   // --- Helper Widgets ---
 
   Widget _buildLabel(String text) {

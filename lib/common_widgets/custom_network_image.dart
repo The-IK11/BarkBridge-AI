@@ -14,6 +14,7 @@ class CustomNetworkImage extends StatelessWidget {
   final bool includeBase;
   final bool isCircular;
   final BorderRadius? borderRadius;
+  final double elevation;
 
   const CustomNetworkImage({
     super.key,
@@ -25,6 +26,7 @@ class CustomNetworkImage extends StatelessWidget {
     this.includeBase = false,
     this.isCircular = false,
     this.borderRadius,
+    this.elevation = 0,
   });
 
   @override
@@ -34,7 +36,9 @@ class CustomNetworkImage extends StatelessWidget {
         : (borderRadius ?? BorderRadius.zero);
 
     return Card(
-      elevation: 4.w,
+      margin: EdgeInsets.zero,
+      color: Colors.transparent,
+      elevation: elevation.w,
       shape: RoundedRectangleBorder(borderRadius: borderRadiusValue),
       child: ClipRRect(
         borderRadius: borderRadiusValue,
@@ -46,7 +50,7 @@ class CustomNetworkImage extends StatelessWidget {
                 fit: fit,
               )
             : CachedNetworkImage(
-                imageUrl: includeBase ? '$baseUrl/$imageUrl' : imageUrl!,
+                imageUrl: _buildImageUrl(),
                 width: width,
                 height: height,
                 fit: fit,
@@ -60,6 +64,13 @@ class CustomNetworkImage extends StatelessWidget {
               ),
       ),
     );
+  }
+
+  String _buildImageUrl() {
+    if (imageUrl!.contains('http')) {
+      return imageUrl!;
+    }
+    return '$baseUrl/$imageUrl';
   }
 
   Widget _buildShimmerPlaceholder() {
@@ -78,6 +89,11 @@ class CustomNetworkImage extends StatelessWidget {
     if (url == null || url.isEmpty) {
       return const AssetImage('assets/images/error_image.png');
     }
-    return CachedNetworkImageProvider(includeBase ? '$baseUrl/$url' : url);
+
+    final imageUrl = url.contains('http')
+        ? url
+        : (includeBase ? '$baseUrl/$url' : url);
+
+    return CachedNetworkImageProvider(imageUrl);
   }
 }

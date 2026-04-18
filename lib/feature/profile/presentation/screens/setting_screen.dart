@@ -22,7 +22,7 @@ class _SettingScreenState extends State<SettingScreen> {
     return GlowBackground(
       appBar: CustomAppBar(
         title: "Settings",
-        leading: Icon(Icons.close),
+
         backgroundColor: Colors.transparent,
       ),
       child: Padding(
