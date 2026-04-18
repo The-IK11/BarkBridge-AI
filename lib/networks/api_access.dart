@@ -9,6 +9,7 @@ import 'package:tintpin14_app/networks/api_clint/get/rx.dart';
 import 'package:tintpin14_app/networks/dio/dio.dart';
 import 'package:tintpin14_app/networks/endpoints.dart';
 import 'package:tintpin14_app/feature/profile/model/profile_model.dart';
+import 'package:tintpin14_app/feature/profile/model/ai_response_model.dart';
 
 // PostOnboardingRx postOnboardingRX = PostOnboardingRx(
 //   empty: {},
@@ -216,13 +217,27 @@ PostRx postUpdatePassword = PostRx(
   },
 );
 
+// ============ Pet Analysis ============
+
+// Reactive variable to store the AI analysis response
+BehaviorSubject<AIResponseModel?> aiResponseSubject =
+    BehaviorSubject<AIResponseModel?>.seeded(null);
+
 PostRx postPetAnalyze = PostRx(
   empty: {},
   dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
   endPoint: Endpoints.postPetAnalyze(),
   toastSetting: ToastSetting.both,
   onSuccess: (data) async {
-    // Pet analyze successful
+    // Pet analyze successful - store response
+    if (data != null) {
+      try {
+        final aiResponse = AIResponseModel.fromJson(data);
+        aiResponseSubject.add(aiResponse);
+      } catch (e) {
+        print('Error parsing AI response: $e');
+      }
+    }
   },
   onError: (message) async {
     // Error message will be displayed automatically via toast

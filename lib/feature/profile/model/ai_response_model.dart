@@ -67,13 +67,28 @@ class BehaviorAnalysis {
   });
 
   factory BehaviorAnalysis.fromJson(Map<String, dynamic> json) {
+    List<String>? flags;
+
+    if (json['behavioral_flags'] != null) {
+      if (json['behavioral_flags'] is List) {
+        // If it's already a list, convert to List<String>
+        flags = List<String>.from(json['behavioral_flags'] as List);
+      } else if (json['behavioral_flags'] is String) {
+        // If it's a string, split by periods to create individual flags
+        final flagString = json['behavioral_flags'] as String;
+        flags = flagString
+            .split('.')
+            .where((flag) => flag.trim().isNotEmpty)
+            .map((flag) => flag.trim())
+            .toList();
+      }
+    }
+
     return BehaviorAnalysis(
       activity: json['activity'] as String?,
       socialBehavior: json['social_behavior'] as String?,
       energyLevel: json['energy_level'] as String?,
-      behavioralFlags: json['behavioral_flags'] != null
-          ? List<String>.from(json['behavioral_flags'] as List)
-          : null,
+      behavioralFlags: flags,
       enrichmentNeeds: json['enrichment_needs'] as String?,
       confidenceScore: json['confidence_score'] as int?,
     );
