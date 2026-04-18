@@ -11,6 +11,7 @@ import 'package:tintpin14_app/feature/profile/model/profile_model.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/change_password_screen.dart';
 import 'package:tintpin14_app/gen/assets.gen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/helpers/ui_helpers.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final UserData? userData;
@@ -51,7 +52,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         title: "Edit profile",
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.sp),
+        padding: EdgeInsets.all(UIHelper.kDefaultPadding()),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -107,6 +108,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             // Email Field
             _buildLabel("Your Email"),
             AuthCommonTextFormField(
+              isEnabled: false,
               controller: emailController,
               hintText: "Type your email",
               fillcolor: AppColors.cFFFFFF.withAlpha(8),
