@@ -69,6 +69,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     child: CustomNetworkImage(
                       isCircular: true,
+                      width: 123.w,
+                      height: 123.h,
                       imageUrl: widget.userData?.avatar ?? '',
                       fit: BoxFit.cover,
                     ),

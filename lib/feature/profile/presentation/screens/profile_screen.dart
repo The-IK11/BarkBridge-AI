@@ -65,8 +65,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text(
                     snapshot.error.toString(),
                     textAlign: TextAlign.center,
-                    style: TextFontStyle.textstyle14c626262Manrope500
-                        .copyWith(color: Colors.red),
+                    style: TextFontStyle.textstyle14c626262Manrope500.copyWith(
+                      color: Colors.red,
+                    ),
                   ),
                 ],
               ),
@@ -76,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           // Handle success state
           if (snapshot.hasData && snapshot.data != null) {
             final userData = snapshot.data!.data;
-            
+
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.sp),
               child: SingleChildScrollView(
