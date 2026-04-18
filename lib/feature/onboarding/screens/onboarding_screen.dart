@@ -5,11 +5,13 @@ import 'package:get/instance_manager.dart';
 import 'package:tintpin14_app/common_widgets/custom_tab_bar.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/common_widgets/hexagon_button.dart';
+import 'package:tintpin14_app/constants/app_constants.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
 import 'package:tintpin14_app/feature/onboarding/widgets/onboarding_widget.dart';
 import 'package:tintpin14_app/gen/assets.gen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/helpers/di.dart';
 import 'package:tintpin14_app/navigation_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -89,6 +91,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   if (currentTab < 3) {
                     currentTab++;
                   } else {
+                    appData.write(kKeyFirstTime, false);
                     Get.to(() => SignInScreen());
                   }
                 });

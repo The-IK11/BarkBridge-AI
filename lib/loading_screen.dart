@@ -52,10 +52,10 @@ class _LoadingState extends State<Loading> {
       return const WelcomeScreen();
     } else {
       return isLoggedIn
-          ? const HomeScreen()
+          ? NavigationScreen()
           : appData.read(kKeyFirstTime)
           ? const OnboardingScreen()
-          : const NavigationScreen();
+          : const SignInScreen();
     }
   }
 }

@@ -5,12 +5,16 @@ import 'package:get/get.dart';
 import 'package:get/utils.dart';
 import 'package:tintpin14_app/common_widgets/auth_common_text_form_field.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
+import 'package:tintpin14_app/common_widgets/custom_toast.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
+import 'package:tintpin14_app/constants/validator.dart';
 import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
 import 'package:tintpin14_app/feature/auth/presentation/screens/verification_screen.dart';
 import 'package:tintpin14_app/gen/assets.gen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/helpers/loading_helper.dart';
+import 'package:tintpin14_app/networks/api_access.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -21,6 +25,33 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   bool checkBoxValue = false;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    nameController;
+    emailController;
+    phoneController;
+    passwordController;
+    confirmPasswordController;
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
@@ -43,25 +74,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 style: TextFontStyle.textstyle16c898996Manrope400,
               ),
               SizedBox(height: 40.h),
-
-              // Email Field
-              _buildLabel("Email"),
+              _buildLabel("Name"),
               AuthCommonTextFormField(
-                controller: TextEditingController(),
-                hintText: "Type your email",
+                validator: emptyValidator,
+                controller: nameController,
+                hintText: "Enter your name",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                borderColor: AppColors.cE6E6E8,
                 radius: BorderRadius.circular(16.r),
               ),
               SizedBox(height: 20.h),
-
-              // Password Field
-              _buildLabel("Phone number"),
+              // Email Field
+              _buildLabel("Email"),
               AuthCommonTextFormField(
-                controller: TextEditingController(),
-                hintText: "Type your phone number",
+                validator: emailValidator,
+                controller: emailController,
+                hintText: "Enter your email",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                borderColor: AppColors.cE6E6E8,
+                radius: BorderRadius.circular(16.r),
+              ),
+              SizedBox(height: 20.h),
+              // Phone Number Field
+              _buildLabel("Phone Number"),
+              AuthCommonTextFormField(
+                keyBoardType: TextInputType.phone,
+                validator: validatePhoneNumber,
+                controller: phoneController,
+                hintText: "Enter your phone number",
+                fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                radius: BorderRadius.circular(16.r),
+                //isObscure: true,
+              ),
+              SizedBox(height: 20.h),
+              // Phone Number Field
+              _buildLabel("Password"),
+              AuthCommonTextFormField(
+                validator: passwordValidator,
+                controller: passwordController,
+                hintText: "Type your password",
+                fillcolor: AppColors.cFFFFFF.withAlpha(8),
                 radius: BorderRadius.circular(16.r),
                 //isObscure: true,
               ),
@@ -71,34 +121,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // Password Field
               _buildLabel("Password"),
               AuthCommonTextFormField(
-                controller: TextEditingController(),
-                hintText: "Type your password",
+                validator: (value) =>
+                    confirmPasswordValidator(value, passwordController.text),
+                controller: confirmPasswordController,
+                hintText: "Re-type your password",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                borderColor: AppColors.cE6E6E8,
                 radius: BorderRadius.circular(16.r),
                 isObscure: true,
               ),
 
               SizedBox(height: 24.h),
               Row(
-                // Align items to the top or center so text lines up with checkbox
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Checkbox(
-                    value: checkBoxValue,
-                    onChanged: (value) {
-                      setState(() {
-                        checkBoxValue = !checkBoxValue;
-                      });
-                    },
-                    // Note: MaterialStateBorderSide is deprecated in newer Flutter versions;
-                    // check below if you need the update.
-                    side: MaterialStateBorderSide.resolveWith((states) {
-                      if (states.contains(MaterialState.selected)) {
-                        return const BorderSide(color: Colors.blue, width: 2);
-                      }
-                      return const BorderSide(color: Colors.grey, width: 2);
-                    }),
+                  SizedBox(
+                    width: 24.w,
+                    height: 24.h,
+                    child: Checkbox(
+                      value: checkBoxValue,
+                      onChanged: (value) {
+                        setState(() {
+                          checkBoxValue = !checkBoxValue;
+                        });
+                      },
+
+                      side: WidgetStateBorderSide.resolveWith((states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return const BorderSide(color: Colors.blue, width: 2);
+                        }
+                        return const BorderSide(color: Colors.grey, width: 2);
+                      }),
+                    ),
                   ),
                   SizedBox(width: 10.w),
 
@@ -129,8 +182,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
               CustomButton(
                 buttonType: ButtonType.primary,
                 text: "Sign Up Now",
-                onPressed: () {
-                  Get.to(() => VerificationScreen());
+                onPressed: () async {
+                  if (checkBoxValue == false) {
+                    customToastMessage(
+                      "Terms and Conditions",
+                      "You must agree to the terms and conditions to proceed.",
+                    );
+                    return; // Stop further execution if terms are not agreed
+                  }
+                  await postRegister
+                      .postData(
+                        data: {
+                          "name": nameController.text,
+                          "email": emailController.text,
+                          "phone": phoneController.text,
+                          "password": passwordController.text,
+                          "password_confirmation":
+                              confirmPasswordController.text,
+                          "agree_to_terms": checkBoxValue ? 1 : 0,
+                        },
+                      )
+                      .waitingForFutureWithoutBg()
+                      .then((v) {
+                        Get.to(
+                          () => VerificationScreen(
+                            verificationType: "signup",
+                            email: emailController.text,
+                          ),
+                        );
+                      });
                 },
               ),
 
@@ -157,12 +237,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 buttonType: ButtonType.secondary,
                 text: "Sign in with Apple",
                 onPressed: () {},
+                iconColor: AppColors.cFFFFFF,
                 imageUrl: Assets.icons.appleIcon.path,
               ),
               SizedBox(height: 16.h),
               CustomButton(
                 buttonType: ButtonType.secondary,
-                text: "Sign in with Apple",
+                text: "Sign in with Google",
                 onPressed: () {},
                 imageUrl: Assets.icons.googleIcon.path,
               ), // Or use an asset icon
@@ -175,7 +256,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     style: TextFontStyle.textstyle16c898996Manrope400,
                     children: [
                       TextSpan(
-                        text: "Sign up",
+                        text: "Sign in",
                         style: TextFontStyle.textstyle16c898996Manrope400
                             .copyWith(color: AppColors.cFFFFFF),
                         recognizer: TapGestureRecognizer()

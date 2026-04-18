@@ -12,6 +12,7 @@ class CustomButton extends StatelessWidget {
   final Border? border;
   final TextStyle? textStyle;
   final Color? fillColor;
+  final Color? iconColor;
 
   const CustomButton({
     super.key,
@@ -22,6 +23,7 @@ class CustomButton extends StatelessWidget {
     this.border,
     this.textStyle,
     this.fillColor,
+    this.iconColor,
   });
 
   @override
@@ -41,7 +43,12 @@ class CustomButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (imageUrl != null)
-                  Image.asset(imageUrl!, height: 20, width: 20),
+                  Image.asset(
+                    imageUrl!,
+                    height: 20,
+                    width: 20,
+                    color: iconColor,
+                  ),
                 const SizedBox(width: 8),
                 Text(
                   text,
@@ -78,7 +85,7 @@ class CustomButton extends StatelessWidget {
                     imageUrl!,
                     height: 20.h,
                     width: 20.w,
-                    //color: AppColors.cFFFFFF,
+                    color: iconColor,
                   ),
                 const SizedBox(width: 8),
                 Text(

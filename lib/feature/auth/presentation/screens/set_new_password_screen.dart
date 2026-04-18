@@ -6,11 +6,45 @@ import 'package:tintpin14_app/common_widgets/auth_common_text_form_field.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
+import 'package:tintpin14_app/constants/validator.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/helpers/loading_helper.dart';
 import 'package:tintpin14_app/navigation_screen.dart';
+import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
+import 'package:tintpin14_app/networks/api_access.dart';
 
-class SetNewPasswordScreen extends StatelessWidget {
-  const SetNewPasswordScreen({super.key});
+class SetNewPasswordScreen extends StatefulWidget {
+  const SetNewPasswordScreen({
+    super.key,
+    required this.email,
+    required this.otp,
+  });
+  final String email;
+  final String otp;
+
+  @override
+  State<SetNewPasswordScreen> createState() => _SetNewPasswordScreenState();
+}
+
+class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    newPasswordController;
+    confirmPasswordController;
+  }
+
+  @override
+  void dispose() {
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
@@ -44,27 +78,44 @@ class SetNewPasswordScreen extends StatelessWidget {
             // Password Field
             _buildLabel("New Password"),
             AuthCommonTextFormField(
-              controller: TextEditingController(),
+              validator: passwordValidator,
+              controller: newPasswordController,
               hintText: "Type New password",
               fillcolor: AppColors.cFFFFFF.withAlpha(8),
-              borderColor: AppColors.cE6E6E8,
               radius: BorderRadius.circular(16.r),
               isObscure: true,
             ),
             SizedBox(height: 20.h),
             _buildLabel("Confirm Password"),
             AuthCommonTextFormField(
-              controller: TextEditingController(),
+              validator: (value) =>
+                  confirmPasswordValidator(value, newPasswordController.text),
+              controller: confirmPasswordController,
               hintText: "Retype New password",
               fillcolor: AppColors.cFFFFFF.withAlpha(8),
-              borderColor: AppColors.cE6E6E8,
               radius: BorderRadius.circular(16.r),
               isObscure: true,
             ),
             SizedBox(height: 40.h),
             CustomButton(
               text: "Continue",
-              onPressed: () {
+              onPressed: () async {
+                await postLoginResetPassword
+                    .postData(
+                      data: {
+                        "email": widget.email,
+                        "otp": widget.otp,
+                        "password": newPasswordController.text.trim(),
+                        "password_confirmation": confirmPasswordController.text
+                            .trim(),
+                      },
+                    )
+                    .waitingForFutureWithoutBg()
+                    .then((v) {
+                      if (v) {
+                        showSuccessDialog(context);
+                      }
+                    });
                 showSuccessDialog(context);
               },
             ),
@@ -114,7 +165,7 @@ class SetNewPasswordScreen extends StatelessWidget {
                 CustomButton(
                   text: "Done",
                   onPressed: () {
-                    Get.to(NavigationScreen());
+                    Get.offAll(() => SignInScreen());
                   },
                 ),
               ],

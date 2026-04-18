@@ -47,6 +47,14 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/avatar_border.png
+  AssetGenImage get avatarBorder =>
+      const AssetGenImage('assets/images/avatar_border.png');
+
+  /// File path: assets/images/avatar_eillipes.png
+  AssetGenImage get avatarEillipes =>
+      const AssetGenImage('assets/images/avatar_eillipes.png');
+
   /// File path: assets/images/error_image.png
   AssetGenImage get errorImage =>
       const AssetGenImage('assets/images/error_image.png');
@@ -73,6 +81,8 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    avatarBorder,
+    avatarEillipes,
     errorImage,
     onboarding1Image,
     onboarding2Image,

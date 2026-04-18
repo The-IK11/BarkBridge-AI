@@ -36,6 +36,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading:
           leading ??
           InkWell(
+            borderRadius: BorderRadius.circular(50.r),
+
             onTap: () {
               if (onBackButtonPressed != null) {
                 onBackButtonPressed!();

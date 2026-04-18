@@ -7,11 +7,34 @@ import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/feature/auth/presentation/screens/set_new_password_screen.dart';
+import 'package:tintpin14_app/constants/validator.dart';
+import 'package:tintpin14_app/feature/auth/presentation/screens/verification_screen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/helpers/loading_helper.dart';
+import 'package:tintpin14_app/networks/api_access.dart';
 
-class ResetPasswordScreen extends StatelessWidget {
+class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
+
+  @override
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+}
+
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+  final TextEditingController emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    emailController;
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
@@ -45,17 +68,29 @@ class ResetPasswordScreen extends StatelessWidget {
             // Email Field
             _buildLabel("Email"),
             AuthCommonTextFormField(
-              controller: TextEditingController(),
-              hintText: "Type your email",
+              validator: emailValidator,
+              controller: emailController,
+              hintText: "Enter your email",
               fillcolor: AppColors.cFFFFFF.withAlpha(8),
-              borderColor: AppColors.cE6E6E8,
               radius: BorderRadius.circular(16.r),
             ),
             SizedBox(height: 30.h),
             CustomButton(
               text: "Continue",
-              onPressed: () {
-                Get.to(() => SetNewPasswordScreen());
+              onPressed: () async {
+                await postLoginEmailVerify
+                    .postData(data: {"email": emailController.text})
+                    .waitingForFutureWithoutBg()
+                    .then((v) {
+                      if (v) {
+                        Get.to(
+                          () => VerificationScreen(
+                            verificationType: "reset_password",
+                            email: emailController.text,
+                          ),
+                        );
+                      }
+                    });
               },
             ),
           ],
