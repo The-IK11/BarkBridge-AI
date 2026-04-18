@@ -10,12 +10,14 @@ import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/common_widgets/not_found_widget.dart';
 import 'package:tintpin14_app/common_widgets/waiting_widget.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
+import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
 import 'package:tintpin14_app/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/setting_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/widgets/upgradePlanBanner.dart';
 import 'package:tintpin14_app/gen/assets.gen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/helpers/loading_helper.dart';
 import 'package:tintpin14_app/networks/api_access.dart';
 import 'package:tintpin14_app/feature/profile/model/profile_model.dart';
 
@@ -317,16 +319,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               text: "Delete",
                               onPressed: () async {
                                 Get.back();
-                                // Prepare data with reason if provided
-                                final Map<String, dynamic> deleteData = {};
-                                if (deleteReasonController.text.isNotEmpty) {
-                                  deleteData['reason'] =
-                                      deleteReasonController.text;
+                                try {
+                                  final reason = deleteReasonController.text
+                                      .trim();
+                                  final Map<String, dynamic> deleteData = {
+                                    'reason': reason,
+                                  };
+                                  await postDeleteAccount
+                                      .deleteData(data: deleteData)
+                                      .waitingForFutureWithoutBg()
+                                      .then((v) {
+                                        deleteReasonController.clear();
+                                        if (v) {
+                                          Get.offAll(() => SignInScreen());
+                                        }
+                                      });
+                                } catch (e) {
+                                  print('Delete account error: $e');
                                 }
-                                await postDeleteAccount.deleteData(
-                                  data: deleteData,
-                                );
-                                deleteReasonController.clear();
                               },
                             ),
                           ),
@@ -389,7 +399,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         text: "Yes",
                         onPressed: () async {
                           Get.back();
-                          await postLogout.postData();
+                          try {
+                            await postLogout
+                                .postData()
+                                .waitingForFutureWithoutBg()
+                                .then((v) {
+                                  if (v) {
+                                    Get.offAll(() => SignInScreen());
+                                  }
+                                });
+                          } catch (e) {
+                            print('Logout error: $e');
+                          }
                         },
                       ),
                     ),

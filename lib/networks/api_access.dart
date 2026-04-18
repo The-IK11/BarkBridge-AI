@@ -176,6 +176,9 @@ DeleteRx postDeleteAccount = DeleteRx(
   deleteEndPoint: Endpoints.postDeleteAccount(),
   toastSetting: DeleteToastSetting.both,
   onSuccess: (data) async {
+    DioSingleton.instance.reset();
+    await appData.write(kKeyAccessToken, null);
+    await appData.write(kKeyIsLoggedIn, false);
     // Account deleted successfully
   },
   onError: (message) async {
@@ -190,6 +193,10 @@ PostRx postLogout = PostRx(
   toastSetting: ToastSetting.both,
   onSuccess: (data) async {
     // Logout successful
+
+    DioSingleton.instance.reset();
+    await appData.write(kKeyAccessToken, null);
+    await appData.write(kKeyIsLoggedIn, false);
   },
   onError: (message) async {
     // Error message will be displayed automatically via toast
