@@ -12,6 +12,7 @@ import 'package:tintpin14_app/common_widgets/waiting_widget.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
 import 'package:tintpin14_app/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
+import 'package:tintpin14_app/feature/profile/presentation/screens/change_password_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/setting_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/widgets/upgradePlanBanner.dart';
@@ -138,6 +139,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: ListTile(
                         leading: Text(
                           "Edit Profile",
+                          style: TextFontStyle.textstyle16cFFFFFFManrope500,
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20.sp,
+                          color: AppColors.c5465A6,
+                        ),
+                      ),
+                    ),
+                    dividerLine(),
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => ChangePasswordScreen());
+                      },
+                      child: ListTile(
+                        leading: Text(
+                          "Change Password",
                           style: TextFontStyle.textstyle16cFFFFFFManrope500,
                         ),
                         trailing: Icon(

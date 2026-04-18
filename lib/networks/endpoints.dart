@@ -53,4 +53,7 @@ final class Endpoints {
   static String postDeleteAccount() => "/user/delete-account";
   static String postLogout() => "/user/logout";
   static String postUpdatePassword() => "/user/update-password";
+
+  // Pet Analyze
+  static String postPetAnalyze() => "/pet/analyze";
 }

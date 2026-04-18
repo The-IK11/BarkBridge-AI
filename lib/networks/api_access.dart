@@ -215,3 +215,16 @@ PostRx postUpdatePassword = PostRx(
     // Error message will be displayed automatically via toast
   },
 );
+
+PostRx postPetAnalyze = PostRx(
+  empty: {},
+  dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
+  endPoint: Endpoints.postPetAnalyze(),
+  toastSetting: ToastSetting.both,
+  onSuccess: (data) async {
+    // Pet analyze successful
+  },
+  onError: (message) async {
+    // Error message will be displayed automatically via toast
+  },
+);
