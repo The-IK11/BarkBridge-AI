@@ -134,7 +134,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       )
                       .waitingForFutureWithoutBg()
                       .then((v) {
-                        Get.offAll(() => NavigationScreen());
+                        if (v) {
+                          Get.offAll(() => NavigationScreen());
+                        }
                       });
                 },
               ),

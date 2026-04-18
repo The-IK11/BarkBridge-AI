@@ -1,9 +1,12 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:tintpin14_app/constants/app_constants.dart';
+import 'package:tintpin14_app/helpers/di.dart';
 import 'package:tintpin14_app/networks/api_clint/delete/enum.dart';
 import 'package:tintpin14_app/networks/api_clint/delete/rx.dart';
 import 'package:tintpin14_app/networks/api_clint/post/enum.dart';
 import 'package:tintpin14_app/networks/api_clint/post/rx.dart';
 import 'package:tintpin14_app/networks/api_clint/get/rx.dart';
+import 'package:tintpin14_app/networks/dio/dio.dart';
 import 'package:tintpin14_app/networks/endpoints.dart';
 import 'package:tintpin14_app/feature/profile/model/profile_model.dart';
 
@@ -46,7 +49,11 @@ PostRx postRegisterOtpVerify = PostRx(
   endPoint: Endpoints.postRegisterOtpVerify(),
   toastSetting: ToastSetting.both,
   onSuccess: (data) async {
-    // OTP verified successfully for registration
+    if (data['data'] != null && data['data']['token'] != null) {
+      DioSingleton.instance.update(data['data']['token']);
+      await appData.write(kKeyAccessToken, data['data']['token']);
+      await appData.write(kKeyIsLoggedIn, true);
+    }
   },
   onError: (message) async {
     // Error message will be displayed automatically via toast
@@ -61,7 +68,11 @@ PostRx postLogin = PostRx(
   endPoint: Endpoints.postLogin(),
   toastSetting: ToastSetting.both,
   onSuccess: (data) async {
-    // User login successful
+    if (data['data'] != null && data['data']['token'] != null) {
+      DioSingleton.instance.update(data['data']['token']);
+      await appData.write(kKeyAccessToken, data['data']['token']);
+      await appData.write(kKeyIsLoggedIn, true);
+    }
   },
   onError: (message) async {
     // Error message will be displayed automatically via toast
