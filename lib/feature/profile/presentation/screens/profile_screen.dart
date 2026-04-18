@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
+import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/custom_network_image.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/common_widgets/not_found_widget.dart';
 import 'package:tintpin14_app/common_widgets/waiting_widget.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
-import 'package:tintpin14_app/feature/profile/presentation/screens/account_details_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/screens/setting_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/widgets/upgradePlanBanner.dart';
@@ -27,11 +27,21 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool deleteAccountSelected = false;
+  late TextEditingController deleteReasonController;
+
   @override
   void initState() {
     super.initState();
+    deleteReasonController = TextEditingController();
     // Fetch user data when screen loads
     getUserData.fetch();
+  }
+
+  @override
+  void dispose() {
+    deleteReasonController.dispose();
+    super.dispose();
   }
 
   @override
@@ -138,23 +148,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     dividerLine(),
                     InkWell(
                       onTap: () {
-                        Get.to(() => AccountDetailsScreen());
-                      },
-                      child: ListTile(
-                        leading: Text(
-                          "Account Details",
-                          style: TextFontStyle.textstyle16cFFFFFFManrope500,
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 20.sp,
-                          color: AppColors.c5465A6,
-                        ),
-                      ),
-                    ),
-                    dividerLine(),
-                    InkWell(
-                      onTap: () {
                         Get.to(() => SettingScreen());
                       },
                       child: ListTile(
@@ -170,6 +163,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     dividerLine(),
+                    InkWell(
+                      onTap: () async {
+                        await _showLogoutDialog();
+                      },
+                      child: ListTile(
+                        leading: Text(
+                          "Logout",
+                          style: TextFontStyle.textstyle16cFFFFFFManrope500,
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20.sp,
+                          color: AppColors.c5465A6,
+                        ),
+                      ),
+                    ),
+                    dividerLine(),
+                    InkWell(
+                      onTap: () async {
+                        _showDeleteAccountDialog();
+                      },
+                      child: ListTile(
+                        leading: Text(
+                          "Delete Account",
+                          style: TextFontStyle.textstyle16cFFFFFFManrope500
+                              .copyWith(color: Colors.red),
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20.sp,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
                     SizedBox(height: 25.h),
                     InkWell(
                       onTap: () {
@@ -187,6 +214,192 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return const NotFoundWidget();
         },
       ),
+    );
+  }
+
+  void _showDeleteAccountDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.85,
+                padding: EdgeInsets.all(16.w),
+                decoration: BoxDecoration(
+                  color: AppColors.c1D2031,
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Delete Account",
+                        style: TextFontStyle.textstyle20cFFFFFFManrope600,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 20.h),
+                      Text(
+                        "Are you sure you want to delete your account? This action cannot be undone.",
+                        style: TextFontStyle.textstyle14c626262Manrope500,
+                        textAlign: TextAlign.start,
+                      ),
+                      SizedBox(height: 20.h),
+                      Text(
+                        "Please tell us the reason for deletion (optional)",
+                        style: TextFontStyle.textstyle14c626262Manrope500,
+                      ),
+                      SizedBox(height: 10.h),
+                      TextFormField(
+                        controller: deleteReasonController,
+                        maxLines: 4,
+                        minLines: 3,
+                        style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                        cursorColor: Colors.white,
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(
+                            color: Colors.white.withOpacity(0.6),
+                            fontSize: 13.sp,
+                            height: 1.4,
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xFF1C1F2A),
+                          contentPadding: const EdgeInsets.all(16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Colors.blueAccent.withOpacity(0.7),
+                              width: 1.5,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Colors.blueAccent.withOpacity(0.6),
+                              width: 1.5,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: Colors.blueAccent,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomButton(
+                              buttonType: ButtonType.secondary,
+                              fillColor: AppColors.cA2A3A9,
+                              text: "Cancel",
+                              onPressed: () {
+                                deleteReasonController.clear();
+                                Get.back();
+                              },
+                            ),
+                          ),
+                          SizedBox(width: 20.w),
+                          Expanded(
+                            child: CustomButton(
+                              buttonType: ButtonType.secondary,
+                              fillColor: AppColors.cE93820,
+                              text: "Delete",
+                              onPressed: () async {
+                                Get.back();
+                                // Prepare data with reason if provided
+                                final Map<String, dynamic> deleteData = {};
+                                if (deleteReasonController.text.isNotEmpty) {
+                                  deleteData['reason'] =
+                                      deleteReasonController.text;
+                                }
+                                await postDeleteAccount.deleteData(
+                                  data: deleteData,
+                                );
+                                deleteReasonController.clear();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _showLogoutDialog() {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              color: AppColors.c1D2031,
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Are you sure you want to logout?",
+                  style: TextFontStyle.textstyle20cFFFFFFManrope600,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 30.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                        buttonType: ButtonType.secondary,
+                        fillColor: AppColors.cA2A3A9,
+                        text: "No",
+                        onPressed: () {
+                          Get.back();
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 20.w),
+                    Expanded(
+                      child: CustomButton(
+                        buttonType: ButtonType.secondary,
+                        fillColor: AppColors.cE93820,
+                        text: "Yes",
+                        onPressed: () async {
+                          Get.back();
+                          await postLogout.postData();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -156,7 +156,7 @@ final class Logger extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    if (err.response?.data['message'] == "Unauthenticated") {
+    if (err.response?.data['message'] == "Unauthenticated.") {
       DioSingleton.instance.reset();
       appData.write(kKeyAccessToken, null);
       getx.Get.offAll(() => SignInScreen());
