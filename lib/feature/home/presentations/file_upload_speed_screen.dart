@@ -27,7 +27,7 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
   bool _isUploading = false;
   String? _errorMessage;
   Timer? _progressTimer;
-  StreamSubscription? _subscription;
+  int _currentUploadId = 0; // Track which upload this is
 
   @override
   void initState() {
@@ -39,7 +39,6 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
   @override
   void dispose() {
     _progressTimer?.cancel();
-    _subscription?.cancel();
     super.dispose();
   }
 
@@ -59,6 +58,13 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
   }
 
   Future<void> _startVideoUpload() async {
+    // Cancel any previous uploads first
+    _progressTimer?.cancel();
+
+    // Increment upload ID to invalidate old stream events
+    _currentUploadId++;
+    final uploadId = _currentUploadId;
+
     if (widget.videoFile == null) {
       _goBack();
       return;
@@ -68,35 +74,22 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
       _isUploading = true;
       _errorMessage = null;
       _percentage = 0;
+      _lastPercentage = 0;
+      _uploadComplete = false;
     });
 
     try {
-      // Create a subscription to track upload progress
-      _subscription = postPetAnalyze.dataFetcher.stream.listen(
-        (event) {
-          // Listen for completion
-          _progressTimer?.cancel();
-          setState(() {
-            _uploadComplete = true;
-            _percentage = 100;
-            _isUploading = false;
-          });
-        },
-        onError: (error) {
-          _progressTimer?.cancel();
-          print('Stream Error: $error');
-          _goBack();
-        },
-      );
-
-      // Simulate gradual progress update
+      // Start simulating progress BEFORE making API call
       _progressTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-        if (_percentage < 95 && _isUploading) {
+        // Only update if this is still the current upload
+        if (uploadId == _currentUploadId &&
+            mounted &&
+            _percentage < 95 &&
+            _isUploading) {
           // Check if progress is stalled (no change in last 100ms)
           if (_percentage == _lastPercentage && _percentage > 0) {
             print('Upload stalled at $_percentage%');
-            _progressTimer?.cancel();
-            _subscription?.cancel();
+            timer.cancel();
             _goBack();
             return;
           }
@@ -107,13 +100,13 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
         }
       });
 
-      // Make the API call with video file (pass File object, not path string)
+      // Make the API call
       final success = await postPetAnalyze.postData(
         data: {'media': widget.videoFile},
       );
-      if (!success) {
+
+      if (!success || uploadId != _currentUploadId) {
         _progressTimer?.cancel();
-        _subscription?.cancel();
         if (mounted) {
           _goBack();
         }
@@ -121,12 +114,19 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
       }
 
       _progressTimer?.cancel();
-      _subscription?.cancel();
+      if (mounted) {
+        setState(() {
+          _uploadComplete = true;
+          _percentage = 100;
+          _isUploading = false;
+        });
+      }
     } catch (e) {
-      _progressTimer?.cancel();
-      _subscription?.cancel();
-      print('Upload Error: $e');
-      _goBack();
+      if (uploadId == _currentUploadId) {
+        _progressTimer?.cancel();
+        print('Upload Error: $e');
+        _goBack();
+      }
     }
   }
 
