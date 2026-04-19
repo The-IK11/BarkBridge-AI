@@ -22,9 +22,12 @@ class FileUploadSpeedScreen extends StatefulWidget {
 class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
     with SingleTickerProviderStateMixin {
   int _percentage = 0;
+  int _lastPercentage = 0;
   bool _uploadComplete = false;
   bool _isUploading = false;
   String? _errorMessage;
+  Timer? _progressTimer;
+  StreamSubscription? _subscription;
 
   @override
   void initState() {
@@ -33,11 +36,31 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
     _startVideoUpload();
   }
 
+  @override
+  void dispose() {
+    _progressTimer?.cancel();
+    _subscription?.cancel();
+    super.dispose();
+  }
+
+  void _goBack() {
+    if (!mounted) {
+      return;
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final navigator = Navigator.of(context);
+      if (navigator.canPop()) {
+        navigator.pop();
+      }
+    });
+  }
+
   Future<void> _startVideoUpload() async {
     if (widget.videoFile == null) {
-      setState(() {
-        _errorMessage = "No video file selected";
-      });
+      _goBack();
       return;
     }
 
@@ -49,9 +72,10 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
 
     try {
       // Create a subscription to track upload progress
-      final subscription = postPetAnalyze.dataFetcher.stream.listen(
+      _subscription = postPetAnalyze.dataFetcher.stream.listen(
         (event) {
           // Listen for completion
+          _progressTimer?.cancel();
           setState(() {
             _uploadComplete = true;
             _percentage = 100;
@@ -59,35 +83,50 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
           });
         },
         onError: (error) {
-          setState(() {
-            _errorMessage = "Upload failed: ${error.toString()}";
-            _isUploading = false;
-          });
+          _progressTimer?.cancel();
+          print('Stream Error: $error');
+          _goBack();
         },
       );
 
       // Simulate gradual progress update
-      final progressTimer = Timer.periodic(Duration(milliseconds: 500), (
-        timer,
-      ) {
+      _progressTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
         if (_percentage < 95 && _isUploading) {
+          // Check if progress is stalled (no change in last 100ms)
+          if (_percentage == _lastPercentage && _percentage > 0) {
+            print('Upload stalled at $_percentage%');
+            _progressTimer?.cancel();
+            _subscription?.cancel();
+            _goBack();
+            return;
+          }
+          _lastPercentage = _percentage;
           setState(() {
-            _percentage += 5;
+            _percentage += 1;
           });
         }
       });
 
       // Make the API call with video file (pass File object, not path string)
-      await postPetAnalyze.postData(data: {'media': widget.videoFile});
+      final success = await postPetAnalyze.postData(
+        data: {'media': widget.videoFile},
+      );
+      if (!success) {
+        _progressTimer?.cancel();
+        _subscription?.cancel();
+        if (mounted) {
+          _goBack();
+        }
+        return;
+      }
 
-      progressTimer.cancel();
-      subscription.cancel();
+      _progressTimer?.cancel();
+      _subscription?.cancel();
     } catch (e) {
-      setState(() {
-        _errorMessage = "Upload failed: ${e.toString()}";
-        _isUploading = false;
-      });
+      _progressTimer?.cancel();
+      _subscription?.cancel();
       print('Upload Error: $e');
+      _goBack();
     }
   }
 
