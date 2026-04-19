@@ -9,91 +9,138 @@ class GaugePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final clampedValue = percentage.clamp(0, 100).toDouble();
     final center = Offset(size.width / 2, size.height / 2 + 20);
     final radius = size.width / 2.2;
+    const startAngle = math.pi * 0.75; // 135 degrees
+    const totalSweep = math.pi * 1.5; // 270 degrees
+    final sweepAngle = totalSweep * (clampedValue / 100);
 
-    // 1. Draw Ticks (The dashed lines outside)
-    final tickPaint = Paint()
-      ..color = Colors.white12
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
+    // 1. Draw Outer Ticks as Dots (Faint white dots with fade at ends)
+    for (int i = 0; i < 24; i++) {
+      double angle = startAngle + (i * (totalSweep / 24));
+      double tickR = radius + 16;
 
-    for (int i = 0; i < 40; i++) {
-      // Angle range: roughly 140 degrees to 400 degrees (spanning 260 deg)
-      double angle = (math.pi * 0.8) + (i * (math.pi * 1.4) / 40);
-      double outerR = radius + 15;
-      double innerR = radius + 5;
+      // Calculate fade opacity - full at middle, faded at edges
+      double fadeOpacity = 1.0 - (((i - 11.5).abs()) / 12.0).clamp(0, 1);
+      fadeOpacity = fadeOpacity * 0.35; // Scale to max 0.35 opacity
 
-      canvas.drawLine(
-        Offset(
-          center.dx + math.cos(angle) * innerR,
-          center.dy + math.sin(angle) * innerR,
-        ),
-        Offset(
-          center.dx + math.cos(angle) * outerR,
-          center.dy + math.sin(angle) * outerR,
-        ),
-        tickPaint,
-      );
+      final tickPaint = Paint()
+        ..color = Colors.white.withOpacity(fadeOpacity)
+        ..strokeWidth = 0;
+
+      final tickX = center.dx + math.cos(angle) * tickR;
+      final tickY = center.dy + math.sin(angle) * tickR;
+
+      canvas.drawCircle(Offset(tickX, tickY), 1.2, tickPaint);
     }
 
-    // 2. Draw Background Arc (Dark Track)
-    final trackPaint = Paint()
-      ..color = const Color(0xFF0F1125)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 30
-      ..strokeCap = StrokeCap.round;
+    // 2. Draw Background Track with Gradient
+    final arcRect = Rect.fromCircle(center: center, radius: radius - 15);
 
-    // Start at 135 deg, sweep 270 deg
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius - 15),
-      math.pi * 0.75, // Start angle
-      math.pi * 1.5, // Sweep angle (270 deg)
-      false,
-      trackPaint,
-    );
-
-    // 3. Draw Gradient Progress Arc
-    final gradient = const SweepGradient(
-      colors: [Color(0xFF0015FF), Color(0xFF2E3BFF), Color(0xFF5E81FF)],
+    final bgGradient = const SweepGradient(
+      colors: [
+        Color.fromRGBO(25, 60, 136, 0.229),
+        Color.fromARGB(255, 25, 60, 136),
+        Color.fromRGBO(25, 60, 136, 0.229),
+      ],
       stops: [0.0, 0.5, 1.0],
-      transform: GradientRotation(math.pi * 0.75), // Rotate gradient start
+      transform: GradientRotation(startAngle),
+    ).createShader(Rect.fromCircle(center: center, radius: radius));
+
+    final bgPaint = Paint()
+      ..shader = bgGradient
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 20
+      ..strokeCap = StrokeCap.butt;
+
+    canvas.drawArc(arcRect, startAngle, totalSweep, false, bgPaint);
+
+    // 3. Draw Gradient Progress Arc (Vibrant blue to neon purple)
+    final gradient = const SweepGradient(
+      colors: [
+        Color.fromARGB(16, 46, 60, 255),
+        // Color(0xFF2E3BFF), // Vibrant blue (brighter start)
+        Color.fromARGB(255, 40, 101, 255), // Vibrant blue
+        Color.fromARGB(18, 46, 60, 255), // Neon purple
+      ],
+      stops: [0.0, 0.5, 1.0],
+      transform: GradientRotation(startAngle),
     ).createShader(Rect.fromCircle(center: center, radius: radius));
 
     final progressPaint = Paint()
       ..shader = gradient
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 30
-      ..strokeCap = StrokeCap.round;
+      ..strokeWidth = 20
+      ..strokeCap = StrokeCap.butt;
 
-    // Calculate sweep based on percentage
-    double sweepAngle = (math.pi * 1.5) * (percentage / 100);
+    if (sweepAngle > 0) {
+      canvas.drawArc(arcRect, startAngle, sweepAngle, false, progressPaint);
+    }
 
+    // 3.5 Draw Remaining Path with Low Opacity
+    final remainingSweep = totalSweep - sweepAngle;
+    if (remainingSweep > 0) {
+      final remainingPaint = Paint()
+        ..color = const Color.fromARGB(83, 40, 101, 255).withOpacity(0.4)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 20
+        ..strokeCap = StrokeCap.butt;
+
+      canvas.drawArc(
+        arcRect,
+        startAngle + sweepAngle,
+        remainingSweep,
+        false,
+        remainingPaint,
+      );
+    }
+
+    // 3.6 Draw Center Path (Inner Circle) - Static
+    final centerRadius = radius - 50;
+    final centerArcRect = Rect.fromCircle(center: center, radius: centerRadius);
+
+    final centerStaticPaint = Paint()
+      ..color = const Color(0xFF07152E).withOpacity(0.5)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 12
+      ..strokeCap = StrokeCap.butt;
+
+    // Draw static circle with reduced length from both sides
+    final centerStartOffset = totalSweep * 0.15; // Skip 15% from start
+    final centerEndOffset = totalSweep * 0.15; // Skip 15% from end
+    final centerSweep =
+        totalSweep - centerStartOffset - centerEndOffset; // 70% of total
     canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius - 15),
-      math.pi * 0.75,
-      sweepAngle,
+      centerArcRect,
+      startAngle + centerStartOffset,
+      centerSweep,
       false,
-      progressPaint,
+      centerStaticPaint,
     );
 
-    // 4. Draw Needle
-    double currentAngle = (math.pi * 0.75) + sweepAngle;
+    // 4. Draw Needle (Tapered: bottom 13 width, top 4 width, rounded tip)
+    double currentAngle = startAngle + sweepAngle;
 
     canvas.save();
     canvas.translate(center.dx, center.dy);
     canvas.rotate(currentAngle);
 
-    final needlePath = Path();
-    needlePath.moveTo(0, -10); // Center thickness
-    needlePath.lineTo(radius - 35, 0); // Tip
-    needlePath.lineTo(0, 10);
-    needlePath.close();
+    final needleLength = radius - 50;
+    const bottomWidth = 15.0;
+    const topWidth = 6.0;
 
-    canvas.drawPath(needlePath, Paint()..color = const Color(0xFF2E3BFF));
+    final needlePath = Path()
+      ..moveTo(0, -bottomWidth / 2) // Left bottom at base
+      ..lineTo(needleLength, -topWidth / 2) // Left side to tip
+      ..lineTo(needleLength, topWidth / 2) // Right side to tip
+      ..lineTo(0, bottomWidth / 2) // Right bottom at base
+      ..close();
 
-    // Draw Center Dot over needle
-    canvas.drawCircle(Offset.zero, 8, Paint()..color = Colors.black);
+    canvas.drawPath(
+      needlePath,
+      Paint()..color = const Color.fromARGB(255, 35, 53, 247),
+    );
 
     canvas.restore();
   }
