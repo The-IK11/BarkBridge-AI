@@ -110,29 +110,47 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               textAlign: TextAlign.center,
             ),
+            SizedBox(height: 20.h),
             Stack(
+              clipBehavior: Clip.none,
               children: [
-                Lottie.asset(Assets.lottie.cameraBackground),
+                SizedBox(
+                  height: 245.h,
+                  width: 245.w,
+                  child: Lottie.asset(Assets.lottie.ringLottie),
+                ),
                 Positioned(
-                  top: 118.h,
-                  left: 110.w,
-                  child: Container(
-                    width: 122.w,
-                    height: 122.h,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppColors.c3B53FF, AppColors.c2606ED],
+                  top: -40.h,
+                  left: -40.w,
+                  child: Image.asset(
+                    Assets.icons.homeRingImage.path,
+                    height: 330.h,
+                    width: 330.w,
+                  ),
+                ),
+                Positioned(
+                  top: 60.h,
+                  left: 66.w,
+                  child: InkWell(
+                    onTap: () {
+                      customShowDialog(context);
+                    },
+                    child: Container(
+                      width: 122.w,
+                      height: 122.h,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColors.c3B53FF, AppColors.c2606ED],
+                        ),
+                        shape: BoxShape.circle,
                       ),
-                      shape: BoxShape.circle,
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        customShowDialog(context);
-                      },
-                      child: Icon(
-                        Icons.camera_alt_rounded,
-                        color: AppColors.cFFFFFF,
-                        size: 70.sp,
+                      child: Center(
+                        child: Image.asset(
+                          Assets.icons.scanCameraIcon.path,
+                          height: 90.h,
+                          width: 90.w,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),

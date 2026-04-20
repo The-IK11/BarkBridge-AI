@@ -14,9 +14,6 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
-  /// File path: assets/icons/Button.png
-  AssetGenImage get button => const AssetGenImage('assets/icons/Button.png');
-
   /// File path: assets/icons/appbarBackIcon.png
   AssetGenImage get appbarBackIcon =>
       const AssetGenImage('assets/icons/appbarBackIcon.png');
@@ -45,6 +42,10 @@ class $AssetsIconsGen {
   AssetGenImage get homeIcon =>
       const AssetGenImage('assets/icons/home_icon.png');
 
+  /// File path: assets/icons/home_ring_image.png
+  AssetGenImage get homeRingImage =>
+      const AssetGenImage('assets/icons/home_ring_image.png');
+
   /// File path: assets/icons/navigationBar_middle_part.png
   AssetGenImage get navigationBarMiddlePart =>
       const AssetGenImage('assets/icons/navigationBar_middle_part.png');
@@ -61,13 +62,16 @@ class $AssetsIconsGen {
   AssetGenImage get resultIcon =>
       const AssetGenImage('assets/icons/result_icon.png');
 
+  /// File path: assets/icons/scan_camera_icon.png
+  AssetGenImage get scanCameraIcon =>
+      const AssetGenImage('assets/icons/scan_camera_icon.png');
+
   /// File path: assets/icons/selected_home_icon.png
   AssetGenImage get selectedHomeIcon =>
       const AssetGenImage('assets/icons/selected_home_icon.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
-    button,
     appbarBackIcon,
     appleIcon,
     backIcon,
@@ -75,10 +79,12 @@ class $AssetsIconsGen {
     crownIcon,
     googleIcon,
     homeIcon,
+    homeRingImage,
     navigationBarMiddlePart,
     navigationBar,
     profileIcon,
     resultIcon,
+    scanCameraIcon,
     selectedHomeIcon,
   ];
 }
@@ -198,6 +204,9 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/restaurant_loading.json
   String get restaurantLoading => 'assets/lottie/restaurant_loading.json';
 
+  /// File path: assets/lottie/ring_lottie.json
+  String get ringLottie => 'assets/lottie/ring_lottie.json';
+
   /// File path: assets/lottie/success.json
   String get success => 'assets/lottie/success.json';
 
@@ -230,6 +239,7 @@ class $AssetsLottieGen {
     rating,
     removeFromCart,
     restaurantLoading,
+    ringLottie,
     success,
     success1,
     waiting,
