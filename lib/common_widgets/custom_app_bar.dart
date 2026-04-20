@@ -14,6 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? iconThemeColor;
   final VoidCallback? onBackButtonPressed;
   final Widget? leading;
+  final bool showBackButton;
 
   @override
   final Size preferredSize;
@@ -26,6 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.iconThemeColor,
     this.onBackButtonPressed,
+    this.showBackButton = true,
     this.leading,
   }) : preferredSize = const Size.fromHeight(kToolbarHeight);
 
@@ -38,26 +40,30 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           InkWell(
             borderRadius: BorderRadius.circular(50.r),
 
-            onTap: () {
-              if (onBackButtonPressed != null) {
-                onBackButtonPressed!();
-              } else {
-                // Default behavior if no callback is provided
+            onTap: showBackButton
+                ? () {
+                    if (onBackButtonPressed != null) {
+                      onBackButtonPressed!();
+                    } else {
+                      // Default behavior if no callback is provided
 
-                NavigationService.goBack;
-              }
-            },
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.only(left: 5.w),
-                child: Image.asset(
-                  Assets.icons.backIcon.path,
-                  width: 20.w,
-                  height: 20.h,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+                      NavigationService.goBack;
+                    }
+                  }
+                : null,
+            child: showBackButton
+                ? Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 5.w),
+                      child: Image.asset(
+                        Assets.icons.backIcon.path,
+                        width: 20.w,
+                        height: 20.h,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                : null,
           ),
       centerTitle: true,
       title: Text(

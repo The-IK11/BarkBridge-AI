@@ -7,14 +7,18 @@ import 'package:tintpin14_app/gen/colors.gen.dart';
 import 'package:tintpin14_app/networks/api_access.dart';
 
 class AiResponseScreen extends StatelessWidget {
-  const AiResponseScreen({super.key});
+  final bool isAIResponseScreen;
+  const AiResponseScreen({super.key, required this.isAIResponseScreen});
 
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
       appBar: CustomAppBar(
-        title: "AI Analysis Results",
+        title: isAIResponseScreen
+            ? "AI Analysis Results"
+            : "Last Analyzed Results",
         backgroundColor: Colors.transparent,
+        showBackButton: isAIResponseScreen,
       ),
       child: SafeArea(
         child: StreamBuilder<dynamic>(

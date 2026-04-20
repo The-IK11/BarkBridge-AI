@@ -237,7 +237,7 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
             child: OutlinedButton(
               onPressed: _uploadComplete
                   ? () {
-                      Get.to(() => const AiResponseScreen());
+                      Get.to(() => AiResponseScreen(isAIResponseScreen: true));
                     }
                   : null,
               style: OutlinedButton.styleFrom(

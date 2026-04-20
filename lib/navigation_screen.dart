@@ -20,7 +20,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   // List of screens for the navigation
   final List<Widget> _screens = [
-    const AiResponseScreen(),
+    AiResponseScreen(isAIResponseScreen: false),
     HomeScreen(),
     ProfileScreen(),
   ];
