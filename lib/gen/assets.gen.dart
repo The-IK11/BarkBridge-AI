@@ -124,6 +124,10 @@ class $AssetsImagesGen {
   AssetGenImage get splashImage =>
       const AssetGenImage('assets/images/splash_image.png');
 
+  /// File path: assets/images/upgrade_plan_image.png
+  AssetGenImage get upgradePlanImage =>
+      const AssetGenImage('assets/images/upgrade_plan_image.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     avatarBorder,
@@ -134,6 +138,7 @@ class $AssetsImagesGen {
     onboarding3Image,
     onboarding4Image,
     splashImage,
+    upgradePlanImage,
   ];
 }
 

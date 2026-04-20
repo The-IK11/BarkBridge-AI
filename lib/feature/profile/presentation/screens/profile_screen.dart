@@ -56,7 +56,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         automaticallyImplyLeading: false,
         title: Text(
           "Profile",
-          style: TextFontStyle.textstyle20cFFFFFFManrope600,
+          style: TextFontStyle.textstyle11cB8BBCCManrope400.copyWith(
+            color: AppColors.cD9DAE4,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 4,
+          ),
         ),
       ),
       child: StreamBuilder<GetProfileDataModel>(
@@ -222,8 +227,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onTap: () {
                         Get.to(() => PlanAndPricingScreen());
                       },
-                      child: UpgradePlanBanner(),
+                      child: Image.asset(
+                        Assets.images.upgradePlanImage.path,
+                        // width: double.infinity,
+                        // height: 120.h,
+                        fit: BoxFit.cover,
+                      ),
                     ),
+                    SizedBox(height: 25.h),
                   ],
                 ),
               ),
