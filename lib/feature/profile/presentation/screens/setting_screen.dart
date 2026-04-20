@@ -32,7 +32,7 @@ class _SettingScreenState extends State<SettingScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: kToolbarHeight + 20.h),
-              UpgradePlanBanner(),
+
               SizedBox(height: 15.h),
               Text(
                 "Membership",
@@ -51,31 +51,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   color: AppColors.c5465A6,
                 ),
               ),
-              SizedBox(height: 30.h),
-              Text(
-                "General",
-                style: TextFontStyle.textstyle16c5465A6Manrope500,
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Text(
-                  "Show Notification",
-                  style: TextFontStyle.textstyle16cFFFFFFManrope500,
-                ),
-                trailing: Switch(
-                  thumbColor: WidgetStateProperty.all(Colors.white),
-                  activeTrackColor: AppColors.c2401FF,
-                  inactiveTrackColor: Colors.grey,
-                  value: notificationState,
-                  onChanged: (value) {
-                    setState(() {
-                      notificationState = !notificationState;
-                    });
-                  },
-                ),
-              ),
-              // SizedBox(height: 20.h),
-              dividerLine(),
+
               SizedBox(height: 30.h),
               Text("About", style: TextFontStyle.textstyle16c5465A6Manrope500),
               settingContent("Privacy Policy"),
