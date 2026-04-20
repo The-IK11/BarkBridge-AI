@@ -79,7 +79,7 @@ class CustomBottomNavBar extends StatelessWidget {
               children: [
                 // Left Icon (Analytics)
                 Expanded(
-                  child: InkWell(
+                  child: GestureDetector(
                     onTap: () => onTap(0),
                     child: Container(
                       color: Colors.transparent,
@@ -98,7 +98,7 @@ class CustomBottomNavBar extends StatelessWidget {
 
                 // Right Icon (Profile)
                 Expanded(
-                  child: InkWell(
+                  child: GestureDetector(
                     onTap: () => onTap(2),
                     child: Container(
                       color: Colors.transparent,
@@ -130,7 +130,7 @@ class CustomBottomNavBar extends StatelessWidget {
               ),
 
               // Rotate the container to create the Diamond
-              child: InkWell(
+              child: GestureDetector(
                 onTap: () => onTap(1),
                 child: Align(
                   alignment: Alignment.topCenter,
