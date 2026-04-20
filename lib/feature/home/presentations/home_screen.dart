@@ -63,7 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextFontStyle.textstyle11cB8BBCCManrope400.copyWith(
             color: AppColors.cD9DAE4,
             fontSize: 20.sp,
-            letterSpacing: 1.5,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 4,
           ),
         ),
       ),
@@ -73,28 +74,40 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             SizedBox(height: kToolbarHeight + 20.h),
             Container(
+              height: 48.h,
+              width: 63.w,
               padding: EdgeInsets.all(10.sp),
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                borderRadius: BorderRadius.circular(24.r),
+                border: Border.all(color: AppColors.c778DFF.withAlpha(50)),
                 color: AppColors.c778DFF.withAlpha(50),
               ),
-              child: Image.asset(
-                Assets.icons.crownIcon.path,
-                width: 25.w,
-                height: 25.h,
+              child: Center(
+                child: Image.asset(
+                  Assets.icons.crownIcon.path,
+                  width: 25.w,
+                  height: 25.h,
+                ),
               ),
             ),
             SizedBox(height: 10.h),
             Text(
               "Translating Dog Sounds",
               style: TextFontStyle.textstyle20cFFFFFFManrope600.copyWith(
-                letterSpacing: 1.4,
+                fontSize: 35.sp,
+                letterSpacing: 4,
+                color: AppColors.cD9DAE4,
               ),
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: 10.h),
             Text(
               "Capture the howl to hear what your dog wants to say",
-              style: TextFontStyle.textstyle16c5465A6Manrope500,
+              style: TextFontStyle.textstyle16c5465A6Manrope500.copyWith(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 4,
+              ),
               textAlign: TextAlign.center,
             ),
             Stack(
