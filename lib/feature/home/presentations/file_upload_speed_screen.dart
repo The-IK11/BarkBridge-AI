@@ -6,8 +6,10 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
 import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
+import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/feature/home/presentations/ai_response_screen.dart';
 import 'package:tintpin14_app/feature/home/presentations/widgets/speedometer_guage.dart';
+import 'package:tintpin14_app/gen/colors.gen.dart';
 import 'package:tintpin14_app/networks/api_access.dart';
 
 // --- MAIN SCREEN ---
@@ -139,7 +141,7 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
       ),
       child: Column(
         children: [
-          SizedBox(height: kToolbarHeight + 20.h),
+          SizedBox(height: kToolbarHeight + 30.h),
 
           // Title Text
           Padding(
@@ -149,11 +151,11 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
                   ? "Upload Failed"
                   : "Hang tight! Your file is uploading",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: _errorMessage != null ? Colors.red : Colors.white,
-                fontSize: 22.sp,
-                fontWeight: FontWeight.bold,
-                height: 1.4,
+              style: TextFontStyle.textstyle11cB8BBCCManrope400.copyWith(
+                color: AppColors.cD9DAE4,
+                fontSize: 28.sp,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 3,
               ),
             ),
           ),

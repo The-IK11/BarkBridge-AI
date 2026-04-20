@@ -40,9 +40,9 @@ class GaugePainter extends CustomPainter {
 
     final bgGradient = const SweepGradient(
       colors: [
-        Color.fromRGBO(25, 60, 136, 0.229),
+        Color.fromRGBO(25, 60, 136, 0.087),
         Color.fromARGB(255, 25, 60, 136),
-        Color.fromRGBO(25, 60, 136, 0.229),
+        Color.fromRGBO(25, 60, 136, 0.087),
       ],
       stops: [0.0, 0.5, 1.0],
       transform: GradientRotation(startAngle),
