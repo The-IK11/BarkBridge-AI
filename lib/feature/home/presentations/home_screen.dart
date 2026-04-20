@@ -73,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             SizedBox(height: kToolbarHeight + 20.h),
+
             Container(
               height: 48.h,
               width: 63.w,
@@ -156,6 +157,63 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ],
+            ),
+
+            //Credit Box
+            // Credit Box
+            SizedBox(height: 20.h),
+            Container(
+              height: 64.h,
+              width: 167,
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.r),
+                color: Color(0xFF031F5A).withAlpha(70),
+                border: Border.all(
+                  color: const Color.fromARGB(185, 80, 100, 200).withAlpha(80),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        // height: 50.h,
+                        // width: 50.w,
+                        child: CircularProgressIndicator(
+                          value: 0.75,
+                          strokeWidth: 3.w,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Color(0xFF0454CB),
+                          ),
+                          backgroundColor: AppColors.c778DFF.withAlpha(50),
+                        ),
+                      ),
+                      Text(
+                        "190",
+                        style: TextFontStyle.textstyle20cFFFFFFManrope600
+                            .copyWith(
+                              fontSize: 12.sp,
+                              color: AppColors.cFFFFFF,
+                            ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 16.w),
+                  Expanded(
+                    child: Text(
+                      "Credit Left",
+                      style: TextFontStyle.textstyle11cB8BBCCManrope400
+                          .copyWith(
+                            fontSize: 14.sp,
+
+                            color: const Color.fromARGB(255, 106, 122, 219),
+                          ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
