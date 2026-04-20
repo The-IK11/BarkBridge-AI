@@ -14,6 +14,9 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/Button.png
+  AssetGenImage get button => const AssetGenImage('assets/icons/Button.png');
+
   /// File path: assets/icons/appbarBackIcon.png
   AssetGenImage get appbarBackIcon =>
       const AssetGenImage('assets/icons/appbarBackIcon.png');
@@ -30,17 +33,53 @@ class $AssetsIconsGen {
   AssetGenImage get buttonIcon =>
       const AssetGenImage('assets/icons/button_icon.png');
 
+  /// File path: assets/icons/crown_icon.png
+  AssetGenImage get crownIcon =>
+      const AssetGenImage('assets/icons/crown_icon.png');
+
   /// File path: assets/icons/google_icon.png
   AssetGenImage get googleIcon =>
       const AssetGenImage('assets/icons/google_icon.png');
 
+  /// File path: assets/icons/home_icon.png
+  AssetGenImage get homeIcon =>
+      const AssetGenImage('assets/icons/home_icon.png');
+
+  /// File path: assets/icons/navigationBar_middle_part.png
+  AssetGenImage get navigationBarMiddlePart =>
+      const AssetGenImage('assets/icons/navigationBar_middle_part.png');
+
+  /// File path: assets/icons/navigation_bar.png
+  AssetGenImage get navigationBar =>
+      const AssetGenImage('assets/icons/navigation_bar.png');
+
+  /// File path: assets/icons/profile_icon.png
+  AssetGenImage get profileIcon =>
+      const AssetGenImage('assets/icons/profile_icon.png');
+
+  /// File path: assets/icons/result_icon.png
+  AssetGenImage get resultIcon =>
+      const AssetGenImage('assets/icons/result_icon.png');
+
+  /// File path: assets/icons/selected_home_icon.png
+  AssetGenImage get selectedHomeIcon =>
+      const AssetGenImage('assets/icons/selected_home_icon.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
+    button,
     appbarBackIcon,
     appleIcon,
     backIcon,
     buttonIcon,
+    crownIcon,
     googleIcon,
+    homeIcon,
+    navigationBarMiddlePart,
+    navigationBar,
+    profileIcon,
+    resultIcon,
+    selectedHomeIcon,
   ];
 }
 

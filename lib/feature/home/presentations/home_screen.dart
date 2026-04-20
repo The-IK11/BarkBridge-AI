@@ -78,10 +78,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 shape: BoxShape.circle,
                 color: AppColors.c778DFF.withAlpha(50),
               ),
-              child: Icon(
-                Icons.workspace_premium_outlined,
-                size: 20.sp,
-                color: AppColors.cFD5900,
+              child: Image.asset(
+                Assets.icons.crownIcon.path,
+                width: 25.w,
+                height: 25.h,
               ),
             ),
             SizedBox(height: 10.h),
