@@ -138,7 +138,7 @@ class _FaqScreenState extends State<FaqScreen> {
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
-      appBar: CustomAppBar(title: "FAQ", backgroundColor: Colors.transparent),
+      appBar: CustomAppBar(title: "FAQ"),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: SingleChildScrollView(

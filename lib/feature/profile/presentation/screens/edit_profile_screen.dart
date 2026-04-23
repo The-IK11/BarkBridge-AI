@@ -91,7 +91,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return GlowBackground(
       appBar: CustomAppBar(
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
         title: "Edit profile",
       ),
       child: Padding(

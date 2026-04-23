@@ -78,10 +78,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
-      appBar: CustomAppBar(
-        backgroundColor: Colors.transparent,
-        title: "Change password",
-      ),
+      appBar: CustomAppBar(title: "Change password"),
       child: Padding(
         padding: EdgeInsets.all(UIHelper.kDefaultPadding()),
         child: Form(

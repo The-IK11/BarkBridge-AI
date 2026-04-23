@@ -21,7 +21,7 @@ class AiResponseScreen extends StatelessWidget {
         title: isAIResponseScreen
             ? "AI Analysis Results"
             : "Last Analyzed Results",
-        backgroundColor: Colors.transparent,
+
         showBackButton: isAIResponseScreen,
       ),
       child: SafeArea(

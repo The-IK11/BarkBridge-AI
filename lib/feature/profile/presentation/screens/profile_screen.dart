@@ -52,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return GlowBackground(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color.fromARGB(97, 3, 27, 69),
         automaticallyImplyLeading: false,
         title: Text(
           "Profile",

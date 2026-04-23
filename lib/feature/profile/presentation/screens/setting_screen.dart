@@ -24,11 +24,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
-      appBar: CustomAppBar(
-        title: "Settings",
-
-        backgroundColor: Colors.transparent,
-      ),
+      appBar: CustomAppBar(title: "Settings"),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.sp),
         child: SingleChildScrollView(

@@ -46,10 +46,7 @@ class _DynamicScreenState extends State<DynamicScreen> {
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
-      appBar: CustomAppBar(
-        title: widget.title,
-        backgroundColor: Colors.transparent,
-      ),
+      appBar: CustomAppBar(title: widget.title),
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 50.h),
         child: StreamBuilder<DynamicPageModel>(

@@ -15,7 +15,7 @@ class PlanAndPricingScreen extends StatelessWidget {
     return GlowBackground(
       appBar: CustomAppBar(
         showBackButton: true,
-        backgroundColor: Colors.transparent,
+
         title: "Plans and Pricing",
         leading: InkWell(
           borderRadius: BorderRadius.circular(50.r),

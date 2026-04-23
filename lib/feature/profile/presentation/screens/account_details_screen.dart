@@ -21,10 +21,7 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
-      appBar: CustomAppBar(
-        backgroundColor: Colors.transparent,
-        title: "Account Details",
-      ),
+      appBar: CustomAppBar(title: "Account Details"),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.sp),
         child: Column(
