@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:tintpin14_app/feature/dynamic_page/presentation/dynamic_page_screen.dart';
 import 'package:tintpin14_app/feature/faqAndTermsOfService/presentation/screens/faq_screen.dart';
 import 'package:tintpin14_app/feature/home/presentations/ai_response_screen.dart';
 import 'package:tintpin14_app/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
@@ -25,6 +26,7 @@ final class Routes {
   static const String faqScreen = '/faqScreen';
   static const String aiResponseScreen = '/aiResponseScreen';
   static const String subscriptionScreen = '/subscriptionScreen';
+  static const String dynamicPageScreen = '/dynamicPageScreen';
 }
 
 final class RouteGenerator {
@@ -63,6 +65,22 @@ final class RouteGenerator {
                 settings: settings,
               )
             : CupertinoPageRoute(builder: (context) => PlanAndPricingScreen());
+      case Routes.dynamicPageScreen:
+        final args = settings.arguments as Map;
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: DynamicScreen(
+                  title: args["title"],
+                  endpoint: args["endpoint"],
+                ),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => DynamicScreen(
+                  title: args["title"],
+                  endpoint: args["endpoint"],
+                ),
+              );
       // case Routes.logInScreen:
       //   return Platform.isAndroid
       //       ? _FadedTransitionRoute(

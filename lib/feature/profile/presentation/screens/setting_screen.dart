@@ -10,6 +10,7 @@ import 'package:tintpin14_app/feature/profile/presentation/widgets/upgradePlanBa
 import 'package:tintpin14_app/gen/colors.gen.dart';
 import 'package:tintpin14_app/helpers/all_routes.dart';
 import 'package:tintpin14_app/helpers/navigation_service.dart';
+import 'package:tintpin14_app/networks/endpoints.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -62,6 +63,8 @@ class _SettingScreenState extends State<SettingScreen> {
 
               SizedBox(height: 30.h),
               Text("About", style: TextFontStyle.textstyle16c5465A6Manrope500),
+              settingContent("About Us"),
+              dividerLine(),
               settingContent("Privacy Policy"),
               dividerLine(),
               settingContent("Term of Service"),
@@ -107,13 +110,48 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Widget settingContent(String title) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: Text(title, style: TextFontStyle.textstyle16cFFFFFFManrope500),
-      trailing: Icon(
-        Icons.arrow_forward_ios,
-        size: 20.sp,
-        color: AppColors.c5465A6,
+    return InkWell(
+      onTap: () {
+        if (title == "Privacy Policy") {
+          NavigationService.navigateToWithArgs(Routes.dynamicPageScreen, {
+            "title": "Privacy Policy",
+            "endpoint": Endpoints.getPrivacyPolicy(),
+          });
+        } else if (title == "Term of Service") {
+          NavigationService.navigateToWithArgs(Routes.dynamicPageScreen, {
+            "title": "Term of Service",
+            "endpoint": Endpoints.getTermsOfService(),
+          });
+        } else if (title == "Copyright Policy") {
+          NavigationService.navigateToWithArgs(Routes.dynamicPageScreen, {
+            "title": "Copyright Policy",
+            "endpoint": Endpoints.copyRightPolicy(),
+          });
+        } else if (title == "Contact Us") {
+          NavigationService.navigateToWithArgs(Routes.dynamicPageScreen, {
+            "title": "Contact Us",
+            "endpoint": Endpoints.contactUs(),
+          });
+        } else if (title == "Tutorials") {
+          NavigationService.navigateToWithArgs(Routes.dynamicPageScreen, {
+            "title": "Tutorials",
+            "endpoint": Endpoints.tutorials(),
+          });
+        } else if (title == "About Us") {
+          NavigationService.navigateToWithArgs(Routes.dynamicPageScreen, {
+            "title": "About Us",
+            "endpoint": Endpoints.aboutUs(),
+          });
+        }
+      },
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: Text(title, style: TextFontStyle.textstyle16cFFFFFFManrope500),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          size: 20.sp,
+          color: AppColors.c5465A6,
+        ),
       ),
     );
   }
