@@ -26,6 +26,10 @@ class $AssetsIconsGen {
   AssetGenImage get backIcon =>
       const AssetGenImage('assets/icons/backIcon.png');
 
+  /// File path: assets/icons/bubble_tick_icon.png
+  AssetGenImage get bubbleTickIcon =>
+      const AssetGenImage('assets/icons/bubble_tick_icon.png');
+
   /// File path: assets/icons/button_icon.png
   AssetGenImage get buttonIcon =>
       const AssetGenImage('assets/icons/button_icon.png');
@@ -70,11 +74,16 @@ class $AssetsIconsGen {
   AssetGenImage get selectedHomeIcon =>
       const AssetGenImage('assets/icons/selected_home_icon.png');
 
+  /// File path: assets/icons/white_crown_icon.png
+  AssetGenImage get whiteCrownIcon =>
+      const AssetGenImage('assets/icons/white_crown_icon.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     appbarBackIcon,
     appleIcon,
     backIcon,
+    bubbleTickIcon,
     buttonIcon,
     crownIcon,
     googleIcon,
@@ -86,6 +95,7 @@ class $AssetsIconsGen {
     resultIcon,
     scanCameraIcon,
     selectedHomeIcon,
+    whiteCrownIcon,
   ];
 }
 

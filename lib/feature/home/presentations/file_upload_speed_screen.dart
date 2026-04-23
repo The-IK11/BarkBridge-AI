@@ -10,6 +10,8 @@ import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/feature/home/presentations/ai_response_screen.dart';
 import 'package:tintpin14_app/feature/home/presentations/widgets/speedometer_guage.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/helpers/all_routes.dart';
+import 'package:tintpin14_app/helpers/navigation_service.dart';
 import 'package:tintpin14_app/networks/api_access.dart';
 
 // --- MAIN SCREEN ---
@@ -237,7 +239,10 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
             child: OutlinedButton(
               onPressed: _uploadComplete
                   ? () {
-                      Get.to(() => AiResponseScreen(isAIResponseScreen: true));
+                      NavigationService.navigateToWithArgs(
+                        Routes.aiResponseScreen,
+                        {"isAIResponseScreen": true},
+                      );
                     }
                   : null,
               style: OutlinedButton.styleFrom(

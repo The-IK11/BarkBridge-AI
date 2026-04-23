@@ -119,27 +119,32 @@ class CustomBottomNavBar extends StatelessWidget {
           Positioned(
             top: -15.h,
             left: 114.w,
-            child: Container(
-              padding: EdgeInsets.only(top: 16.h),
-              width: 141.w,
-              height: 81.h,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Assets.icons.navigationBarMiddlePart.path),
+            child: GestureDetector(
+              onTap: () => onTap(1),
+              child: Container(
+                padding: EdgeInsets.only(top: 16.h),
+                width: 141.w,
+                height: 81.h,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(
+                      Assets.icons.navigationBarMiddlePart.path,
+                    ),
+                  ),
                 ),
-              ),
 
-              // Rotate the container to create the Diamond
-              child: GestureDetector(
-                onTap: () => onTap(1),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Image.asset(
-                    height: 25.h,
-                    width: 25.w,
-                    currentIndex == 1
-                        ? Assets.icons.selectedHomeIcon.path
-                        : Assets.icons.homeIcon.path,
+                // Rotate the container to create the Diamond
+                child: GestureDetector(
+                  onTap: () => onTap(1),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Image.asset(
+                      height: 25.h,
+                      width: 25.w,
+                      currentIndex == 1
+                          ? Assets.icons.selectedHomeIcon.path
+                          : Assets.icons.homeIcon.path,
+                    ),
                   ),
                 ),
               ),

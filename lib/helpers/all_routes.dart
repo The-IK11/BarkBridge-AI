@@ -3,6 +3,8 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:tintpin14_app/feature/faqAndTermsOfService/presentation/screens/faq_screen.dart';
+import 'package:tintpin14_app/feature/home/presentations/ai_response_screen.dart';
 
 import '../navigation_screen.dart';
 
@@ -19,7 +21,8 @@ final class Routes {
       '/otpVerificationScreen';
   static const String createNewPasswordScreen = '/createNewPasswordScreen';
   static const String navigationRoutes = '/navigationRoutes';
-
+  static const String faqScreen = '/faqScreen';
+  static const String aiResponseScreen = '/aiResponseScreen';
 }
 
 final class RouteGenerator {
@@ -29,13 +32,28 @@ final class RouteGenerator {
 
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // case Routes.signUpScreen:
-      //   return Platform.isAndroid
-      //       ? _FadedTransitionRoute(
-      //           widget: const SignUpScreen(),
-      //           settings: settings,
-      //         )
-      //       : CupertinoPageRoute(builder: (context) => const SignUpScreen());
+      case Routes.faqScreen:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: const FaqScreen(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(builder: (context) => const FaqScreen());
+
+      case Routes.aiResponseScreen:
+        final args = settings.arguments as Map;
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: AiResponseScreen(
+                  isAIResponseScreen: args["isAIResponseScreen"],
+                ),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => AiResponseScreen(
+                  isAIResponseScreen: args["isAIResponseScreen"],
+                ),
+              );
 
       // case Routes.logInScreen:
       //   return Platform.isAndroid
@@ -99,8 +117,6 @@ final class RouteGenerator {
       //             email: args['email'],
       //           ),
       //         );
-
-
 
       // case Routes.setPassword:
       //   final args = settings.arguments as Map;

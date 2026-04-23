@@ -7,6 +7,8 @@ import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/feature/faqAndTermsOfService/presentation/screens/faq_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/widgets/upgradePlanBanner.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/helpers/all_routes.dart';
+import 'package:tintpin14_app/helpers/navigation_service.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -70,7 +72,7 @@ class _SettingScreenState extends State<SettingScreen> {
               dividerLine(),
               InkWell(
                 onTap: () {
-                  Get.to(() => FaqScreen());
+                  NavigationService.navigateTo(Routes.faqScreen);
                 },
                 child: settingContent("FAQ"),
               ),

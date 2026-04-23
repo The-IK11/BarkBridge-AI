@@ -5,6 +5,7 @@ import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/helpers/navigation_service.dart';
 
 class PlanAndPricingScreen extends StatelessWidget {
   const PlanAndPricingScreen({super.key});
@@ -12,9 +13,15 @@ class PlanAndPricingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GlowBackground(
       appBar: CustomAppBar(
+        showBackButton: true,
         backgroundColor: Colors.transparent,
         title: "Plans and Pricing",
-        leading: Icon(Icons.close, color: Colors.white, size: 20.sp),
+        leading: InkWell(
+          onTap: () {
+            NavigationService.goBack;
+          },
+          child: Icon(Icons.close, color: Colors.white, size: 20.sp),
+        ),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.sp),
