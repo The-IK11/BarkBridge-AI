@@ -1,26 +1,21 @@
 class FaqScreenModel {
-  final bool success;
-  final String message;
-  final List<FaqCategory> data;
-  final int code;
+  final bool? success;
+  final String? message;
+  final List<FaqCategory>? data;
+  final int? code;
 
-  FaqScreenModel({
-    required this.success,
-    required this.message,
-    required this.data,
-    required this.code,
-  });
+  FaqScreenModel({this.success, this.message, this.data, this.code});
 
   factory FaqScreenModel.fromJson(Map<String, dynamic> json) {
     return FaqScreenModel(
-      success: json['success'] ?? false,
-      message: json['message'] ?? '',
+      success: json['success'],
+      message: json['message'],
       data: json['data'] != null
           ? List<FaqCategory>.from(
               (json['data'] as List).map((item) => FaqCategory.fromJson(item)),
             )
-          : [],
-      code: json['code'] ?? 0,
+          : null,
+      code: json['code'],
     );
   }
 
@@ -28,38 +23,32 @@ class FaqScreenModel {
     return {
       'success': success,
       'message': message,
-      'data': data.map((item) => item.toJson()).toList(),
+      'data': data?.map((item) => item.toJson()).toList(),
       'code': code,
     };
   }
 }
 
 class FaqCategory {
-  final int id;
-  final String name;
-  final String slug;
-  final String status;
-  final List<FaqItem> faqs;
+  final int? id;
+  final String? name;
+  final String? slug;
+  final String? status;
+  final List<FaqItem>? faqs;
 
-  FaqCategory({
-    required this.id,
-    required this.name,
-    required this.slug,
-    required this.status,
-    required this.faqs,
-  });
+  FaqCategory({this.id, this.name, this.slug, this.status, this.faqs});
 
   factory FaqCategory.fromJson(Map<String, dynamic> json) {
     return FaqCategory(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? '',
-      slug: json['slug'] ?? '',
-      status: json['status'] ?? '',
+      id: json['id'],
+      name: json['name'],
+      slug: json['slug'],
+      status: json['status'],
       faqs: json['faqs'] != null
           ? List<FaqItem>.from(
               (json['faqs'] as List).map((item) => FaqItem.fromJson(item)),
             )
-          : [],
+          : null,
     );
   }
 
@@ -69,33 +58,33 @@ class FaqCategory {
       'name': name,
       'slug': slug,
       'status': status,
-      'faqs': faqs.map((item) => item.toJson()).toList(),
+      'faqs': faqs?.map((item) => item.toJson()).toList(),
     };
   }
 }
 
 class FaqItem {
-  final int id;
-  final int faqCategoryId;
-  final String question;
-  final String answer;
-  final String status;
+  final int? id;
+  final int? faqCategoryId;
+  final String? question;
+  final String? answer;
+  final String? status;
 
   FaqItem({
-    required this.id,
-    required this.faqCategoryId,
-    required this.question,
-    required this.answer,
-    required this.status,
+    this.id,
+    this.faqCategoryId,
+    this.question,
+    this.answer,
+    this.status,
   });
 
   factory FaqItem.fromJson(Map<String, dynamic> json) {
     return FaqItem(
-      id: json['id'] ?? 0,
-      faqCategoryId: json['faq_category_id'] ?? 0,
-      question: json['question'] ?? '',
-      answer: json['answer'] ?? '',
-      status: json['status'] ?? '',
+      id: json['id'],
+      faqCategoryId: json['faq_category_id'],
+      question: json['question'],
+      answer: json['answer'],
+      status: json['status'],
     );
   }
 

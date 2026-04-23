@@ -249,7 +249,7 @@ PostRx postPetAnalyze = PostRx(
 // ============ FAQ ============
 
 GetRx<FaqScreenModel> getFaqRx = GetRx<FaqScreenModel>(
-  empty: FaqScreenModel(success: false, message: '', data: [], code: 0),
+  empty: FaqScreenModel(),
   dataFetcher: BehaviorSubject<FaqScreenModel>(),
   endpoint: Endpoints.getFaq(),
   fromJson: FaqScreenModel.fromJson,
