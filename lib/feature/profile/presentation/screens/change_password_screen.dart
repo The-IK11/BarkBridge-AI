@@ -24,6 +24,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   late TextEditingController oldPasswordController;
   late TextEditingController newPasswordController;
   late TextEditingController confirmPasswordController;
+  late FocusNode oldPasswordFocus;
+  late FocusNode newPasswordFocus;
+  late FocusNode confirmPasswordFocus;
   final GlobalKey<FormState> key = GlobalKey<FormState>();
 
   @override
@@ -32,6 +35,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     oldPasswordController = TextEditingController();
     newPasswordController = TextEditingController();
     confirmPasswordController = TextEditingController();
+    oldPasswordFocus = FocusNode();
+    newPasswordFocus = FocusNode();
+    confirmPasswordFocus = FocusNode();
   }
 
   @override
@@ -39,6 +45,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     oldPasswordController.dispose();
     newPasswordController.dispose();
     confirmPasswordController.dispose();
+    oldPasswordFocus.dispose();
+    newPasswordFocus.dispose();
+    confirmPasswordFocus.dispose();
     super.dispose();
   }
 
@@ -57,24 +66,23 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     };
 
     // Call the API
-    try {
-      final success = await postUpdatePassword
-          .postData(data: updateData)
-          .waitingForFutureWithoutBg();
-
-      if (success) {
-        customToastMessage("Success", "Password updated successfully");
-        // Clear fields on success
-        oldPasswordController.clear();
-        newPasswordController.clear();
-        confirmPasswordController.clear();
-        if (mounted) {
-          Get.back();
-        }
-      }
-    } catch (e) {
-      customToastMessage("Error", "Failed to update password");
-    }
+    await postUpdatePassword
+        .postData(data: updateData)
+        .waitingForFutureWithoutBg()
+        .then((v) {
+          if (v) {
+            setState(() {
+              oldPasswordController.clear();
+              newPasswordController.clear();
+              confirmPasswordController.clear();
+            });
+            // Reset form after frame is painted to avoid validation errors
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              key.currentState?.reset();
+            });
+            FocusScope.of(context).unfocus();
+          }
+        });
   }
 
   @override
@@ -96,7 +104,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: oldPasswordController,
                 hintText: "Type your old password",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
-
                 radius: BorderRadius.circular(16.r),
                 isObscure: true,
               ),
@@ -104,11 +111,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               _buildLabel("New Password"),
               AuthCommonTextFormField(
                 validator: passwordValidator,
-
                 controller: newPasswordController,
                 hintText: "Type your password",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
-
                 radius: BorderRadius.circular(16.r),
                 isObscure: true,
               ),
@@ -120,7 +125,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: confirmPasswordController,
                 hintText: "Type confirm password",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
-
                 radius: BorderRadius.circular(16.r),
                 isObscure: true,
               ),
