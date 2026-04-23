@@ -4,6 +4,7 @@ import 'package:get/route_manager.dart';
 import 'package:tintpin14_app/common_widgets/auth_common_text_form_field.dart';
 import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
+import 'package:tintpin14_app/common_widgets/custom_toast.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/constants/validator.dart';
@@ -62,6 +63,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           .waitingForFutureWithoutBg();
 
       if (success) {
+        customToastMessage("Success", "Password updated successfully");
         // Clear fields on success
         oldPasswordController.clear();
         newPasswordController.clear();
@@ -71,7 +73,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         }
       }
     } catch (e) {
-      print('Password update error: $e');
+      customToastMessage("Error", "Failed to update password");
     }
   }
 

@@ -75,12 +75,7 @@ class _SettingScreenState extends State<SettingScreen> {
               dividerLine(),
               settingContent("Tutorials"),
               dividerLine(),
-              InkWell(
-                onTap: () {
-                  NavigationService.navigateTo(Routes.faqScreen);
-                },
-                child: settingContent("FAQ"),
-              ),
+              settingContent("FAQ"),
             ],
           ),
         ),
@@ -138,6 +133,8 @@ class _SettingScreenState extends State<SettingScreen> {
             "title": "About Us",
             "endpoint": Endpoints.aboutUs(),
           });
+        } else {
+          NavigationService.navigateTo(Routes.faqScreen);
         }
       },
       child: ListTile(
