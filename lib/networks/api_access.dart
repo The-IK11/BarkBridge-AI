@@ -1,5 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:tintpin14_app/constants/app_constants.dart';
+import 'package:tintpin14_app/feature/dynamic_page/model/dynamic_page_model.dart';
 import 'package:tintpin14_app/helpers/di.dart';
 import 'package:tintpin14_app/helpers/navigation_service.dart';
 import 'package:tintpin14_app/networks/api_clint/delete/enum.dart';
@@ -253,4 +254,11 @@ GetRx<FaqScreenModel> getFaqRx = GetRx<FaqScreenModel>(
   dataFetcher: BehaviorSubject<FaqScreenModel>(),
   endpoint: Endpoints.getFaq(),
   fromJson: FaqScreenModel.fromJson,
+);
+
+// ============ Dynamic Page ============
+GetRx<DynamicPageModel> getDynamicPageRx = GetRx<DynamicPageModel>(
+  empty: DynamicPageModel(),
+  dataFetcher: BehaviorSubject<DynamicPageModel>(),
+  fromJson: DynamicPageModel.fromJson,
 );

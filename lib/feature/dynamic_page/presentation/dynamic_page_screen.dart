@@ -9,21 +9,18 @@ import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/feature/faqAndTermsOfService/model/faq_screen_model.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
 import 'package:tintpin14_app/networks/api_access.dart';
+import 'package:tintpin14_app/networks/endpoints.dart';
 
-class FaqScreen extends StatefulWidget {
+class DynamicScreen extends StatefulWidget {
   final String title;
-  const FaqScreen({super.key, required this.title});
+  final String endpoint;
+  const DynamicScreen({super.key, required this.title, required this.endpoint});
 
   @override
-  State<FaqScreen> createState() => _FaqScreenState();
+  State<DynamicScreen> createState() => _DynamicScreenState();
 }
 
-class _FaqScreenState extends State<FaqScreen> {
-  int selectedTab = 0;
-  FaqScreenModel? faqData;
-  String searchQuery = '';
-  late TextEditingController searchController;
-
+class _DynamicScreenState extends State<DynamicScreen> {
   @override
   void initState() {
     super.initState();
@@ -37,12 +34,9 @@ class _FaqScreenState extends State<FaqScreen> {
   }
 
   void _fetchFaqData() {
-    getFaqRx.fetch();
-    getFaqRx.dataFetcher.stream.listen((data) {
-      setState(() {
-        faqData = data;
-      });
-    });
+    getDynamicPageRx.fetch(
+      dynamicEndpoint: Endpoints.getDynamicPage(widget.endpoint),
+    );
   }
 
   @override

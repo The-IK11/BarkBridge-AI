@@ -59,4 +59,13 @@ final class Endpoints {
   // Faq Section
   static String getFaq() => "/faq";
   static String getFaqCategories() => "/faq/categories";
+
+  // Dynamic Page
+  static String getDynamicPage(String slug) => "/pages/$slug";
+  static String getTermsOfService() => "terms-conditions";
+  static String getPrivacyPolicy() => "privacy-policy";
+  static String copyRightPolicy() => "copyright-policy";
+  static String tutorials() => "tutorial";
+  static String contactUs() => "contact-us";
+  static String aboutUs() => "about-us";
 }
