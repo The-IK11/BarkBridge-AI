@@ -11,6 +11,7 @@ import 'package:tintpin14_app/networks/dio/dio.dart';
 import 'package:tintpin14_app/networks/endpoints.dart';
 import 'package:tintpin14_app/feature/profile/model/profile_model.dart';
 import 'package:tintpin14_app/feature/profile/model/ai_response_model.dart';
+import 'package:tintpin14_app/feature/faqAndTermsOfService/model/faq_screen_model.dart';
 
 // PostOnboardingRx postOnboardingRX = PostOnboardingRx(
 //   empty: {},
@@ -243,4 +244,13 @@ PostRx postPetAnalyze = PostRx(
   onError: (message) async {
     // Error message will be displayed automatically via toast
   },
+);
+
+// ============ FAQ ============
+
+GetRx<FaqScreenModel> getFaqRx = GetRx<FaqScreenModel>(
+  empty: FaqScreenModel(success: false, message: '', data: [], code: 0),
+  dataFetcher: BehaviorSubject<FaqScreenModel>(),
+  endpoint: Endpoints.getFaq(),
+  fromJson: FaqScreenModel.fromJson,
 );

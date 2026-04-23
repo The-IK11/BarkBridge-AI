@@ -56,4 +56,7 @@ final class Endpoints {
 
   // Pet Analyze
   static String postPetAnalyze() => "/pet/analyze";
+  // Faq Section
+  static String getFaq() => "/faqs";
+  static String getFaqCategories() => "/faq/categories";
 }
