@@ -11,7 +11,8 @@ import 'package:tintpin14_app/gen/colors.gen.dart';
 import 'package:tintpin14_app/networks/api_access.dart';
 
 class FaqScreen extends StatefulWidget {
-  const FaqScreen({super.key});
+  final String title;
+  const FaqScreen({super.key, required this.title});
 
   @override
   State<FaqScreen> createState() => _FaqScreenState();
@@ -47,7 +48,10 @@ class _FaqScreenState extends State<FaqScreen> {
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
-      appBar: CustomAppBar(title: "FAQ", backgroundColor: Colors.transparent),
+      appBar: CustomAppBar(
+        title: widget.title,
+        backgroundColor: Colors.transparent,
+      ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: SingleChildScrollView(child: Column(children: [
