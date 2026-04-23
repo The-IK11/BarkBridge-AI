@@ -4,6 +4,7 @@ import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
 import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
+import 'package:tintpin14_app/gen/assets.gen.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
 import 'package:tintpin14_app/helpers/navigation_service.dart';
 
@@ -17,6 +18,7 @@ class PlanAndPricingScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         title: "Plans and Pricing",
         leading: InkWell(
+          borderRadius: BorderRadius.circular(50.r),
           onTap: () {
             NavigationService.goBack;
           },
@@ -29,15 +31,15 @@ class PlanAndPricingScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: kToolbarHeight + 20.h),
+              SizedBox(height: kToolbarHeight + 30.h),
               Center(
-                child: Icon(
-                  Icons.workspace_premium_outlined,
-                  size: 70.sp,
-                  color: Colors.white,
+                child: Image.asset(
+                  Assets.icons.whiteCrownIcon.path,
+                  width: 80.w,
+                  height: 80.h,
                 ),
               ),
-              SizedBox(height: 25.h),
+              SizedBox(height: 10.h),
               dividerLine(),
               SizedBox(height: 20.h),
               Container(
@@ -57,9 +59,12 @@ class PlanAndPricingScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Monthly",
+                      "MONTHLY",
                       style: TextFontStyle.textstyle16cFFFFFFManrope500
-                          .copyWith(color: AppColors.cC2C2C2),
+                          .copyWith(
+                            color: AppColors.cC2C2C2,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     SizedBox(height: 12.h),
                     Row(
@@ -87,7 +92,7 @@ class PlanAndPricingScreen extends StatelessWidget {
               dividerLine(),
               SizedBox(height: 20.h),
               Text(
-                "Credit Packs",
+                "CREDIT PACKS",
                 style: TextFontStyle.textstyle16c5465A6Manrope500,
               ),
               SizedBox(height: 25.h),
@@ -103,10 +108,12 @@ class PlanAndPricingScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "Privacy Policy",
-                    style: TextFontStyle.textstyle15c5465A6Manrope400.copyWith(
-                      fontSize: 12.sp,
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Privacy Policy",
+                      style: TextFontStyle.textstyle15c5465A6Manrope400
+                          .copyWith(fontSize: 12.sp),
                     ),
                   ),
                   SizedBox(width: 20.w),
@@ -119,14 +126,17 @@ class PlanAndPricingScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 20.w),
-                  Text(
-                    "Terms of Use",
-                    style: TextFontStyle.textstyle15c5465A6Manrope400.copyWith(
-                      fontSize: 12.sp,
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Terms of Use",
+                      style: TextFontStyle.textstyle15c5465A6Manrope400
+                          .copyWith(fontSize: 12.sp),
                     ),
                   ),
                 ],
               ),
+              SizedBox(height: 20.h),
             ],
           ),
         ),
@@ -154,7 +164,7 @@ class PlanAndPricingScreen extends StatelessWidget {
   Widget premiumFacility(String title) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      leading: Icon(Icons.chat_bubble_outline, color: Colors.white),
+      leading: Assets.icons.bubbleTickIcon.image(width: 24.w, height: 24.h),
       title: Text(
         title,
         style: TextFontStyle.textstyle16c5465A6Manrope500.copyWith(

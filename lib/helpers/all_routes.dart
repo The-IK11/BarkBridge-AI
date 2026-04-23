@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:tintpin14_app/feature/faqAndTermsOfService/presentation/screens/faq_screen.dart';
 import 'package:tintpin14_app/feature/home/presentations/ai_response_screen.dart';
+import 'package:tintpin14_app/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
 
 import '../navigation_screen.dart';
 
@@ -23,6 +24,7 @@ final class Routes {
   static const String navigationRoutes = '/navigationRoutes';
   static const String faqScreen = '/faqScreen';
   static const String aiResponseScreen = '/aiResponseScreen';
+  static const String subscriptionScreen = '/subscriptionScreen';
 }
 
 final class RouteGenerator {
@@ -54,7 +56,13 @@ final class RouteGenerator {
                   isAIResponseScreen: args["isAIResponseScreen"],
                 ),
               );
-
+      case Routes.subscriptionScreen:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: PlanAndPricingScreen(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(builder: (context) => PlanAndPricingScreen());
       // case Routes.logInScreen:
       //   return Platform.isAndroid
       //       ? _FadedTransitionRoute(

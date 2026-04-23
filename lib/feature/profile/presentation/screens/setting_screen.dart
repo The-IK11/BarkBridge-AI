@@ -5,6 +5,7 @@ import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/feature/faqAndTermsOfService/presentation/screens/faq_screen.dart';
+import 'package:tintpin14_app/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
 import 'package:tintpin14_app/feature/profile/presentation/widgets/upgradePlanBanner.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
 import 'package:tintpin14_app/helpers/all_routes.dart';
@@ -41,16 +42,21 @@ class _SettingScreenState extends State<SettingScreen> {
                 style: TextFontStyle.textstyle16c5465A6Manrope500,
               ),
               SizedBox(height: 20.h),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Text(
-                  "Subscription Info",
-                  style: TextFontStyle.textstyle16cFFFFFFManrope500,
-                ),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 20.sp,
-                  color: AppColors.c5465A6,
+              InkWell(
+                onTap: () {
+                  NavigationService.navigateTo(Routes.subscriptionScreen);
+                },
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Text(
+                    "Subscription Info",
+                    style: TextFontStyle.textstyle16cFFFFFFManrope500,
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20.sp,
+                    color: AppColors.c5465A6,
+                  ),
                 ),
               ),
 
