@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
+import 'package:tintpin14_app/common_widgets/custom_button.dart';
 import 'package:tintpin14_app/common_widgets/glow_background.dart';
 import 'package:tintpin14_app/constants/text_font_style.dart';
 import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:tintpin14_app/navigation_screen.dart';
 import 'package:tintpin14_app/networks/api_access.dart';
 
 class AiResponseScreen extends StatelessWidget {
@@ -176,8 +180,17 @@ class AiResponseScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
-                  SizedBox(height: 50.h),
+                  SizedBox(height: 20.h),
+                  if (isAIResponseScreen)
+                    CustomButton(
+                      text: "Back To Home",
+                      onPressed: () {
+                        Get.offAll(() {
+                          return NavigationScreen();
+                        });
+                      },
+                    ),
+                  SizedBox(height: 30.h),
                 ],
               ),
             );
