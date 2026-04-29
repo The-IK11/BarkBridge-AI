@@ -182,7 +182,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             style: TextFontStyle.textstyle14c898996Manrope400,
                           ),
                           TextSpan(
-                            text: "Terms and Condition",
+                            text: "Privacy Policy",
+                            style: TextFontStyle.textstyle14c898996Manrope400
+                                .copyWith(color: AppColors.c2707EE),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                // Handle Privacy Policy tap
+                              },
+                          ),
+                          TextSpan(
+                            text: "&",
+                            style: TextFontStyle.textstyle14c898996Manrope400
+                                .copyWith(),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                // Handle & tap if needed
+                              },
+                          ),
+                          TextSpan(
+                            text: " Terms and Condition",
                             style: TextFontStyle.textstyle14c898996Manrope400
                                 .copyWith(color: AppColors.c2707EE),
                           ),
