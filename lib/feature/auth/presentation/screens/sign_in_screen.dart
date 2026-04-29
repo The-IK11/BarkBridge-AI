@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:barkbridgeai/constants/app_constants.dart';
+import 'package:barkbridgeai/helpers/di.dart';
 import 'package:barkbridgeai/helpers/social_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -188,7 +192,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           'email': user.email ?? '',
                           'avatar': user.photoURL ?? '',
                         };
-
+                        log("Google Sign-In Payload: $payload");
                         // Hit the API like this
                         await postSocialLogin
                             .postData(data: payload)
@@ -196,6 +200,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             .then((v) {
                               if (v) {
                                 Get.to(() => NavigationScreen());
+                                appData.write(kGoogle, true);
                               }
                             });
                       },

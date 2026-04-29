@@ -1,3 +1,6 @@
+import 'package:barkbridgeai/constants/app_constants.dart';
+import 'package:barkbridgeai/helpers/di.dart';
+import 'package:barkbridgeai/helpers/social_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
@@ -425,6 +428,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onPressed: () async {
                           Get.back();
                           try {
+                            if (appData.read(kGoogle)) {
+                              await SocialAuthHelper.signOut(
+                                onSuccess: () async {
+                                  appData.write(kGoogle, false);
+                                },
+                              );
+                            }
                             await postLogout
                                 .postData()
                                 .waitingForFutureWithoutBg()
