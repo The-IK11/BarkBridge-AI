@@ -353,6 +353,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   final Map<String, dynamic> deleteData = {
                                     'reason': reason,
                                   };
+                                  if (appData.read(kGoogle) ?? false) {
+                                    await SocialAuthHelper.signOut(
+                                      onSuccess: () async {
+                                        appData.write(kGoogle, false);
+                                      },
+                                    );
+                                  }
                                   await postDeleteAccount
                                       .deleteData(data: deleteData)
                                       .waitingForFutureWithoutBg()
