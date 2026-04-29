@@ -30,6 +30,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   bool checkBoxValue = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -79,62 +80,71 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 style: TextFontStyle.textstyle16c898996Manrope400,
               ),
               SizedBox(height: 40.h),
-              _buildLabel("Name"),
-              AuthCommonTextFormField(
-                validator: emptyValidator,
-                controller: nameController,
-                hintText: "Enter your name",
-                fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                radius: BorderRadius.circular(16.r),
-              ),
-              SizedBox(height: 20.h),
-              // Email Field
-              _buildLabel("Email"),
-              AuthCommonTextFormField(
-                validator: emailValidator,
-                controller: emailController,
-                hintText: "Enter your email",
-                fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                radius: BorderRadius.circular(16.r),
-              ),
-              SizedBox(height: 20.h),
-              // Phone Number Field
-              _buildLabel("Phone Number"),
-              AuthCommonTextFormField(
-                keyBoardType: TextInputType.phone,
-                validator: validatePhoneNumber,
-                controller: phoneController,
-                hintText: "Enter your phone number",
-                fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                radius: BorderRadius.circular(16.r),
-                //isObscure: true,
-              ),
-              SizedBox(height: 20.h),
-              // Phone Number Field
-              _buildLabel("Password"),
-              AuthCommonTextFormField(
-                validator: passwordValidator,
-                controller: passwordController,
-                hintText: "Type your password",
-                fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                radius: BorderRadius.circular(16.r),
-                //isObscure: true,
-              ),
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildLabel("Name"),
+                    AuthCommonTextFormField(
+                      validator: emptyValidator,
+                      controller: nameController,
+                      hintText: "Enter your name",
+                      fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                      radius: BorderRadius.circular(16.r),
+                    ),
+                    SizedBox(height: 20.h),
+                    // Email Field
+                    _buildLabel("Email"),
+                    AuthCommonTextFormField(
+                      validator: emailValidator,
+                      controller: emailController,
+                      hintText: "Enter your email",
+                      fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                      radius: BorderRadius.circular(16.r),
+                    ),
+                    SizedBox(height: 20.h),
+                    // Phone Number Field
+                    _buildLabel("Phone Number"),
+                    AuthCommonTextFormField(
+                      keyBoardType: TextInputType.phone,
+                      validator: validatePhoneNumber,
+                      controller: phoneController,
+                      hintText: "Enter your phone number",
+                      fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                      radius: BorderRadius.circular(16.r),
+                      //isObscure: true,
+                    ),
+                    SizedBox(height: 20.h),
+                    // Phone Number Field
+                    _buildLabel("Password"),
+                    AuthCommonTextFormField(
+                      validator: passwordValidator,
+                      controller: passwordController,
+                      hintText: "Type your password",
+                      fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                      radius: BorderRadius.circular(16.r),
+                      //isObscure: true,
+                    ),
 
-              SizedBox(height: 20.h),
+                    SizedBox(height: 20.h),
 
-              // Password Field
-              _buildLabel("Password"),
-              AuthCommonTextFormField(
-                validator: (value) =>
-                    confirmPasswordValidator(value, passwordController.text),
-                controller: confirmPasswordController,
-                hintText: "Re-type your password",
-                fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                radius: BorderRadius.circular(16.r),
-                isObscure: true,
+                    // Password Field
+                    _buildLabel("Password"),
+                    AuthCommonTextFormField(
+                      validator: (value) => confirmPasswordValidator(
+                        value,
+                        passwordController.text,
+                      ),
+                      controller: confirmPasswordController,
+                      hintText: "Re-type your password",
+                      fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                      radius: BorderRadius.circular(16.r),
+                      isObscure: true,
+                    ),
+                  ],
+                ),
               ),
-
               SizedBox(height: 24.h),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -188,34 +198,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 buttonType: ButtonType.primary,
                 text: "Sign Up Now",
                 onPressed: () async {
-                  if (checkBoxValue == false) {
-                    customToastMessage(
-                      "Terms and Conditions",
-                      "You must agree to the terms and conditions to proceed.",
-                    );
-                    return; // Stop further execution if terms are not agreed
+                  // Validate form before submission
+                  if (_formKey.currentState!.validate()) {
+                    if (checkBoxValue == false) {
+                      customToastMessage(
+                        "Terms and Conditions",
+                        "You must agree to the terms and conditions to proceed.",
+                      );
+                      return; // Stop further execution if terms are not agreed
+                    }
+                    await postRegister
+                        .postData(
+                          data: {
+                            "name": nameController.text,
+                            "email": emailController.text,
+                            "phone": phoneController.text,
+                            "password": passwordController.text,
+                            "password_confirmation":
+                                confirmPasswordController.text,
+                            "agree_to_terms": checkBoxValue ? 1 : 0,
+                          },
+                        )
+                        .waitingForFutureWithoutBg()
+                        .then((v) {
+                          if (v) {
+                            Get.to(
+                              () => VerificationScreen(
+                                verificationType: "signup",
+                                email: emailController.text,
+                              ),
+                            );
+                          }
+                        });
                   }
-                  await postRegister
-                      .postData(
-                        data: {
-                          "name": nameController.text,
-                          "email": emailController.text,
-                          "phone": phoneController.text,
-                          "password": passwordController.text,
-                          "password_confirmation":
-                              confirmPasswordController.text,
-                          "agree_to_terms": checkBoxValue ? 1 : 0,
-                        },
-                      )
-                      .waitingForFutureWithoutBg()
-                      .then((v) {
-                        Get.to(
-                          () => VerificationScreen(
-                            verificationType: "signup",
-                            email: emailController.text,
-                          ),
-                        );
-                      });
                 },
               ),
 
