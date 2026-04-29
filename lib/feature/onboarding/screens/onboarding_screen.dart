@@ -25,6 +25,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     switch (currentTab) {
       case 0:
         return OnboardingWidget(
+          key: ValueKey(0),
           imageUrl: Assets.images.onboarding1Image.path,
           title: "Your Dog Is Talking to You",
           subtitle:
@@ -32,18 +33,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         );
       case 1:
         return OnboardingWidget(
+          key: ValueKey(1),
           imageUrl: Assets.images.onboarding2Image.path,
           title: "Hear What Your Dog Means",
           subtitle: "Turn dog howls into real understanding",
         );
       case 2:
         return OnboardingWidget(
+          key: ValueKey(2),
           imageUrl: Assets.images.onboarding3Image.path,
           title: "Every Howl Has a Meaning",
           subtitle: "Record your dog’s voice and discover what they want.",
         );
       case 3:
         return OnboardingWidget(
+          key: ValueKey(3),
           imageUrl: Assets.images.onboarding4Image.path,
           title: "Dogs Speak. We Translate.",
           subtitle: "Record a howl and uncover the message behind it.",
@@ -61,8 +65,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Column(
           children: [
             //  SizedBox(height: kToolbarHeight + 20.h),
-            Expanded(child: selectBody()),
-
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 500),
+                transitionBuilder: (child, animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: ScaleTransition(scale: animation, child: child),
+                  );
+                },
+                child: selectBody(),
+              ),
+            ),
+            SizedBox(height: 20.h),
             CustomTabBar(
               currentIndex: currentTab,
               onTap: (index) {
@@ -71,7 +86,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 });
               },
             ),
-            SizedBox(height: 20.h),
+            // SizedBox(height: 20.h),
             // HexagonButton(
             //   onPressed: () {
             //     setState(() {

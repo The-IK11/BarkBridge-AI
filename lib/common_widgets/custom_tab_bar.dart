@@ -16,20 +16,23 @@ class CustomTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(
-        length,
-        (index) => Expanded(
-          child: GestureDetector(
-            onTap: () => onTap(index),
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 4.w),
-              height: index == currentIndex ? 7.h : 3.h,
-              decoration: BoxDecoration(
-                color: index == currentIndex
-                    ? AppColors.cFFFFFF
-                    : AppColors.c111F47,
-                borderRadius: BorderRadius.circular(10.r),
+    return SizedBox(
+      width: 144.w,
+      child: Row(
+        children: List.generate(
+          length,
+          (index) => Expanded(
+            child: GestureDetector(
+              onTap: () => onTap(index),
+              child: Container(
+                width: index == currentIndex ? 37.w : 144.w,
+                //margin: EdgeInsets.symmetric(horizontal: 4.w),
+                height: index == currentIndex ? 7.h : 3.h,
+                decoration: BoxDecoration(
+                  color: index == currentIndex
+                      ? AppColors.cFFFFFF
+                      : AppColors.c111F47,
+                ),
               ),
             ),
           ),
