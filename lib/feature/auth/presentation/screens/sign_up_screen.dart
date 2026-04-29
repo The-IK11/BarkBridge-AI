@@ -1,3 +1,9 @@
+import 'dart:math';
+
+import 'package:barkbridgeai/constants/app_constants.dart';
+import 'package:barkbridgeai/helpers/di.dart';
+import 'package:barkbridgeai/helpers/social_auth.dart';
+import 'package:barkbridgeai/navigation_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -243,7 +249,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
               CustomButton(
                 buttonType: ButtonType.secondary,
                 text: "Sign in with Google",
-                onPressed: () {},
+                onPressed: () async {
+                  await SocialAuthHelper.signOut(onSuccess: () async {});
+                  await SocialAuthHelper.signInWithGoogle(
+                    onSuccess: (user, token) async {
+                      final payload = {
+                        'token': token,
+                        'provider': 'google',
+                        'username': user.displayName ?? 'User',
+                        'email': user.email ?? '',
+                        'avatar': user.photoURL ?? '',
+                      };
+
+                      // Hit the API like this
+                      await postSocialLogin
+                          .postData(data: payload)
+                          .waitingForFutureWithoutBg()
+                          .then((v) {
+                            if (v) {
+                              Get.to(() => NavigationScreen());
+                              appData.write(kGoogle, true);
+                            }
+                          });
+                    },
+                  );
+                },
                 imageUrl: Assets.icons.googleIcon.path,
               ), // Or use an asset icon
 
