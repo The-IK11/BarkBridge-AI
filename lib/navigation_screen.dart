@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/feature/home/presentations/ai_response_screen.dart';
-import 'package:tintpin14_app/feature/home/presentations/home_screen.dart';
-import 'package:tintpin14_app/feature/profile/presentation/screens/profile_screen.dart';
-import 'package:tintpin14_app/gen/assets.gen.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/feature/home/presentations/ai_response_screen.dart';
+import 'package:barkbridgeai/feature/home/presentations/home_screen.dart';
+import 'package:barkbridgeai/feature/profile/presentation/screens/profile_screen.dart';
+import 'package:barkbridgeai/gen/assets.gen.dart';
 // Import your custom clipper and bar here
 
 class NavigationScreen extends StatefulWidget {

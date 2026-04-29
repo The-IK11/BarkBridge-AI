@@ -1,4 +1,4 @@
-# tintpin14_app
+# barkbridgeai
 
 A new Flutter project.
 

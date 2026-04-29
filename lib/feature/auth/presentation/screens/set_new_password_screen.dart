@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
-import 'package:get/state_manager.dart';
-import 'package:tintpin14_app/common_widgets/auth_common_text_form_field.dart';
-import 'package:tintpin14_app/common_widgets/custom_button.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/constants/validator.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
-import 'package:tintpin14_app/helpers/loading_helper.dart';
-import 'package:tintpin14_app/navigation_screen.dart';
-import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
-import 'package:tintpin14_app/networks/api_access.dart';
+import 'package:barkbridgeai/common_widgets/auth_common_text_form_field.dart';
+import 'package:barkbridgeai/common_widgets/custom_button.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/constants/validator.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
+import 'package:barkbridgeai/helpers/loading_helper.dart';
+import 'package:barkbridgeai/feature/auth/presentation/screens/sign_in_screen.dart';
+import 'package:barkbridgeai/networks/api_access.dart';
 
 class SetNewPasswordScreen extends StatefulWidget {
   const SetNewPasswordScreen({

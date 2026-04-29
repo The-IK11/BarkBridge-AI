@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/common_widgets/waiting_widget.dart';
-import 'package:tintpin14_app/feature/dynamic_page/model/dynamic_page_model.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
-import 'package:tintpin14_app/helpers/loading_helper.dart';
-import 'package:tintpin14_app/networks/api_access.dart';
-import 'package:tintpin14_app/networks/endpoints.dart';
+import 'package:barkbridgeai/common_widgets/custom_app_bar.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/common_widgets/waiting_widget.dart';
+import 'package:barkbridgeai/feature/dynamic_page/model/dynamic_page_model.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
+import 'package:barkbridgeai/networks/api_access.dart';
+import 'package:barkbridgeai/networks/endpoints.dart';
 
 class DynamicScreen extends StatefulWidget {
   final String title;

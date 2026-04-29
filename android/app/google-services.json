@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "971263030513",
+    "project_id": "barkbridgeai-a76e5",
+    "storage_bucket": "barkbridgeai-a76e5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:971263030513:android:2737de30352946b50ea550",
+        "android_client_info": {
+          "package_name": "com.barkbridgeai.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmks1b_uxCwEaO3G5eILpk7jGPXUnK9ZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

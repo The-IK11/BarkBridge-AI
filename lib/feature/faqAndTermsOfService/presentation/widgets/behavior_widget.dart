@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/feature/faqAndTermsOfService/presentation/widgets/accordion_item_widget.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/feature/faqAndTermsOfService/presentation/widgets/accordion_item_widget.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
 
 class Behavior extends StatelessWidget {
   const Behavior({super.key});

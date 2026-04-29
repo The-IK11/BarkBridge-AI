@@ -3,12 +3,10 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:tintpin14_app/feature/dynamic_page/presentation/dynamic_page_screen.dart';
-import 'package:tintpin14_app/feature/faqAndTermsOfService/presentation/screens/faq_screen.dart';
-import 'package:tintpin14_app/feature/home/presentations/ai_response_screen.dart';
-import 'package:tintpin14_app/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
-
-import '../navigation_screen.dart';
+import 'package:barkbridgeai/feature/dynamic_page/presentation/dynamic_page_screen.dart';
+import 'package:barkbridgeai/feature/faqAndTermsOfService/presentation/screens/faq_screen.dart';
+import 'package:barkbridgeai/feature/home/presentations/ai_response_screen.dart';
+import 'package:barkbridgeai/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
 
 final class Routes {
   static final Routes _routes = Routes._internal();

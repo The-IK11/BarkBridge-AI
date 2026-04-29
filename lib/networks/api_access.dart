@@ -1,18 +1,17 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:tintpin14_app/constants/app_constants.dart';
-import 'package:tintpin14_app/feature/dynamic_page/model/dynamic_page_model.dart';
-import 'package:tintpin14_app/helpers/di.dart';
-import 'package:tintpin14_app/helpers/navigation_service.dart';
-import 'package:tintpin14_app/networks/api_clint/delete/enum.dart';
-import 'package:tintpin14_app/networks/api_clint/delete/rx.dart';
-import 'package:tintpin14_app/networks/api_clint/post/enum.dart';
-import 'package:tintpin14_app/networks/api_clint/post/rx.dart';
-import 'package:tintpin14_app/networks/api_clint/get/rx.dart';
-import 'package:tintpin14_app/networks/dio/dio.dart';
-import 'package:tintpin14_app/networks/endpoints.dart';
-import 'package:tintpin14_app/feature/profile/model/profile_model.dart';
-import 'package:tintpin14_app/feature/profile/model/ai_response_model.dart';
-import 'package:tintpin14_app/feature/faqAndTermsOfService/model/faq_screen_model.dart';
+import 'package:barkbridgeai/constants/app_constants.dart';
+import 'package:barkbridgeai/feature/dynamic_page/model/dynamic_page_model.dart';
+import 'package:barkbridgeai/helpers/di.dart';
+import 'package:barkbridgeai/networks/api_clint/delete/enum.dart';
+import 'package:barkbridgeai/networks/api_clint/delete/rx.dart';
+import 'package:barkbridgeai/networks/api_clint/post/enum.dart';
+import 'package:barkbridgeai/networks/api_clint/post/rx.dart';
+import 'package:barkbridgeai/networks/api_clint/get/rx.dart';
+import 'package:barkbridgeai/networks/dio/dio.dart';
+import 'package:barkbridgeai/networks/endpoints.dart';
+import 'package:barkbridgeai/feature/profile/model/profile_model.dart';
+import 'package:barkbridgeai/feature/profile/model/ai_response_model.dart';
+import 'package:barkbridgeai/feature/faqAndTermsOfService/model/faq_screen_model.dart';
 
 // PostOnboardingRx postOnboardingRX = PostOnboardingRx(
 //   empty: {},
@@ -145,7 +144,11 @@ PostRx postSocialLogin = PostRx(
   endPoint: Endpoints.postSocialLogin(),
   toastSetting: ToastSetting.both,
   onSuccess: (data) async {
-    // Social login successful
+    if (data['data'] != null && data['data']['token'] != null) {
+      DioSingleton.instance.update(data['data']['token']);
+      await appData.write(kKeyAccessToken, data['data']['token']);
+      await appData.write(kKeyIsLoggedIn, true);
+    }
   },
   onError: (message) async {
     // Error message will be displayed automatically via toast

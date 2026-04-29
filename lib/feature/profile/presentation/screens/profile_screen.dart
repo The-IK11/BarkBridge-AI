@@ -1,26 +1,22 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
-import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
-import 'package:tintpin14_app/common_widgets/custom_button.dart';
-import 'package:tintpin14_app/common_widgets/custom_network_image.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/common_widgets/not_found_widget.dart';
-import 'package:tintpin14_app/common_widgets/waiting_widget.dart';
-import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
-import 'package:tintpin14_app/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
-import 'package:tintpin14_app/feature/profile/presentation/screens/change_password_screen.dart';
-import 'package:tintpin14_app/feature/profile/presentation/screens/edit_profile_screen.dart';
-import 'package:tintpin14_app/feature/profile/presentation/screens/setting_screen.dart';
-import 'package:tintpin14_app/feature/profile/presentation/widgets/upgradePlanBanner.dart';
-import 'package:tintpin14_app/gen/assets.gen.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
-import 'package:tintpin14_app/helpers/loading_helper.dart';
-import 'package:tintpin14_app/networks/api_access.dart';
-import 'package:tintpin14_app/feature/profile/model/profile_model.dart';
+import 'package:barkbridgeai/common_widgets/custom_button.dart';
+import 'package:barkbridgeai/common_widgets/custom_network_image.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/common_widgets/not_found_widget.dart';
+import 'package:barkbridgeai/common_widgets/waiting_widget.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/feature/auth/presentation/screens/sign_in_screen.dart';
+import 'package:barkbridgeai/feature/plansAndPricing/screens/plan_and_pricing_screen.dart';
+import 'package:barkbridgeai/feature/profile/presentation/screens/change_password_screen.dart';
+import 'package:barkbridgeai/feature/profile/presentation/screens/edit_profile_screen.dart';
+import 'package:barkbridgeai/feature/profile/presentation/screens/setting_screen.dart';
+import 'package:barkbridgeai/gen/assets.gen.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
+import 'package:barkbridgeai/helpers/loading_helper.dart';
+import 'package:barkbridgeai/networks/api_access.dart';
+import 'package:barkbridgeai/feature/profile/model/profile_model.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

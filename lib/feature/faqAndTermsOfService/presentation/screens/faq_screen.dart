@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tintpin14_app/common_widgets/auth_common_text_form_field.dart';
-import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/common_widgets/waiting_widget.dart';
-import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/feature/faqAndTermsOfService/model/faq_screen_model.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
-import 'package:tintpin14_app/networks/api_access.dart';
+import 'package:barkbridgeai/common_widgets/auth_common_text_form_field.dart';
+import 'package:barkbridgeai/common_widgets/custom_app_bar.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/common_widgets/waiting_widget.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/feature/faqAndTermsOfService/model/faq_screen_model.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
+import 'package:barkbridgeai/networks/api_access.dart';
 
 class FaqScreen extends StatefulWidget {
   const FaqScreen({super.key});

@@ -4,8 +4,8 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' as getx;
-import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
-import 'package:tintpin14_app/networks/dio/dio.dart';
+import 'package:barkbridgeai/feature/auth/presentation/screens/sign_in_screen.dart';
+import 'package:barkbridgeai/networks/dio/dio.dart';
 
 import '../../constants/app_constants.dart';
 

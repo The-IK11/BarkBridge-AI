@@ -2,17 +2,14 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/state_manager.dart';
-import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/feature/home/presentations/ai_response_screen.dart';
-import 'package:tintpin14_app/feature/home/presentations/widgets/speedometer_guage.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
-import 'package:tintpin14_app/helpers/all_routes.dart';
-import 'package:tintpin14_app/helpers/navigation_service.dart';
-import 'package:tintpin14_app/networks/api_access.dart';
+import 'package:barkbridgeai/common_widgets/custom_app_bar.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/feature/home/presentations/widgets/speedometer_guage.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
+import 'package:barkbridgeai/helpers/all_routes.dart';
+import 'package:barkbridgeai/helpers/navigation_service.dart';
+import 'package:barkbridgeai/networks/api_access.dart';
 
 // --- MAIN SCREEN ---
 class FileUploadSpeedScreen extends StatefulWidget {

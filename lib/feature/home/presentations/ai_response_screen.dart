@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
-import 'package:tintpin14_app/common_widgets/custom_button.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
-import 'package:tintpin14_app/navigation_screen.dart';
-import 'package:tintpin14_app/networks/api_access.dart';
+import 'package:barkbridgeai/common_widgets/custom_app_bar.dart';
+import 'package:barkbridgeai/common_widgets/custom_button.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
+import 'package:barkbridgeai/navigation_screen.dart';
+import 'package:barkbridgeai/networks/api_access.dart';
 
 class AiResponseScreen extends StatelessWidget {
   final bool isAIResponseScreen;
@@ -243,11 +242,11 @@ class AiResponseScreen extends StatelessWidget {
 }
 // import 'package:flutter/material.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
-// import 'package:tintpin14_app/common_widgets/glow_background.dart';
-// import 'package:tintpin14_app/constants/text_font_style.dart';
-// import 'package:tintpin14_app/gen/colors.gen.dart';
-// import 'package:tintpin14_app/navigation_screen.dart';
+// import 'package:barkbridgeai/common_widgets/custom_app_bar.dart';
+// import 'package:barkbridgeai/common_widgets/glow_background.dart';
+// import 'package:barkbridgeai/constants/text_font_style.dart';
+// import 'package:barkbridgeai/gen/colors.gen.dart';
+// import 'package:barkbridgeai/navigation_screen.dart';
 
 // class AiResponseScreen extends StatelessWidget {
 //   const AiResponseScreen({super.key});

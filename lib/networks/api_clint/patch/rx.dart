@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tintpin14_app/networks/api_clint/error_message_converter.dart';
+import 'package:barkbridgeai/networks/api_clint/error_message_converter.dart';
 
 import '../../../../../../../common_widgets/custom_toast.dart';
 import '../../../../../../../networks/rx_base.dart';

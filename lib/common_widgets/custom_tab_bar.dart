@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
 
 class CustomTabBar extends StatelessWidget {
   final int currentIndex;

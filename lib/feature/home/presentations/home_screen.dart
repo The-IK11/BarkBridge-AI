@@ -5,12 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tintpin14_app/common_widgets/custom_button.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/feature/home/presentations/file_upload_speed_screen.dart';
-import 'package:tintpin14_app/gen/assets.gen.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:barkbridgeai/common_widgets/custom_button.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/feature/home/presentations/file_upload_speed_screen.dart';
+import 'package:barkbridgeai/gen/assets.gen.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
 import 'package:image_picker/image_picker.dart';
 
 class HomeScreen extends StatefulWidget {

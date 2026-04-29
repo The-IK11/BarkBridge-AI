@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:tintpin14_app/networks/dio/dio.dart';
+import 'package:barkbridgeai/networks/dio/dio.dart';
 
 import '../../../../../../networks/exception_handler/data_source.dart';
 

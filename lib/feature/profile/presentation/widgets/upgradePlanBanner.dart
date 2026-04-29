@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
-import 'package:tintpin14_app/gen/fonts.gen.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
+import 'package:barkbridgeai/gen/fonts.gen.dart';
 
 class UpgradePlanBanner extends StatelessWidget {
   const UpgradePlanBanner({super.key});
