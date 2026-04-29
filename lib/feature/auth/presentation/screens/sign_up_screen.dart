@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:barkbridgeai/constants/app_constants.dart';
 import 'package:barkbridgeai/helpers/di.dart';
 import 'package:barkbridgeai/helpers/social_auth.dart';
+import 'package:barkbridgeai/helpers/url_lunch.dart';
 import 'package:barkbridgeai/navigation_screen.dart';
+import 'package:barkbridgeai/networks/endpoints.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -187,6 +189,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 .copyWith(color: AppColors.c2707EE),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
+                                urlLunch(
+                                  "https://barkbridgeai.tech/page/privacy-policy",
+                                );
                                 // Handle Privacy Policy tap
                               },
                           ),
@@ -194,15 +199,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             text: "&",
                             style: TextFontStyle.textstyle14c898996Manrope400
                                 .copyWith(),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                // Handle & tap if needed
-                              },
                           ),
                           TextSpan(
                             text: " Terms and Condition",
                             style: TextFontStyle.textstyle14c898996Manrope400
                                 .copyWith(color: AppColors.c2707EE),
+
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                urlLunch(
+                                  "https://barkbridgeai.tech/page/terms-conditions",
+                                );
+                                // Handle & tap if needed
+                              },
                           ),
                         ],
                       ),
