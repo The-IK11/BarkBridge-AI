@@ -428,7 +428,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onPressed: () async {
                           Get.back();
                           try {
-                            if (appData.read(kGoogle)) {
+                            if (appData.read(kGoogle) ?? false) {
                               await SocialAuthHelper.signOut(
                                 onSuccess: () async {
                                   appData.write(kGoogle, false);
