@@ -110,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _buildLabel("Phone Number"),
                     AuthCommonTextFormField(
                       keyBoardType: TextInputType.phone,
-                      validator: validatePhoneNumber,
+                      //   validator: validatePhoneNumber,
                       controller: phoneController,
                       hintText: "Enter your phone number",
                       fillcolor: AppColors.cFFFFFF.withAlpha(8),
@@ -239,7 +239,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           data: {
                             "name": nameController.text,
                             "email": emailController.text,
-                            "phone": phoneController.text,
+                            "phone": phoneController.text.isEmpty
+                                ? null
+                                : phoneController.text,
                             "password": passwordController.text,
                             "password_confirmation":
                                 confirmPasswordController.text,
