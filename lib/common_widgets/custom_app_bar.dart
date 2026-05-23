@@ -14,6 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? iconThemeColor;
   final VoidCallback? onBackButtonPressed;
   final Widget? leading;
+  final bool showBackButton;
 
   @override
   final Size preferredSize;
@@ -26,6 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.iconThemeColor,
     this.onBackButtonPressed,
+    this.showBackButton = true,
     this.leading,
   }) : preferredSize = const Size.fromHeight(kToolbarHeight);
 
@@ -38,36 +40,43 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           InkWell(
             borderRadius: BorderRadius.circular(50.r),
 
-            onTap: () {
-              if (onBackButtonPressed != null) {
-                onBackButtonPressed!();
-              } else {
-                // Default behavior if no callback is provided
+            onTap: showBackButton
+                ? () {
+                    if (onBackButtonPressed != null) {
+                      onBackButtonPressed!();
+                    } else {
+                      // Default behavior if no callback is provided
 
-                NavigationService.goBack;
-              }
-            },
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.only(left: 5.w),
-                child: Image.asset(
-                  Assets.icons.backIcon.path,
-                  width: 20.w,
-                  height: 20.h,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+                      NavigationService.goBack;
+                    }
+                  }
+                : null,
+            child: showBackButton
+                ? Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 5.w),
+                      child: Image.asset(
+                        Assets.icons.backIcon.path,
+                        width: 20.w,
+                        height: 20.h,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                : null,
           ),
       centerTitle: true,
       title: Text(
         title,
-        style: TextFontStyle.textstyle16c6C757DHelveticalNenu400.copyWith(
-          color: AppColors.cFFFFFF,
-          fontWeight: FontWeight.w600,
+        style: TextFontStyle.textstyle11cB8BBCCManrope400.copyWith(
+          color: AppColors.cD9DAE4,
+          fontSize: 20.sp,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 4,
         ),
       ),
-      backgroundColor: backgroundColor ?? AppColors.cFFFFFF,
+      backgroundColor: backgroundColor ?? Color.fromARGB(97, 3, 27, 69),
+
       elevation: 0,
       // iconTheme: IconThemeData(color: iconThemeColor ?? AppColors.cF5F5F5),
       actions: actions ?? [],

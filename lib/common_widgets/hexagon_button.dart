@@ -2,7 +2,7 @@
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'dart:math' as math;
 
-// import 'package:tintpin14_app/gen/colors.gen.dart';
+// import 'package:barkbridgeai/gen/colors.gen.dart';
 
 // class HexagonButton extends StatelessWidget {
 //   final VoidCallback? onPressed;
@@ -85,7 +85,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:math' as math;
-import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
 
 class HexagonButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -93,11 +93,11 @@ class HexagonButton extends StatelessWidget {
   final IconData icon;
 
   const HexagonButton({
-    Key? key,
+    super.key,
     this.onPressed,
     this.size = 60.0,
     this.icon = Icons.arrow_outward,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

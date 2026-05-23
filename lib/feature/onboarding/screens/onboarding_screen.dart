@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/instance_manager.dart';
-import 'package:tintpin14_app/common_widgets/custom_tab_bar.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/common_widgets/hexagon_button.dart';
-import 'package:tintpin14_app/constants/app_constants.dart';
-import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
-import 'package:tintpin14_app/feature/onboarding/widgets/onboarding_widget.dart';
-import 'package:tintpin14_app/gen/assets.gen.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
-import 'package:tintpin14_app/helpers/di.dart';
-import 'package:tintpin14_app/navigation_screen.dart';
+import 'package:barkbridgeai/common_widgets/custom_tab_bar.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/constants/app_constants.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/feature/auth/presentation/screens/sign_in_screen.dart';
+import 'package:barkbridgeai/feature/onboarding/widgets/onboarding_widget.dart';
+import 'package:barkbridgeai/gen/assets.gen.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
+import 'package:barkbridgeai/helpers/di.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -27,6 +25,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     switch (currentTab) {
       case 0:
         return OnboardingWidget(
+          key: ValueKey(0),
           imageUrl: Assets.images.onboarding1Image.path,
           title: "Your Dog Is Talking to You",
           subtitle:
@@ -34,18 +33,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         );
       case 1:
         return OnboardingWidget(
+          key: ValueKey(1),
           imageUrl: Assets.images.onboarding2Image.path,
           title: "Hear What Your Dog Means",
           subtitle: "Turn dog howls into real understanding",
         );
       case 2:
         return OnboardingWidget(
+          key: ValueKey(2),
           imageUrl: Assets.images.onboarding3Image.path,
           title: "Every Howl Has a Meaning",
           subtitle: "Record your dog’s voice and discover what they want.",
         );
       case 3:
         return OnboardingWidget(
+          key: ValueKey(3),
           imageUrl: Assets.images.onboarding4Image.path,
           title: "Dogs Speak. We Translate.",
           subtitle: "Record a howl and uncover the message behind it.",
@@ -63,8 +65,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Column(
           children: [
             //  SizedBox(height: kToolbarHeight + 20.h),
-            Expanded(child: selectBody()),
-
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 500),
+                transitionBuilder: (child, animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: ScaleTransition(scale: animation, child: child),
+                  );
+                },
+                child: selectBody(),
+              ),
+            ),
+            SizedBox(height: 20.h),
             CustomTabBar(
               currentIndex: currentTab,
               onTap: (index) {
@@ -73,7 +86,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 });
               },
             ),
-            SizedBox(height: 20.h),
+            // SizedBox(height: 20.h),
             // HexagonButton(
             //   onPressed: () {
             //     setState(() {

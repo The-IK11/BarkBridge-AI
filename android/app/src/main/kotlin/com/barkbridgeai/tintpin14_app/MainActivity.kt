@@ -1,4 +1,4 @@
-package com.barkbridgeai.tintpin14_app
+package com.barkbridgeai.barkbridgeai
 
 import io.flutter.embedding.android.FlutterActivity
 

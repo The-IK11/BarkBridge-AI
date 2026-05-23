@@ -1,4 +1,4 @@
-name: tintpin14_app
+name: barkbridgeai
 description: "A new Flutter project."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -37,6 +37,11 @@ dependencies:
   camera: ^0.11.0+1
   permission_handler: ^11.0.0
   pin_input_text_field: ^4.5.2
+  flutter_html: ^3.0.0
+  firebase_auth: 6.4.0
+  google_sign_in: ^6.1.1
+  firebase_core: 4.7.0
+
 
 
 

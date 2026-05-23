@@ -1,20 +1,27 @@
+import 'dart:math';
+
+import 'package:barkbridgeai/constants/app_constants.dart';
+import 'package:barkbridgeai/helpers/di.dart';
+import 'package:barkbridgeai/helpers/social_auth.dart';
+import 'package:barkbridgeai/helpers/url_lunch.dart';
+import 'package:barkbridgeai/navigation_screen.dart';
+import 'package:barkbridgeai/networks/endpoints.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/utils.dart';
-import 'package:tintpin14_app/common_widgets/auth_common_text_form_field.dart';
-import 'package:tintpin14_app/common_widgets/custom_button.dart';
-import 'package:tintpin14_app/common_widgets/custom_toast.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/constants/validator.dart';
-import 'package:tintpin14_app/feature/auth/presentation/screens/sign_in_screen.dart';
-import 'package:tintpin14_app/feature/auth/presentation/screens/verification_screen.dart';
-import 'package:tintpin14_app/gen/assets.gen.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
-import 'package:tintpin14_app/helpers/loading_helper.dart';
-import 'package:tintpin14_app/networks/api_access.dart';
+import 'package:barkbridgeai/common_widgets/auth_common_text_form_field.dart';
+import 'package:barkbridgeai/common_widgets/custom_button.dart';
+import 'package:barkbridgeai/common_widgets/custom_toast.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/constants/validator.dart';
+import 'package:barkbridgeai/feature/auth/presentation/screens/sign_in_screen.dart';
+import 'package:barkbridgeai/feature/auth/presentation/screens/verification_screen.dart';
+import 'package:barkbridgeai/gen/assets.gen.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
+import 'package:barkbridgeai/helpers/loading_helper.dart';
+import 'package:barkbridgeai/networks/api_access.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -25,6 +32,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   bool checkBoxValue = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -74,62 +82,71 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 style: TextFontStyle.textstyle16c898996Manrope400,
               ),
               SizedBox(height: 40.h),
-              _buildLabel("Name"),
-              AuthCommonTextFormField(
-                validator: emptyValidator,
-                controller: nameController,
-                hintText: "Enter your name",
-                fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                radius: BorderRadius.circular(16.r),
-              ),
-              SizedBox(height: 20.h),
-              // Email Field
-              _buildLabel("Email"),
-              AuthCommonTextFormField(
-                validator: emailValidator,
-                controller: emailController,
-                hintText: "Enter your email",
-                fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                radius: BorderRadius.circular(16.r),
-              ),
-              SizedBox(height: 20.h),
-              // Phone Number Field
-              _buildLabel("Phone Number"),
-              AuthCommonTextFormField(
-                keyBoardType: TextInputType.phone,
-                validator: validatePhoneNumber,
-                controller: phoneController,
-                hintText: "Enter your phone number",
-                fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                radius: BorderRadius.circular(16.r),
-                //isObscure: true,
-              ),
-              SizedBox(height: 20.h),
-              // Phone Number Field
-              _buildLabel("Password"),
-              AuthCommonTextFormField(
-                validator: passwordValidator,
-                controller: passwordController,
-                hintText: "Type your password",
-                fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                radius: BorderRadius.circular(16.r),
-                //isObscure: true,
-              ),
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildLabel("Name"),
+                    AuthCommonTextFormField(
+                      validator: emptyValidator,
+                      controller: nameController,
+                      hintText: "Enter your name",
+                      fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                      radius: BorderRadius.circular(16.r),
+                    ),
+                    SizedBox(height: 20.h),
+                    // Email Field
+                    _buildLabel("Email"),
+                    AuthCommonTextFormField(
+                      validator: emailValidator,
+                      controller: emailController,
+                      hintText: "Enter your email",
+                      fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                      radius: BorderRadius.circular(16.r),
+                    ),
+                    SizedBox(height: 20.h),
+                    // Phone Number Field
+                    _buildLabel("Phone Number"),
+                    AuthCommonTextFormField(
+                      keyBoardType: TextInputType.phone,
+                      //   validator: validatePhoneNumber,
+                      controller: phoneController,
+                      hintText: "Enter your phone number",
+                      fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                      radius: BorderRadius.circular(16.r),
+                      //isObscure: true,
+                    ),
+                    SizedBox(height: 20.h),
+                    // Phone Number Field
+                    _buildLabel("Password"),
+                    AuthCommonTextFormField(
+                      validator: passwordValidator,
+                      controller: passwordController,
+                      hintText: "Type your password",
+                      fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                      radius: BorderRadius.circular(16.r),
+                      //isObscure: true,
+                    ),
 
-              SizedBox(height: 20.h),
+                    SizedBox(height: 20.h),
 
-              // Password Field
-              _buildLabel("Password"),
-              AuthCommonTextFormField(
-                validator: (value) =>
-                    confirmPasswordValidator(value, passwordController.text),
-                controller: confirmPasswordController,
-                hintText: "Re-type your password",
-                fillcolor: AppColors.cFFFFFF.withAlpha(8),
-                radius: BorderRadius.circular(16.r),
-                isObscure: true,
+                    // Password Field
+                    _buildLabel("Password"),
+                    AuthCommonTextFormField(
+                      validator: (value) => confirmPasswordValidator(
+                        value,
+                        passwordController.text,
+                      ),
+                      controller: confirmPasswordController,
+                      hintText: "Re-type your password",
+                      fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                      radius: BorderRadius.circular(16.r),
+                      isObscure: true,
+                    ),
+                  ],
+                ),
               ),
-
               SizedBox(height: 24.h),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -167,9 +184,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             style: TextFontStyle.textstyle14c898996Manrope400,
                           ),
                           TextSpan(
-                            text: "Terms and Condition",
+                            text: "Privacy Policy",
                             style: TextFontStyle.textstyle14c898996Manrope400
                                 .copyWith(color: AppColors.c2707EE),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                urlLunch(
+                                  "https://barkbridgeai.tech/page/privacy-policy",
+                                );
+                                // Handle Privacy Policy tap
+                              },
+                          ),
+                          TextSpan(
+                            text: "&",
+                            style: TextFontStyle.textstyle14c898996Manrope400
+                                .copyWith(),
+                          ),
+                          TextSpan(
+                            text: " Terms and Condition",
+                            style: TextFontStyle.textstyle14c898996Manrope400
+                                .copyWith(color: AppColors.c2707EE),
+
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                urlLunch(
+                                  "https://barkbridgeai.tech/page/terms-conditions",
+                                );
+                                // Handle & tap if needed
+                              },
                           ),
                         ],
                       ),
@@ -183,34 +225,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 buttonType: ButtonType.primary,
                 text: "Sign Up Now",
                 onPressed: () async {
-                  if (checkBoxValue == false) {
-                    customToastMessage(
-                      "Terms and Conditions",
-                      "You must agree to the terms and conditions to proceed.",
-                    );
-                    return; // Stop further execution if terms are not agreed
+                  // Validate form before submission
+                  if (_formKey.currentState!.validate()) {
+                    if (checkBoxValue == false) {
+                      customToastMessage(
+                        "Terms and Conditions",
+                        "You must agree to the terms and conditions to proceed.",
+                      );
+                      return; // Stop further execution if terms are not agreed
+                    }
+                    await postRegister
+                        .postData(
+                          data: {
+                            "name": nameController.text,
+                            "email": emailController.text,
+                            "phone": phoneController.text.isEmpty
+                                ? null
+                                : phoneController.text,
+                            "password": passwordController.text,
+                            "password_confirmation":
+                                confirmPasswordController.text,
+                            "agree_to_terms": checkBoxValue ? 1 : 0,
+                          },
+                        )
+                        .waitingForFutureWithoutBg()
+                        .then((v) {
+                          if (v) {
+                            Get.to(
+                              () => VerificationScreen(
+                                verificationType: "signup",
+                                email: emailController.text,
+                              ),
+                            );
+                          }
+                        });
                   }
-                  await postRegister
-                      .postData(
-                        data: {
-                          "name": nameController.text,
-                          "email": emailController.text,
-                          "phone": phoneController.text,
-                          "password": passwordController.text,
-                          "password_confirmation":
-                              confirmPasswordController.text,
-                          "agree_to_terms": checkBoxValue ? 1 : 0,
-                        },
-                      )
-                      .waitingForFutureWithoutBg()
-                      .then((v) {
-                        Get.to(
-                          () => VerificationScreen(
-                            verificationType: "signup",
-                            email: emailController.text,
-                          ),
-                        );
-                      });
                 },
               ),
 
@@ -244,7 +293,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
               CustomButton(
                 buttonType: ButtonType.secondary,
                 text: "Sign in with Google",
-                onPressed: () {},
+                onPressed: () async {
+                  await SocialAuthHelper.signOut(onSuccess: () async {});
+                  await SocialAuthHelper.signInWithGoogle(
+                    onSuccess: (user, token) async {
+                      final payload = {
+                        'token': token,
+                        'provider': 'google',
+                        'username': user.displayName ?? 'User',
+                        'email': user.email ?? '',
+                        'avatar': user.photoURL ?? '',
+                      };
+
+                      // Hit the API like this
+                      await postSocialLogin
+                          .postData(data: payload)
+                          .waitingForFutureWithoutBg()
+                          .then((v) {
+                            if (v) {
+                              Get.to(() => NavigationScreen());
+                              appData.write(kGoogle, true);
+                            }
+                          });
+                    },
+                  );
+                },
                 imageUrl: Assets.icons.googleIcon.path,
               ), // Or use an asset icon
 

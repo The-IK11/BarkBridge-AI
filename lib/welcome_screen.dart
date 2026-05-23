@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'common_widgets/safe_scaffold.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
 import 'gen/assets.gen.dart';
 
 final class WelcomeScreen extends StatelessWidget {

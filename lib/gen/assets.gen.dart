@@ -26,21 +26,76 @@ class $AssetsIconsGen {
   AssetGenImage get backIcon =>
       const AssetGenImage('assets/icons/backIcon.png');
 
+  /// File path: assets/icons/bubble_tick_icon.png
+  AssetGenImage get bubbleTickIcon =>
+      const AssetGenImage('assets/icons/bubble_tick_icon.png');
+
   /// File path: assets/icons/button_icon.png
   AssetGenImage get buttonIcon =>
       const AssetGenImage('assets/icons/button_icon.png');
 
+  /// File path: assets/icons/crown_icon.png
+  AssetGenImage get crownIcon =>
+      const AssetGenImage('assets/icons/crown_icon.png');
+
   /// File path: assets/icons/google_icon.png
   AssetGenImage get googleIcon =>
       const AssetGenImage('assets/icons/google_icon.png');
+
+  /// File path: assets/icons/home_icon.png
+  AssetGenImage get homeIcon =>
+      const AssetGenImage('assets/icons/home_icon.png');
+
+  /// File path: assets/icons/home_ring_image.png
+  AssetGenImage get homeRingImage =>
+      const AssetGenImage('assets/icons/home_ring_image.png');
+
+  /// File path: assets/icons/navigationBar_middle_part.png
+  AssetGenImage get navigationBarMiddlePart =>
+      const AssetGenImage('assets/icons/navigationBar_middle_part.png');
+
+  /// File path: assets/icons/navigation_bar.png
+  AssetGenImage get navigationBar =>
+      const AssetGenImage('assets/icons/navigation_bar.png');
+
+  /// File path: assets/icons/profile_icon.png
+  AssetGenImage get profileIcon =>
+      const AssetGenImage('assets/icons/profile_icon.png');
+
+  /// File path: assets/icons/result_icon.png
+  AssetGenImage get resultIcon =>
+      const AssetGenImage('assets/icons/result_icon.png');
+
+  /// File path: assets/icons/scan_camera_icon.png
+  AssetGenImage get scanCameraIcon =>
+      const AssetGenImage('assets/icons/scan_camera_icon.png');
+
+  /// File path: assets/icons/selected_home_icon.png
+  AssetGenImage get selectedHomeIcon =>
+      const AssetGenImage('assets/icons/selected_home_icon.png');
+
+  /// File path: assets/icons/white_crown_icon.png
+  AssetGenImage get whiteCrownIcon =>
+      const AssetGenImage('assets/icons/white_crown_icon.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
     appbarBackIcon,
     appleIcon,
     backIcon,
+    bubbleTickIcon,
     buttonIcon,
+    crownIcon,
     googleIcon,
+    homeIcon,
+    homeRingImage,
+    navigationBarMiddlePart,
+    navigationBar,
+    profileIcon,
+    resultIcon,
+    scanCameraIcon,
+    selectedHomeIcon,
+    whiteCrownIcon,
   ];
 }
 
@@ -79,6 +134,10 @@ class $AssetsImagesGen {
   AssetGenImage get splashImage =>
       const AssetGenImage('assets/images/splash_image.png');
 
+  /// File path: assets/images/upgrade_plan_image.png
+  AssetGenImage get upgradePlanImage =>
+      const AssetGenImage('assets/images/upgrade_plan_image.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     avatarBorder,
@@ -89,6 +148,7 @@ class $AssetsImagesGen {
     onboarding3Image,
     onboarding4Image,
     splashImage,
+    upgradePlanImage,
   ];
 }
 
@@ -159,6 +219,9 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/restaurant_loading.json
   String get restaurantLoading => 'assets/lottie/restaurant_loading.json';
 
+  /// File path: assets/lottie/ring_lottie.json
+  String get ringLottie => 'assets/lottie/ring_lottie.json';
+
   /// File path: assets/lottie/success.json
   String get success => 'assets/lottie/success.json';
 
@@ -191,6 +254,7 @@ class $AssetsLottieGen {
     rating,
     removeFromCart,
     restaurantLoading,
+    ringLottie,
     success,
     success1,
     waiting,

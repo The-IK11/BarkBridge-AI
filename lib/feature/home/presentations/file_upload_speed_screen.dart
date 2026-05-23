@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/state_manager.dart';
-import 'package:tintpin14_app/common_widgets/custom_app_bar.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/feature/home/presentations/ai_response_screen.dart';
-import 'package:tintpin14_app/feature/home/presentations/widgets/speedometer_guage.dart';
-import 'package:tintpin14_app/networks/api_access.dart';
+import 'package:barkbridgeai/common_widgets/custom_app_bar.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/feature/home/presentations/widgets/speedometer_guage.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
+import 'package:barkbridgeai/helpers/all_routes.dart';
+import 'package:barkbridgeai/helpers/navigation_service.dart';
+import 'package:barkbridgeai/networks/api_access.dart';
 
 // --- MAIN SCREEN ---
 class FileUploadSpeedScreen extends StatefulWidget {
@@ -22,9 +23,12 @@ class FileUploadSpeedScreen extends StatefulWidget {
 class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
     with SingleTickerProviderStateMixin {
   int _percentage = 0;
+  int _lastPercentage = 0;
   bool _uploadComplete = false;
   bool _isUploading = false;
   String? _errorMessage;
+  Timer? _progressTimer;
+  int _currentUploadId = 0; // Track which upload this is
 
   @override
   void initState() {
@@ -33,11 +37,37 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
     _startVideoUpload();
   }
 
+  @override
+  void dispose() {
+    _progressTimer?.cancel();
+    super.dispose();
+  }
+
+  void _goBack() {
+    if (!mounted) {
+      return;
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final navigator = Navigator.of(context);
+      if (navigator.canPop()) {
+        navigator.pop();
+      }
+    });
+  }
+
   Future<void> _startVideoUpload() async {
+    // Cancel any previous uploads first
+    _progressTimer?.cancel();
+
+    // Increment upload ID to invalidate old stream events
+    _currentUploadId++;
+    final uploadId = _currentUploadId;
+
     if (widget.videoFile == null) {
-      setState(() {
-        _errorMessage = "No video file selected";
-      });
+      _goBack();
       return;
     }
 
@@ -45,49 +75,59 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
       _isUploading = true;
       _errorMessage = null;
       _percentage = 0;
+      _lastPercentage = 0;
+      _uploadComplete = false;
     });
 
     try {
-      // Create a subscription to track upload progress
-      final subscription = postPetAnalyze.dataFetcher.stream.listen(
-        (event) {
-          // Listen for completion
+      // Start simulating progress BEFORE making API call
+      _progressTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+        // Only update if this is still the current upload
+        if (uploadId == _currentUploadId &&
+            mounted &&
+            _percentage < 95 &&
+            _isUploading) {
+          // Check if progress is stalled (no change in last 100ms)
+          if (_percentage == _lastPercentage && _percentage > 0) {
+            print('Upload stalled at $_percentage%');
+            timer.cancel();
+            _goBack();
+            return;
+          }
+          _lastPercentage = _percentage;
           setState(() {
-            _uploadComplete = true;
-            _percentage = 100;
-            _isUploading = false;
-          });
-        },
-        onError: (error) {
-          setState(() {
-            _errorMessage = "Upload failed: ${error.toString()}";
-            _isUploading = false;
-          });
-        },
-      );
-
-      // Simulate gradual progress update
-      final progressTimer = Timer.periodic(Duration(milliseconds: 500), (
-        timer,
-      ) {
-        if (_percentage < 95 && _isUploading) {
-          setState(() {
-            _percentage += 5;
+            _percentage += 1;
           });
         }
       });
 
-      // Make the API call with video file (pass File object, not path string)
-      await postPetAnalyze.postData(data: {'media': widget.videoFile});
+      // Make the API call
+      final success = await postPetAnalyze.postData(
+        data: {'media': widget.videoFile},
+      );
 
-      progressTimer.cancel();
-      subscription.cancel();
+      if (!success || uploadId != _currentUploadId) {
+        _progressTimer?.cancel();
+        if (mounted) {
+          _goBack();
+        }
+        return;
+      }
+
+      _progressTimer?.cancel();
+      if (mounted) {
+        setState(() {
+          _uploadComplete = true;
+          _percentage = 100;
+          _isUploading = false;
+        });
+      }
     } catch (e) {
-      setState(() {
-        _errorMessage = "Upload failed: ${e.toString()}";
-        _isUploading = false;
-      });
-      print('Upload Error: $e');
+      if (uploadId == _currentUploadId) {
+        _progressTimer?.cancel();
+        print('Upload Error: $e');
+        _goBack();
+      }
     }
   }
 
@@ -100,7 +140,7 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
       ),
       child: Column(
         children: [
-          SizedBox(height: kToolbarHeight + 20.h),
+          SizedBox(height: kToolbarHeight + 30.h),
 
           // Title Text
           Padding(
@@ -110,11 +150,11 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
                   ? "Upload Failed"
                   : "Hang tight! Your file is uploading",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: _errorMessage != null ? Colors.red : Colors.white,
-                fontSize: 22.sp,
-                fontWeight: FontWeight.bold,
-                height: 1.4,
+              style: TextFontStyle.textstyle11cB8BBCCManrope400.copyWith(
+                color: AppColors.cD9DAE4,
+                fontSize: 28.sp,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 3,
               ),
             ),
           ),
@@ -196,7 +236,10 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
             child: OutlinedButton(
               onPressed: _uploadComplete
                   ? () {
-                      Get.to(() => const AiResponseScreen());
+                      NavigationService.navigateToWithArgs(
+                        Routes.aiResponseScreen,
+                        {"isAIResponseScreen": true},
+                      );
                     }
                   : null,
               style: OutlinedButton.styleFrom(

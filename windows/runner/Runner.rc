@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "tintpin14_app" "\0"
+            VALUE "FileDescription", "barkbridgeai" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "tintpin14_app" "\0"
+            VALUE "InternalName", "barkbridgeai" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "tintpin14_app.exe" "\0"
-            VALUE "ProductName", "tintpin14_app" "\0"
+            VALUE "OriginalFilename", "barkbridgeai.exe" "\0"
+            VALUE "ProductName", "barkbridgeai" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

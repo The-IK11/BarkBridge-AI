@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/gen/assets.gen.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/gen/assets.gen.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
 
 class OnboardingWidget extends StatelessWidget {
   const OnboardingWidget({super.key, this.imageUrl, this.title, this.subtitle});

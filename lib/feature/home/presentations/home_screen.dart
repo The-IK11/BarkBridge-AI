@@ -5,12 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tintpin14_app/common_widgets/custom_button.dart';
-import 'package:tintpin14_app/common_widgets/glow_background.dart';
-import 'package:tintpin14_app/constants/text_font_style.dart';
-import 'package:tintpin14_app/feature/home/presentations/file_upload_speed_screen.dart';
-import 'package:tintpin14_app/gen/assets.gen.dart';
-import 'package:tintpin14_app/gen/colors.gen.dart';
+import 'package:barkbridgeai/common_widgets/custom_button.dart';
+import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/constants/text_font_style.dart';
+import 'package:barkbridgeai/feature/home/presentations/file_upload_speed_screen.dart';
+import 'package:barkbridgeai/gen/assets.gen.dart';
+import 'package:barkbridgeai/gen/colors.gen.dart';
 import 'package:image_picker/image_picker.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -63,7 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextFontStyle.textstyle11cB8BBCCManrope400.copyWith(
             color: AppColors.cD9DAE4,
             fontSize: 20.sp,
-            letterSpacing: 1.5,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 4,
           ),
         ),
       ),
@@ -72,59 +73,147 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             SizedBox(height: kToolbarHeight + 20.h),
+
             Container(
+              height: 48.h,
+              width: 63.w,
               padding: EdgeInsets.all(10.sp),
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                borderRadius: BorderRadius.circular(24.r),
+                border: Border.all(color: AppColors.c778DFF.withAlpha(50)),
                 color: AppColors.c778DFF.withAlpha(50),
               ),
-              child: Icon(
-                Icons.workspace_premium_outlined,
-                size: 20.sp,
-                color: AppColors.cFD5900,
+              child: Center(
+                child: Image.asset(
+                  Assets.icons.crownIcon.path,
+                  width: 25.w,
+                  height: 25.h,
+                ),
               ),
             ),
             SizedBox(height: 10.h),
             Text(
               "Translating Dog Sounds",
               style: TextFontStyle.textstyle20cFFFFFFManrope600.copyWith(
-                letterSpacing: 1.4,
+                fontSize: 35.sp,
+                letterSpacing: 4,
+                color: AppColors.cD9DAE4,
               ),
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: 10.h),
             Text(
               "Capture the howl to hear what your dog wants to say",
-              style: TextFontStyle.textstyle16c5465A6Manrope500,
+              style: TextFontStyle.textstyle16c5465A6Manrope500.copyWith(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 4,
+              ),
               textAlign: TextAlign.center,
             ),
+            SizedBox(height: 20.h),
             Stack(
+              clipBehavior: Clip.none,
               children: [
-                Lottie.asset(Assets.lottie.cameraBackground),
+                SizedBox(
+                  height: 245.h,
+                  width: 245.w,
+                  child: Lottie.asset(Assets.lottie.ringLottie),
+                ),
                 Positioned(
-                  top: 118.h,
-                  left: 110.w,
-                  child: Container(
-                    width: 122.w,
-                    height: 122.h,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppColors.c3B53FF, AppColors.c2606ED],
+                  top: -40.h,
+                  left: -40.w,
+                  child: Image.asset(
+                    Assets.icons.homeRingImage.path,
+                    height: 330.h,
+                    width: 330.w,
+                  ),
+                ),
+                Positioned(
+                  top: 60.h,
+                  left: 66.w,
+                  child: InkWell(
+                    onTap: () {
+                      customShowDialog(context);
+                    },
+                    child: Container(
+                      width: 122.w,
+                      height: 122.h,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColors.c3B53FF, AppColors.c2606ED],
+                        ),
+                        shape: BoxShape.circle,
                       ),
-                      shape: BoxShape.circle,
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        customShowDialog(context);
-                      },
-                      child: Icon(
-                        Icons.camera_alt_rounded,
-                        color: AppColors.cFFFFFF,
-                        size: 70.sp,
+                      child: Center(
+                        child: Image.asset(
+                          Assets.icons.scanCameraIcon.path,
+                          height: 90.h,
+                          width: 90.w,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ],
+            ),
+
+            //Credit Box
+            // Credit Box
+            SizedBox(height: 20.h),
+            Container(
+              height: 64.h,
+              width: 167,
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.r),
+                color: Color(0xFF031F5A).withAlpha(70),
+                border: Border.all(
+                  color: const Color.fromARGB(185, 80, 100, 200).withAlpha(80),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        // height: 50.h,
+                        // width: 50.w,
+                        child: CircularProgressIndicator(
+                          value: 0.75,
+                          strokeWidth: 3.w,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Color(0xFF0454CB),
+                          ),
+                          backgroundColor: AppColors.c778DFF.withAlpha(50),
+                        ),
+                      ),
+                      Text(
+                        "190",
+                        style: TextFontStyle.textstyle20cFFFFFFManrope600
+                            .copyWith(
+                              fontSize: 12.sp,
+                              color: AppColors.cFFFFFF,
+                            ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 16.w),
+                  Expanded(
+                    child: Text(
+                      "Credit Left",
+                      style: TextFontStyle.textstyle11cB8BBCCManrope400
+                          .copyWith(
+                            fontSize: 14.sp,
+
+                            color: const Color.fromARGB(255, 106, 122, 219),
+                          ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
