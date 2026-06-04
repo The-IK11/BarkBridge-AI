@@ -176,9 +176,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               SizedBox(height: 25.h),
               // Phone Field
-              _buildLabel("Your Phone Number"),
+              _buildLabel("Your Phone Number(Optional)"),
               AuthCommonTextFormField(
-                validator: emptyValidator,
                 controller: phoneController,
                 hintText: "Type your number",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
