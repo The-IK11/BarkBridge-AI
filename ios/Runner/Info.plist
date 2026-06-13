@@ -51,5 +51,30 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	 <!-- Google Sign-In Config -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <!-- IMPORTANT: REVERSED_CLIENT_ID (from GoogleService-Info.plist) -->
+                <string>com.googleusercontent.apps.971263030513-78d00lhi1c15cj9hsou7jr6b7ffrhjq0</string>
+            </array>
+        </dict>
+    </array>
+
+    <!-- Firebase Google Sign-In -->
+    <key>GIDSignIn</key>
+    <dict>
+        <key>ClientID</key>
+        <string>971263030513-78d00lhi1c15cj9hsou7jr6b7ffrhjq0.apps.googleusercontent.com</string>
+    </dict>
+
+    <!-- REQUIRED: Fix for "Make sure GIDClientID is set in Info.plist" -->
+    <key>GIDClientID</key>
+    <string>971263030513-78d00lhi1c15cj9hsou7jr6b7ffrhjq0.apps.googleusercontent.com</string>
+
 </dict>
 </plist>
