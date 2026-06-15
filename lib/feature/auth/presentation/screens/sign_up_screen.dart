@@ -107,7 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     SizedBox(height: 20.h),
                     // Phone Number Field
-                    _buildLabel("Phone Number"),
+                    _buildLabel("Phone Number(Optional)"),
                     AuthCommonTextFormField(
                       keyBoardType: TextInputType.phone,
                       //   validator: validatePhoneNumber,
