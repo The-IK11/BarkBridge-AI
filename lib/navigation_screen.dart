@@ -32,18 +32,20 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GlowBackground(
-      // backgroundColor: const Color(0xFF050511),
-      // extendBody:
-      //     true, // This allows the screen content to go behind the Nav Bar
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+    return SafeArea(
+      child: GlowBackground(
+        // backgroundColor: const Color(0xFF050511),
+        // extendBody:
+        //     true, // This allows the screen content to go behind the Nav Bar
+        bottomNavigationBar: CustomBottomNavBar(
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
+        // backgroundColor: const Color(0xFF050511),
+        // extendBody:
+        //     true, // This allows the screen content to go behind the Nav Bar
+        child: _screens[_selectedIndex],
       ),
-      // backgroundColor: const Color(0xFF050511),
-      // extendBody:
-      //     true, // This allows the screen content to go behind the Nav Bar
-      child: _screens[_selectedIndex],
     );
   }
 }
