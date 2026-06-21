@@ -94,7 +94,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: kToolbarHeight + 20.h),
+              SizedBox(height: kToolbarHeight + 40.h),
               // Email Field
               _buildLabel("Old Password"),
               AuthCommonTextFormField(

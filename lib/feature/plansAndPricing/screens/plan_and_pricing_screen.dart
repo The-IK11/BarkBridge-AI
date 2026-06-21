@@ -31,7 +31,7 @@ class PlanAndPricingScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: kToolbarHeight + 30.h),
+              SizedBox(height: kToolbarHeight + 60.h),
               Center(
                 child: Image.asset(
                   Assets.icons.whiteCrownIcon.path,

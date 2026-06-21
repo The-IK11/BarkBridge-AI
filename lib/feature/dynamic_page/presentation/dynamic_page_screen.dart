@@ -89,7 +89,7 @@ class _DynamicScreenState extends State<DynamicScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20.h),
+                  SizedBox(height: kToolbarHeight ),
                   // Display HTML content
                   Html(
                     data: pageData.data!.pageContent ?? '',

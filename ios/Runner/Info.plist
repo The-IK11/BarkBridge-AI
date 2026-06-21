@@ -2,16 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>We need camera access to record dog videos.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>We need microphone access to record dog sounds.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need gallery access to upload existing videos.</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Tintpin14 App</string>
+	<string>BarkBridge AI</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -30,6 +26,35 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>We need camera access to record dog videos.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need microphone access to record dog sounds.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need gallery access to upload existing videos.</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneClassName</key>
+					<string>UIWindowScene</string>
+					<key>UISceneConfigurationName</key>
+					<string>flutter</string>
+					<key>UISceneDelegateClassName</key>
+					<string>FlutterSceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>Main</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -47,9 +72,27 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
+	<!-- Google Sign-In Config -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!-- REVERSED_CLIENT_ID from GoogleService-Info.plist -->
+				<string>com.googleusercontent.apps.971263030513-78d00lhi1c15cj9hsou7jr6b7ffrhjq0</string>
+			</array>
+		</dict>
+	</array>
+	<!-- Firebase Google Sign-In -->
+	<key>GIDSignIn</key>
+	<dict>
+		<key>ClientID</key>
+		<string>971263030513-78d00lhi1c15cj9hsou7jr6b7ffrhjq0.apps.googleusercontent.com</string>
+	</dict>
+	<!-- REQUIRED: Fix for "Make sure GIDClientID is set in Info.plist" -->
+	<key>GIDClientID</key>
+	<string>971263030513-78d00lhi1c15cj9hsou7jr6b7ffrhjq0.apps.googleusercontent.com</string>
 </dict>
 </plist>

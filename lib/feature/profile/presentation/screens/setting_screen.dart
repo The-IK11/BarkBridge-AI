@@ -27,8 +27,7 @@ class _SettingScreenState extends State<SettingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: kToolbarHeight + 20.h),
-
+              SizedBox(height: kToolbarHeight + 40.h),
               SizedBox(height: 15.h),
               Text(
                 "Membership",
