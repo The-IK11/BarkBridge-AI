@@ -77,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: selectBody(),
               ),
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 10.h),
             CustomTabBar(
               currentIndex: currentTab,
               onTap: (index) {

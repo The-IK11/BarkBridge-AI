@@ -25,7 +25,7 @@ class OnboardingWidget extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 20.h),
+        SizedBox(height: 10.h),
         Text(
           subtitle ??
               "Record a howl and turn it into a message you can understand",

@@ -143,7 +143,7 @@ class _FaqScreenState extends State<FaqScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: kToolbarHeight + 20.h),
+              SizedBox(height: kToolbarHeight + 60.h),
               AuthCommonTextFormField(
                 prefixIcon: Container(
                   width: 38.w,

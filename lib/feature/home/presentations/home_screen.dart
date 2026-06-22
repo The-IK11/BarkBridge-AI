@@ -261,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fillColor: AppColors.c282B3C,
                         buttonType: ButtonType.secondary,
                         textStyle: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.cFFFFFF,
                         ),
@@ -276,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: CustomButton(
                         text: "Take Video",
                         textStyle: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.w600,
                         ),
                         onPressed: () {
