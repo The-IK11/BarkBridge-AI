@@ -1,4 +1,6 @@
 import 'package:auto_animated/auto_animated.dart';
+import 'package:barkbridgeai/feature/onboarding/screens/onboarding_screen.dart';
+import 'package:barkbridgeai/feature/onboarding/screens/onboarding_screen.dart';
 import 'package:barkbridgeai/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +99,7 @@ class UtilScreenMobile extends StatelessWidget {
             },
             navigatorKey: NavigationService.navigatorKey,
             onGenerateRoute: RouteGenerator.generateRoute,
-            home: const Loading(), //
+            home: Loading(), //
           ),
         );
       },
