@@ -1,3 +1,4 @@
+import 'package:barkbridgeai/feature/analyzed%20history/presenation/analyzed_history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:barkbridgeai/common_widgets/glow_background.dart';
@@ -19,7 +20,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   // List of screens for the navigation
   final List<Widget> _screens = [
-    AiResponseScreen(isAIResponseScreen: false),
+  //  AiResponseScreen(isAIResponseScreen: false),
+  AnalyzedHistoryScreen(),
     HomeScreen(),
     ProfileScreen(),
   ];

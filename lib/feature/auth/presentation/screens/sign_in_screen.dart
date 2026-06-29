@@ -178,14 +178,14 @@ class _SignInScreenState extends State<SignInScreen> {
                             onSuccess: (user, token, userName) async {
                               await Future(() async {
                                 //TODO: uncomment this when use apple sign in 
-                                // await postAppleSignIn.postData(
-                                //   data: {
-                                //     'name': userName,
-                                //     'provider': 'apple',
-                                //     'token': token,
-                                //     "role": selectedRoleForGoogleSignIn,
-                                //   },
-                                // );
+                                await postAppleLogin.postData(
+                                  data: {
+                                  //  'name': userName,
+                                    'provider': 'apple',
+                                    'token': token,
+                                   
+                                  },
+                                );
                                 // return RevenueCatService().loginUser(
                                 //   user.email!,
                                 // );
