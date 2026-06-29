@@ -5,14 +5,18 @@ import 'dart:ui';
 import 'package:barkbridgeai/common_widgets/custom_network_image.dart';
 import 'package:barkbridgeai/common_widgets/custom_app_bar.dart';
 import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/common_widgets/waiting_widget.dart';
 import 'package:barkbridgeai/constants/text_font_style.dart';
 import 'package:barkbridgeai/feature/analyzed%20history/model/analyzed_history_model.dart';
+import 'package:barkbridgeai/feature/analyzed%20history/presenation/analyzed_history_details_screen.dart';
 import 'package:barkbridgeai/feature/analyzed%20history/widget/video_thumnail.dart';
 import 'package:barkbridgeai/gen/colors.gen.dart';
 import 'package:barkbridgeai/helpers/ui_helpers.dart';
 import 'package:barkbridgeai/networks/api_access.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class AnalyzedHistoryScreen extends StatefulWidget {
   const AnalyzedHistoryScreen({super.key});
@@ -32,28 +36,24 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async => getAnalysisHistoryRx.fetch(),
+    return GlowBackground(
+      appBar: CustomAppBar(
+        title: "Analyzed History",
+        showBackButton: false,
+      ),
+      child: SafeArea(
+        child: RefreshIndicator(
+                onRefresh: () async => getAnalysisHistoryRx.fetch(),
       backgroundColor: AppColors.allPrimaryColor,
-      child: GlowBackground(
-        appBar: CustomAppBar(
-          title: "Analyzed History",
-          showBackButton: false,
-        ),
-        child: SafeArea(
           child: StreamBuilder(
             stream: getAnalysisHistoryRx.getStream,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(AppColors.c3B53FF),
-                  ),
-                );
+                return WaitingWidget();
               }
-
+              
               final items = snapshot.data?.data?.data;
-
+              
               if (items == null || items.isEmpty) {
                 return Center(
                   child: Text(
@@ -62,7 +62,7 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
                   ),
                 );
               }
-
+              
               return SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                 child: ListView.separated(
@@ -121,7 +121,11 @@ class _HistoryCardState extends State<HistoryCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Get.to(() => AnalyzedHistoryDetailsScreen(isAIResponseScreen: true,
+        aiResponse: widget.item,
+        ));
+      },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20.r),
         child: BackdropFilter(

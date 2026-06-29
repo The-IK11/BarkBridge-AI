@@ -1,3 +1,5 @@
+import 'package:barkbridgeai/feature/analyzed%20history/model/analyzed_history_model.dart';
+import 'package:barkbridgeai/feature/profile/model/ai_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,11 +12,13 @@ import 'package:barkbridgeai/navigation_screen.dart';
 import 'package:barkbridgeai/networks/api_access.dart';
 
 class AnalyzedHistoryDetailsScreen extends StatelessWidget {
+  final AnalyzedHistoryScanItem? aiResponse;
   final bool isAIResponseScreen;
-  const AnalyzedHistoryDetailsScreen({super.key, required this.isAIResponseScreen});
+  const AnalyzedHistoryDetailsScreen({super.key, required this.isAIResponseScreen, this.aiResponse});
 
   @override
   Widget build(BuildContext context) {
+   
     return GlowBackground(
       appBar: CustomAppBar(
         title: isAIResponseScreen
@@ -24,30 +28,7 @@ class AnalyzedHistoryDetailsScreen extends StatelessWidget {
         showBackButton: isAIResponseScreen,
       ),
       child: SafeArea(
-        child: StreamBuilder<dynamic>(
-          stream: aiResponseSubject.stream,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(AppColors.c3B53FF),
-                ),
-              );
-            }
-
-            if (!snapshot.hasData || snapshot.data == null) {
-              return Center(
-                child: Text(
-                  "No analysis data available",
-                  style: TextFontStyle.textstyle14cFFFFFFManrope500,
-                ),
-              );
-            }
-
-            final aiResponse = snapshot.data;
-            final analysis = aiResponse?.data?.data;
-
-            return SingleChildScrollView(
+        child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +36,7 @@ class AnalyzedHistoryDetailsScreen extends StatelessWidget {
                   // Activity Section
                   _buildSectionCard(
                     title: "Activity",
-                    content: analysis?.activity ?? "N/A",
+                    content: aiResponse?.result!.activity?? "N/A",
                     icon: Icons.pets,
                   ),
                   SizedBox(height: 16.h),
@@ -63,7 +44,7 @@ class AnalyzedHistoryDetailsScreen extends StatelessWidget {
                   // Social Behavior Section
                   _buildSectionCard(
                     title: "Social Behavior",
-                    content: analysis?.socialBehavior ?? "N/A",
+                    content: aiResponse?.result!.socialBehavior ?? "N/A",
                     icon: Icons.group,
                   ),
                   SizedBox(height: 16.h),
@@ -71,14 +52,14 @@ class AnalyzedHistoryDetailsScreen extends StatelessWidget {
                   // Energy Level Section
                   _buildSectionCard(
                     title: "Energy Level",
-                    content: analysis?.energyLevel ?? "N/A",
+                    content: aiResponse?.result!.energyLevel ?? "N/A",
                     icon: Icons.flash_on,
                   ),
                   SizedBox(height: 16.h),
 
                   // Behavioral Flags Section
-                  if (analysis?.behavioralFlags != null &&
-                      analysis!.behavioralFlags!.isNotEmpty)
+                  if (aiResponse?.result?.behavioralFlags != null &&
+                      aiResponse!.result!.behavioralFlags!.isNotEmpty)
                     Container(
                       padding: EdgeInsets.all(16.w),
                       decoration: BoxDecoration(
@@ -111,7 +92,7 @@ class AnalyzedHistoryDetailsScreen extends StatelessWidget {
                           Wrap(
                             spacing: 8.w,
                             runSpacing: 8.h,
-                            children: analysis.behavioralFlags!
+                            children: aiResponse!.result!.behavioralFlags!
                                 .map<Widget>(
                                   (flag) => Container(
                                     padding: EdgeInsets.symmetric(
@@ -147,13 +128,13 @@ class AnalyzedHistoryDetailsScreen extends StatelessWidget {
                   // Enrichment Needs Section
                   _buildSectionCard(
                     title: "Enrichment Needs",
-                    content: analysis?.enrichmentNeeds ?? "N/A",
+                    content: aiResponse?.result?.enrichmentNeeds ?? "N/A",
                     icon: Icons.lightbulb,
                   ),
                   SizedBox(height: 16.h),
 
                   // Confidence Score Section
-                  if (analysis?.confidenceScore != null)
+                  if (aiResponse?.result?.confidenceScore != null)
                     Container(
                       padding: EdgeInsets.all(16.w),
                       decoration: BoxDecoration(
@@ -172,7 +153,7 @@ class AnalyzedHistoryDetailsScreen extends StatelessWidget {
                                 .copyWith(fontWeight: FontWeight.w600),
                           ),
                           Text(
-                            "${analysis!.confidenceScore}%",
+                            "${aiResponse!.result!.confidenceScore}%",
                             style: TextFontStyle.textStyle14cFFFFFFOpenSans400
                                 .copyWith(color: AppColors.c3B53FF),
                           ),
@@ -192,9 +173,8 @@ class AnalyzedHistoryDetailsScreen extends StatelessWidget {
                   SizedBox(height: 30.h),
                 ],
               ),
-            );
-          },
-        ),
+            )
+        
       ),
     );
   }
