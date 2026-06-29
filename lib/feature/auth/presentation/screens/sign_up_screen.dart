@@ -285,7 +285,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
               CustomButton(
                 buttonType: ButtonType.secondary,
                 text: "Sign in with Apple",
-                onPressed: () {},
+                onPressed: () async{
+                    await SocialAuthHelper.signInWithApple(
+                            onSuccess: (user, token, userName) async {
+                              await Future(() async {
+                                //TODO: uncomment this when use apple sign in 
+                                await postAppleLogin.postData(
+                                  data: {
+                                  //  'name': userName,
+                                    'provider': 'apple',
+                                    'token': token,
+                                   
+                                  },
+                                );
+                                // return RevenueCatService().loginUser(
+                                //   user.email!,
+                                // );
+                              }).waitingForFutureWithoutBg().then((v) {
+                                if (v) {
+                                  // Get.offAll(()=>SubscriptionScreen());
+                                  Get.offAll(
+                                    () => NavigationScreen(),
+                                  );
+                                }
+                              });
+                              // debugPrint(
+                              //   'Apple Sign-In successful: ${user.email}',
+                              // );
+                              // debugPrint(
+                              //   'Apple Display Name: ${user.displayName}',
+                              // );
+                              // debugPrint('Apple ID Token: $token');
+                              // return;
+                            },
+                          );
+                },
                 iconColor: AppColors.cFFFFFF,
                 imageUrl: Assets.icons.appleIcon.path,
               ),
