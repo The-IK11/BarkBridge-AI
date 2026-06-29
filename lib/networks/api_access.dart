@@ -256,7 +256,7 @@ PostRx postPetAnalyze = PostRx(
 GetRx<AnalyzedHistoryDataModel> getAnalysisHistoryRx = GetRx<AnalyzedHistoryDataModel>(
   empty: AnalyzedHistoryDataModel(),
   dataFetcher: BehaviorSubject<AnalyzedHistoryDataModel>(),
-  endpoint: Endpoints.getAnalysisHistory(),
+
   fromJson: AnalyzedHistoryDataModel.fromJson,
 );
 // ============ FAQ ============

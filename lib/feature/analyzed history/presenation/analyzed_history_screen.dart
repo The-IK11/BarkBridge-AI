@@ -13,6 +13,7 @@ import 'package:barkbridgeai/feature/analyzed%20history/widget/video_thumnail.da
 import 'package:barkbridgeai/gen/colors.gen.dart';
 import 'package:barkbridgeai/helpers/ui_helpers.dart';
 import 'package:barkbridgeai/networks/api_access.dart';
+import 'package:barkbridgeai/networks/endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -28,10 +29,79 @@ class AnalyzedHistoryScreen extends StatefulWidget {
 class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
   static const String baseUrl = 'https://barkbridgeai.tech/';
 
+  final ScrollController _scrollController = ScrollController();
+
+  // ── Accumulated list across all pages ──
+  final List<AnalyzedHistoryScanItem> _allItems = [];
+  int _currentPage = 1;
+  int _lastPage = 1;
+  bool _isFetchingMore = false;
+  bool _isRefreshing = false;
+
   @override
   void initState() {
     super.initState();
-    getAnalysisHistoryRx.fetch();
+    _scrollController.addListener(_onScroll);
+    _fetchPage(page: 1, isRefresh: true);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  // ── Fetch a specific page ──────────────────────────────────────────────────
+  Future<void> _fetchPage({required int page, bool isRefresh = false}) async {
+    if (_isFetchingMore || _isRefreshing) return;
+
+    setState(() {
+      if (isRefresh) {
+        _isRefreshing = true;
+      } else {
+        _isFetchingMore = true;
+      }
+    });
+
+    await getAnalysisHistoryRx.fetch(
+      dynamicEndpoint: Endpoints.getAnalysisHistory(10, page),
+    );
+
+    final response = getAnalysisHistoryRx.getStream.value;
+    final pagination = response?.data;
+    final newItems = pagination?.data ?? [];
+
+    setState(() {
+      if (isRefresh) {
+        // Clear and replace on refresh
+        _allItems.clear();
+        _currentPage = 1;
+        _isRefreshing = false;
+      } else {
+        _isFetchingMore = false;
+      }
+
+      _allItems.addAll(newItems);
+      _currentPage = pagination?.currentPage ?? page;
+      _lastPage = pagination?.lastPage ?? 1;
+    });
+  }
+
+  // ── Scroll listener ────────────────────────────────────────────────────────
+  void _onScroll() {
+    final isAtBottom = _scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200;
+
+    final hasMorePages = _currentPage < _lastPage;
+
+    if (isAtBottom && hasMorePages && !_isFetchingMore && !_isRefreshing) {
+      _fetchPage(page: _currentPage + 1);
+    }
+  }
+
+  // ── Pull to refresh ────────────────────────────────────────────────────────
+  Future<void> _onRefresh() async {
+    await _fetchPage(page: 1, isRefresh: true);
   }
 
   @override
@@ -43,18 +113,18 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
       ),
       child: SafeArea(
         child: RefreshIndicator(
-                onRefresh: () async => getAnalysisHistoryRx.fetch(),
-      backgroundColor: AppColors.allPrimaryColor,
+          onRefresh: _onRefresh,
+          backgroundColor: AppColors.allPrimaryColor,
           child: StreamBuilder(
             stream: getAnalysisHistoryRx.getStream,
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return WaitingWidget();
+              // ── Initial loading (empty list) ──
+              if (_isRefreshing && _allItems.isEmpty) {
+                return const WaitingWidget();
               }
-              
-              final items = snapshot.data?.data?.data;
-              
-              if (items == null || items.isEmpty) {
+      
+              // ── Empty state ──
+              if (_allItems.isEmpty) {
                 return Center(
                   child: Text(
                     "No analysis data available",
@@ -62,22 +132,33 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
                   ),
                 );
               }
-              
-              return SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: items.length,
-                  separatorBuilder: (_, __) => SizedBox(height: 10.h),
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return HistoryCard(
-                      item: item,
-                      baseUrl: baseUrl,
-                    );
-                  },
-                ),
+      
+              // ── List ──
+              return CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 20.h,
+                    ),
+                    sliver: SliverList.separated(
+                      itemCount: _allItems.length,
+                      separatorBuilder: (_, __) => SizedBox(height: 10.h),
+                      itemBuilder: (context, index) {
+                        return HistoryCard(
+                          item: _allItems[index],
+                          baseUrl: baseUrl,
+                        );
+                      },
+                    ),
+                  ),
+      
+                  // ── Bottom loader ──
+                  SliverToBoxAdapter(
+                    child: _buildBottomLoader(),
+                  ),
+                ],
               );
             },
           ),
@@ -85,8 +166,35 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
       ),
     );
   }
-}
 
+  Widget _buildBottomLoader() {
+    if (_isFetchingMore) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 20.h),
+        child: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation(AppColors.allPrimaryColor),
+          ),
+        ),
+      );
+    }
+
+    // Show "no more data" hint when all pages loaded
+    if (_currentPage >= _lastPage && _allItems.isNotEmpty &&_allItems.length >= 10) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.h),
+        child: Center(
+          child: Text(
+            "You've reached the end",
+            style: TextFontStyle.textstyle14cFFFFFFManrope500,
+          ),
+        ),
+      );
+    }
+
+    return SizedBox(height: 20.h);
+  }
+}
 
 class HistoryCard extends StatefulWidget {
   final AnalyzedHistoryScanItem item;

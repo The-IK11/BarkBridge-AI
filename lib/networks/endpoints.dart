@@ -74,6 +74,6 @@ final class Endpoints {
  static String postAppleLogin() => "/apple-login";
 
  //Analysis History
-  static String getAnalysisHistory() => "/pet-analyzer/history";
+  static String getAnalysisHistory(int perPage, int page) => "/pet-analyzer/history?per_page=$perPage&page=$page";
 
 }
