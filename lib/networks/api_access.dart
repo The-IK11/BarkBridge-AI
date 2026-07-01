@@ -253,12 +253,13 @@ PostRx postPetAnalyze = PostRx(
 
 // ============ Analyzer History ============
 
-GetRx<AnalyzedHistoryDataModel> getAnalysisHistoryRx = GetRx<AnalyzedHistoryDataModel>(
-  empty: AnalyzedHistoryDataModel(),
-  dataFetcher: BehaviorSubject<AnalyzedHistoryDataModel>(),
+GetRx<AnalyzedHistoryDataModel> getAnalysisHistoryRx =
+    GetRx<AnalyzedHistoryDataModel>(
+      empty: AnalyzedHistoryDataModel(),
+      dataFetcher: BehaviorSubject<AnalyzedHistoryDataModel>(),
 
-  fromJson: AnalyzedHistoryDataModel.fromJson,
-);
+      fromJson: AnalyzedHistoryDataModel.fromJson,
+    );
 // ============ FAQ ============
 
 GetRx<FaqScreenModel> getFaqRx = GetRx<FaqScreenModel>(
@@ -280,6 +281,11 @@ PostRx postAppleLogin = PostRx(
   endPoint: Endpoints.postAppleLogin(),
   toastSetting: ToastSetting.both,
   onSuccess: (data) async {
+    if (data['data'] != null && data['data']['token'] != null) {
+      DioSingleton.instance.update(data['data']['token']);
+      await appData.write(kKeyAccessToken, data['data']['token']);
+      await appData.write(kKeyIsLoggedIn, true);
+    }
     // Password reset initiated successfully
   },
   onError: (message) async {

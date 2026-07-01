@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:barkbridgeai/common_widgets/custom_app_bar.dart';
 import 'package:barkbridgeai/common_widgets/custom_button.dart';
 import 'package:barkbridgeai/common_widgets/glow_background.dart';
@@ -9,6 +10,9 @@ import 'package:barkbridgeai/constants/text_font_style.dart';
 import 'package:barkbridgeai/gen/assets.gen.dart';
 import 'package:barkbridgeai/gen/colors.gen.dart';
 import 'package:barkbridgeai/helpers/navigation_service.dart';
+import 'package:barkbridgeai/services/credits_manager.dart';
+import 'package:barkbridgeai/services/revenuecat_service/revenue_cat_service.dart';
+import 'package:barkbridgeai/services/revenuecat_service/revenue_cut_constent.dart';
 
 /// Enum representing each subscription plan tier.
 enum PlanType { free, starter, value, proMonthly }
@@ -23,6 +27,7 @@ class PlanAndPricingScreen extends StatefulWidget {
 class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
     with SingleTickerProviderStateMixin {
   PlanType _selectedPlan = PlanType.proMonthly;
+  bool _isPurchasing = false;
 
   late AnimationController _shimmerController;
 
@@ -52,6 +57,188 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
         return "Buy Value Pack — \$9.99";
       case PlanType.proMonthly:
         return "Subscribe for \$19.99/month";
+    }
+  }
+
+  /// Map PlanType to its store product ID (platform-aware).
+  String? _getStoreProductId(PlanType plan) {
+    final bool isIOS = Platform.isIOS;
+    switch (plan) {
+      case PlanType.free:
+        return null; // No purchase needed
+      case PlanType.starter:
+        return isIOS
+            ? RevenueCutConstent.credits10AppStoreId
+            : RevenueCutConstent.credits10ProductId;
+      case PlanType.value:
+        return isIOS
+            ? RevenueCutConstent.credits25AppStoreId
+            : RevenueCutConstent.credits25ProductId;
+      case PlanType.proMonthly:
+        return isIOS
+            ? RevenueCutConstent.monthlyAppStoreId
+            : RevenueCutConstent.monthlyProductId;
+    }
+  }
+
+  /// Credits to add for each plan on successful purchase.
+  int _getCreditsForPlan(PlanType plan) {
+    switch (plan) {
+      case PlanType.free:
+        return 0;
+      case PlanType.starter:
+        return 10;
+      case PlanType.value:
+        return 25;
+      case PlanType.proMonthly:
+        return 100;
+    }
+  }
+
+  /// Handle the purchase flow for the selected plan.
+  Future<void> _handlePurchase() async {
+    if (_isPurchasing) return;
+
+    // Free plan — just navigate back
+    if (_selectedPlan == PlanType.free) {
+      NavigationService.goBack;
+      return;
+    }
+
+    final productId = _getStoreProductId(_selectedPlan);
+    if (productId == null) return;
+
+    setState(() => _isPurchasing = true);
+
+    try {
+      final result = await RevenueCatService().purchaseByStoreProductId(
+        productId,
+      );
+
+      switch (result) {
+        case PurchaseResult.success:
+          final credits = _getCreditsForPlan(_selectedPlan);
+          CreditsManager.instance.addCredits(credits);
+          if (mounted) {
+            Get.snackbar(
+              '✅ Purchase Successful',
+              '$credits scan credits added!',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: AppColors.c3B53FF.withValues(alpha: 0.9),
+              colorText: Colors.white,
+              duration: const Duration(seconds: 3),
+            );
+          }
+          break;
+        case PurchaseResult.cancelled:
+          debugPrint('Purchase cancelled by user');
+          break;
+        case PurchaseResult.alreadyPurchased:
+          if (mounted) {
+            Get.snackbar(
+              'Already Purchased',
+              'You already own this product.',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.orange.withValues(alpha: 0.9),
+              colorText: Colors.white,
+            );
+          }
+          break;
+        case PurchaseResult.notAllowed:
+          if (mounted) {
+            Get.snackbar(
+              'Purchase Not Allowed',
+              'In-app purchases are disabled on this device.',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.red.withValues(alpha: 0.9),
+              colorText: Colors.white,
+            );
+          }
+          break;
+        case PurchaseResult.error:
+          if (mounted) {
+            Get.snackbar(
+              'Purchase Failed',
+              'Something went wrong. Please try again.',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.red.withValues(alpha: 0.9),
+              colorText: Colors.white,
+            );
+          }
+          break;
+      }
+    } catch (e) {
+      debugPrint('❌ Purchase error: $e');
+      if (mounted) {
+        Get.snackbar(
+          'Error',
+          'An unexpected error occurred.',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red.withValues(alpha: 0.9),
+          colorText: Colors.white,
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isPurchasing = false);
+      }
+    }
+  }
+
+  /// Handle restore purchases.
+  Future<void> _handleRestore() async {
+    if (_isPurchasing) return;
+
+    setState(() => _isPurchasing = true);
+
+    try {
+      final result = await RevenueCatService().restorePurchases();
+
+      switch (result) {
+        case RestoreResult.success:
+          // For restore, check if user has active subscription and grant credits
+          final hasSubscription =
+              await RevenueCatService().hasActiveSubscription();
+          if (hasSubscription) {
+            CreditsManager.instance.addCredits(100);
+          }
+          if (mounted) {
+            Get.snackbar(
+              '✅ Restored',
+              'Your purchases have been restored.',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: AppColors.c3B53FF.withValues(alpha: 0.9),
+              colorText: Colors.white,
+            );
+          }
+          break;
+        case RestoreResult.noPurchases:
+          if (mounted) {
+            Get.snackbar(
+              'No Purchases',
+              'No previous purchases found.',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.orange.withValues(alpha: 0.9),
+              colorText: Colors.white,
+            );
+          }
+          break;
+        case RestoreResult.error:
+          if (mounted) {
+            Get.snackbar(
+              'Restore Failed',
+              'Could not restore purchases. Please try again.',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.red.withValues(alpha: 0.9),
+              colorText: Colors.white,
+            );
+          }
+          break;
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isPurchasing = false);
+      }
     }
   }
 
@@ -96,15 +283,59 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
               ),
               SizedBox(height: 8.h),
 
-              // ── Free tier teaser ──
+              // ── Free tier teaser + Credits counter ──
               Center(
-                child: Text(
-                  "Start with 3 free scans",
-                  style: TextFontStyle.textstyle15c5465A6Manrope400.copyWith(
-                    color: AppColors.c778DFF,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
+                child: ValueListenableBuilder<int>(
+                  valueListenable: CreditsManager.instance.creditsNotifier,
+                  builder: (context, credits, _) {
+                    return Column(
+                      children: [
+                        Text(
+                          "Start with 3 free scans",
+                          style: TextFontStyle.textstyle15c5465A6Manrope400
+                              .copyWith(
+                                color: AppColors.c778DFF,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                        ),
+                        SizedBox(height: 8.h),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 8.h,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.r),
+                            color: AppColors.c3B53FF.withValues(alpha: 0.15),
+                            border: Border.all(
+                              color: AppColors.c778DFF.withValues(alpha: 0.4),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.bolt_rounded,
+                                color: AppColors.cDAA356,
+                                size: 18.sp,
+                              ),
+                              SizedBox(width: 6.w),
+                              Text(
+                                "$credits scans remaining",
+                                style: TextFontStyle
+                                    .textstyle16cFFFFFFManrope500
+                                    .copyWith(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
               SizedBox(height: 16.h),
@@ -157,10 +388,8 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
 
               // ── CTA Button ──
               CustomButton(
-                text: _ctaLabel,
-                onPressed: () {
-                  // TODO: Trigger purchase flow for _selectedPlan
-                },
+                text: _isPurchasing ? "Processing..." : _ctaLabel,
+                onPressed: _isPurchasing ? () {} : () => _handlePurchase(),
               ),
 
               SizedBox(height: 16.h),
@@ -197,9 +426,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
               // ── Restore Purchases ──
               Center(
                 child: TextButton(
-                  onPressed: () {
-                    // TODO: Implement restore purchases
-                  },
+                  onPressed: _isPurchasing ? null : () => _handleRestore(),
                   child: Text(
                     "Restore Purchases",
                     style: TextFontStyle.textstyle15c5465A6Manrope400.copyWith(

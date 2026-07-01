@@ -15,6 +15,7 @@ class OnboardingWidget extends StatelessWidget {
       children: [
         Image.asset(
           imageUrl ?? Assets.images.onboarding1Image.path,
+          height: 380.h,
           width: double.infinity,
         ),
         Text(

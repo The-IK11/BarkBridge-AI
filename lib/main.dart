@@ -19,6 +19,8 @@ import 'helpers/helper_methods.dart';
 import 'helpers/navigation_service.dart';
 import 'loading_screen.dart';
 import 'networks/dio/dio.dart';
+import 'services/credits_manager.dart';
+import 'services/revenuecat_service/revenue_cat_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +32,17 @@ void main() async {
   DioSingleton.instance.create();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialize credits manager (loads saved credits, grants 3 free on first install)
+  CreditsManager.instance.init();
+
+  // Initialize RevenueCat SDK
+  try {
+    await RevenueCatService().configure();
+  } catch (e) {
+    debugPrint('⚠️ RevenueCat init failed (non-fatal): $e');
+  }
+
   runApp(const MyApp());
 }
 
