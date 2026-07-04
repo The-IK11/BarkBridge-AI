@@ -1,6 +1,7 @@
 import 'package:barkbridgeai/constants/app_constants.dart';
 import 'package:barkbridgeai/helpers/di.dart';
 import 'package:barkbridgeai/helpers/social_auth.dart';
+import 'package:barkbridgeai/services/revenuecat_service/revenue_cat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
@@ -447,6 +448,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .waitingForFutureWithoutBg()
                                 .then((v) {
                                   if (v) {
+                                    RevenueCatService().logoutUser();
                                     Get.offAll(() => SignInScreen());
                                   }
                                 });

@@ -213,10 +213,16 @@ class _SignInScreenState extends State<SignInScreen> {
                         onSuccess: (user, token, userName) async {
                           // Dismiss Apple-auth loading before API loading starts
                           dismissLoading();
-                          await postAppleLogin
+
+                          await Future(()async{
+                              await postAppleLogin
                               .postData(
                                 data: {'provider': 'apple', 'token': token},
-                              )
+                              );
+
+                              return RevenueCatService().loginUser(appData.read(kKeyUserID).toString());
+                          })
+                              .waitingForFutureWithoutBg()
                               .then((v) {
                                 if (v) {
                                   Get.offAll(() => NavigationScreen());
@@ -249,8 +255,15 @@ class _SignInScreenState extends State<SignInScreen> {
                         };
                         log("Google Sign-In Payload: $payload");
                         // Hit the API like this
-                        await postSocialLogin
-                            .postData(data: payload)
+
+                      await    Future(()async{
+
+                         await postSocialLogin
+                            .postData(data: payload);
+
+                            return RevenueCatService().loginUser(appData.read(kKeyUserID).toString());
+                      })
+                       
                             .waitingForFutureWithoutBg()
                             .then((v) {
                               if (v) {
