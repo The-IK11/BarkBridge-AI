@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:purchases_flutter/purchases_flutter.dart' hide PurchaseResult;
 import 'package:barkbridgeai/common_widgets/custom_app_bar.dart';
 import 'package:barkbridgeai/common_widgets/custom_button.dart';
 import 'package:barkbridgeai/common_widgets/glow_background.dart';
@@ -29,6 +30,11 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
   PlanType _selectedPlan = PlanType.proMonthly;
   bool _isPurchasing = false;
 
+  // ── Dynamic pricing from RevenueCat ──
+  bool _isLoadingPrices = true;
+  /// Maps a platform-specific product ID → its StoreProduct (contains localized priceString)
+  final Map<String, StoreProduct> _storeProducts = {};
+
   late AnimationController _shimmerController;
 
   @override
@@ -38,6 +44,38 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
       vsync: this,
       duration: const Duration(seconds: 2),
     )..repeat();
+    _loadPrices();
+  }
+
+  /// Fetch offerings from RevenueCat and cache each StoreProduct by its identifier.
+  Future<void> _loadPrices() async {
+    try {
+      final offerings = await RevenueCatService().getOfferings();
+      if (offerings != null && mounted) {
+        final Map<String, StoreProduct> loaded = {};
+        for (final offering in offerings.all.values) {
+          for (final pkg in offering.availablePackages) {
+            loaded[pkg.storeProduct.identifier] = pkg.storeProduct;
+          }
+        }
+        setState(() {
+          _storeProducts.addAll(loaded);
+          _isLoadingPrices = false;
+        });
+      } else if (mounted) {
+        setState(() => _isLoadingPrices = false);
+      }
+    } catch (e) {
+      debugPrint('⚠️ Could not load dynamic prices: $e');
+      if (mounted) setState(() => _isLoadingPrices = false);
+    }
+  }
+
+  /// Returns the localized price string for a plan, falling back to a default.
+  String _priceFor(PlanType plan, {required String fallback}) {
+    final productId = _getStoreProductId(plan);
+    if (productId == null) return fallback;
+    return _storeProducts[productId]?.priceString ?? fallback;
   }
 
   @override
@@ -47,16 +85,17 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
   }
 
   /// Returns the CTA button label based on the currently selected plan.
+  /// Prices are dynamic from RevenueCat when available.
   String get _ctaLabel {
     switch (_selectedPlan) {
       case PlanType.free:
         return "Continue with Free";
       case PlanType.starter:
-        return "Buy Starter Pack — \$5.99";
+        return "Buy Starter Pack — ${_priceFor(PlanType.starter, fallback: '\$5.99')}";
       case PlanType.value:
-        return "Buy Value Pack — \$9.99";
+        return "Buy Value Pack — ${_priceFor(PlanType.value, fallback: '\$9.99')}";
       case PlanType.proMonthly:
-        return "Subscribe for \$19.99/month";
+        return "Subscribe for ${_priceFor(PlanType.proMonthly, fallback: '\$19.99')}/month";
     }
   }
 
@@ -265,7 +304,9 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
           child: Icon(Icons.close, color: Colors.white, size: 20.sp),
         ),
       ),
-      child: Padding(
+      child: _isLoadingPrices
+          ? _buildLoadingState()
+          : Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.sp),
         child: SingleChildScrollView(
           child: Column(
@@ -360,26 +401,26 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
               SizedBox(height: 16.h),
 
               // ══════════════════════════════════════════════
-              //  STARTER PACK — $5.99 one-time, 10 scans
+              //  STARTER PACK — dynamic price, 10 scans
               // ══════════════════════════════════════════════
               _buildCreditPackCard(
                 planType: PlanType.starter,
                 title: "Starter Pack",
                 scans: "10 Scans",
-                price: "\$5.99",
+                price: _priceFor(PlanType.starter, fallback: '\$5.99'),
                 priceSubtitle: "/One-time purchase",
                 badge: null,
               ),
               SizedBox(height: 14.h),
 
               // ══════════════════════════════════════════════
-              //  VALUE PACK — $9.99 one-time, 25 scans
+              //  VALUE PACK — dynamic price, 25 scans
               // ══════════════════════════════════════════════
               _buildCreditPackCard(
                 planType: PlanType.value,
                 title: "Value Pack",
                 scans: "25 Scans",
-                price: "\$9.99",
+                price: _priceFor(PlanType.value, fallback: '\$9.99'),
                 priceSubtitle: "/One-time purchase",
                 badge: "MOST POPULAR",
               ),
@@ -485,6 +526,35 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
   }
 
   // ─────────────────────────────────────────────────────────────────
+  //  LOADING STATE
+  // ─────────────────────────────────────────────────────────────────
+  Widget _buildLoadingState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 52.w,
+            height: 52.w,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.c778DFF),
+            ),
+          ),
+          SizedBox(height: 20.h),
+          Text(
+            "Loading plans...",
+            style: TextFontStyle.textstyle16c5465A6Manrope500.copyWith(
+              color: AppColors.c778DFF,
+              fontSize: 15.sp,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────
   //  PRO MONTHLY HERO CARD
   // ─────────────────────────────────────────────────────────────────
   Widget _buildProMonthlyCard() {
@@ -575,12 +645,12 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
             ),
             SizedBox(height: 12.h),
 
-            // ── Price ──
+            // ── Price (dynamic from RevenueCat) ──
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "\$19.99",
+                  _priceFor(PlanType.proMonthly, fallback: '\$19.99'),
                   style: TextFontStyle.textstyle28cFFFFFFManrope700,
                 ),
                 Padding(

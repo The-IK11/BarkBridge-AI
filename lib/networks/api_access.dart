@@ -75,6 +75,7 @@ PostRx postLogin = PostRx(
     if (data['data'] != null && data['data']['token'] != null) {
       DioSingleton.instance.update(data['data']['token']);
       await appData.write(kKeyAccessToken, data['data']['token']);
+      await appData.write(kKeyUserID, data['data']['id']);
       await appData.write(kKeyIsLoggedIn, true);
     }
   },
@@ -149,6 +150,7 @@ PostRx postSocialLogin = PostRx(
       DioSingleton.instance.update(data['data']['token']);
       await appData.write(kKeyAccessToken, data['data']['token']);
       await appData.write(kKeyIsLoggedIn, true);
+      await appData.write(kKeyUserID, data['data']['id']);
     }
   },
   onError: (message) async {
@@ -203,8 +205,10 @@ PostRx postLogout = PostRx(
     // Logout successful
 
     DioSingleton.instance.reset();
-    await appData.write(kKeyAccessToken, null);
-    await appData.write(kKeyIsLoggedIn, false);
+    await appData.remove(kKeyAccessToken);
+    await appData.write(kKeyIsLoggedIn,false);
+    await appData.remove(kKeyUserID);
+
   },
   onError: (message) async {
     // Error message will be displayed automatically via toast
@@ -285,6 +289,7 @@ PostRx postAppleLogin = PostRx(
       DioSingleton.instance.update(data['data']['token']);
       await appData.write(kKeyAccessToken, data['data']['token']);
       await appData.write(kKeyIsLoggedIn, true);
+      await appData.write(kKeyUserID, data['data']['id']);
     }
     // Password reset initiated successfully
   },

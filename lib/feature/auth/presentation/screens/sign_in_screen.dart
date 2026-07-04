@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:barkbridgeai/constants/app_constants.dart';
 import 'package:barkbridgeai/helpers/di.dart';
 import 'package:barkbridgeai/helpers/social_auth.dart';
+import 'package:barkbridgeai/services/revenuecat_service/revenue_cat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
@@ -136,13 +137,20 @@ class _SignInScreenState extends State<SignInScreen> {
                   text: "Sign In",
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      await postLogin
+
+                      await Future(() async{ await postLogin
                           .postData(
                             data: {
                               "email": emailController.text,
                               "password": passwordController.text,
                             },
-                          )
+                          );
+
+                           return RevenueCatService().loginUser(
+                              appData.read(kKeyUserID).toString()
+                            );
+                          } )
+                     
                           .waitingForFutureWithoutBg()
                           .then((v) {
                             if (v) {
