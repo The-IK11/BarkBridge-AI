@@ -100,7 +100,7 @@ class UtilScreenMobile extends StatelessWidget {
             },
             navigatorKey: NavigationService.navigatorKey,
             onGenerateRoute: RouteGenerator.generateRoute,
-            home: PlanAndPricingScreen(), //
+            home: Loading(), //
           ),
         );
       },

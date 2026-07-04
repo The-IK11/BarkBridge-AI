@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:barkbridgeai/constants/app_constants.dart';
@@ -282,14 +283,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height: 30.h),
 
               // Social Buttons
-              CustomButton(
-                buttonType: ButtonType.secondary,
-                text: "Sign in with Apple",
-                onPressed: () {},
-                iconColor: AppColors.cFFFFFF,
-                imageUrl: Assets.icons.appleIcon.path,
-              ),
-              SizedBox(height: 16.h),
+              if (Platform.isIOS) ...[
+                CustomButton(
+                  buttonType: ButtonType.secondary,
+                  text: "Sign in with Apple",
+                  onPressed: () async {
+                    await SocialAuthHelper.signInWithApple(
+                      onSuccess: (user, token, userName) async {
+                        await Future(() async {
+                          //TODO: uncomment this when use apple sign in
+                          // await postAppleSignIn.postData(
+                          //   data: {
+                          //     'name': userName,
+                          //     'provider': 'apple',
+                          //     'token': token,
+                          //     "role": selectedRoleForGoogleSignIn,
+                          //   },
+                          // );
+                          // return RevenueCatService().loginUser(
+                          //   user.email!,
+                          // );
+                        }).waitingForFutureWithoutBg().then((v) {
+                          if (v) {
+                            // Get.offAll(()=>SubscriptionScreen());
+                            Get.offAll(() => NavigationScreen());
+                          }
+                        });
+                        // debugPrint(
+                        //   'Apple Sign-In successful: ${user.email}',
+                        // );
+                        // debugPrint(
+                        //   'Apple Display Name: ${user.displayName}',
+                        // );
+                        // debugPrint('Apple ID Token: $token');
+                        // return;
+                      },
+                    );
+                  },
+                  iconColor: AppColors.cFFFFFF,
+                  imageUrl: Assets.icons.appleIcon.path,
+                ),
+                SizedBox(height: 16.h),
+              ],
               CustomButton(
                 buttonType: ButtonType.secondary,
                 text: "Sign in with Google",

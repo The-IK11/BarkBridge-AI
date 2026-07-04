@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:barkbridgeai/constants/app_constants.dart';
 import 'package:barkbridgeai/helpers/di.dart';
@@ -170,6 +171,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 SizedBox(height: 30.h),
 
                 // Social Buttons
+                if(Platform.isIOS)...[
                 CustomButton(
                   buttonType: ButtonType.secondary,
                   text: "Sign in with Apple",
@@ -211,7 +213,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   iconColor: AppColors.cFFFFFF,
                   imageUrl: Assets.icons.appleIcon.path,
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 16.h),],
                 CustomButton(
                   buttonType: ButtonType.secondary,
                   text: "Sign in with Google",
