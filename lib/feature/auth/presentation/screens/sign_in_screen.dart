@@ -18,8 +18,10 @@ import 'package:barkbridgeai/gen/assets.gen.dart';
 import 'package:barkbridgeai/gen/colors.gen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:barkbridgeai/helpers/loading_helper.dart';
+import 'package:barkbridgeai/helpers/navigation_service.dart';
 import 'package:barkbridgeai/navigation_screen.dart';
 import 'package:barkbridgeai/networks/api_access.dart';
+import 'package:barkbridgeai/common_widgets/loading_indicators.dart';
 
 // Ensure you import the GlowBackground widget created above
 
@@ -175,40 +177,49 @@ class _SignInScreenState extends State<SignInScreen> {
                 CustomButton(
                   buttonType: ButtonType.secondary,
                   text: "Sign in with Apple",
-                  onPressed: ()async {
-                        await SocialAuthHelper.signInWithApple(
-                            onSuccess: (user, token, userName) async {
-                              await Future(() async {
-                                //TODO: uncomment this when use apple sign in 
-                                // await postAppleSignIn.postData(
-                                //   data: {
-                                //     'name': userName,
-                                //     'provider': 'apple',
-                                //     'token': token,
-                                //     "role": selectedRoleForGoogleSignIn,
-                                //   },
-                                // );
-                                // return RevenueCatService().loginUser(
-                                //   user.email!,
-                                // );
-                              }).waitingForFutureWithoutBg().then((v) {
+                  onPressed: () async {
+                    // Manually track and control the loading dialog so we can
+                    // dismiss it ourselves before Get.offAll() — preventing
+                    // Navigator.pop() from closing NavigationScreen.
+                    bool isDialogOpen = false;
+
+                    void showLoading() {
+                      isDialogOpen = true;
+                      showDialog(
+                        context: NavigationService.context,
+                        barrierDismissible: false,
+                        builder: (ctx) => loadingIndicatorCircle(context: ctx),
+                      ).then((_) => isDialogOpen = false);
+                    }
+
+                    void dismissLoading() {
+                      if (isDialogOpen) {
+                        isDialogOpen = false;
+                        NavigationService.goBack;
+                      }
+                    }
+
+                    showLoading();
+                    try {
+                      await SocialAuthHelper.signInWithApple(
+                        onSuccess: (user, token, userName) async {
+                          // Dismiss Apple-auth loading before API loading starts
+                          dismissLoading();
+                          await postAppleLogin
+                              .postData(
+                                data: {'provider': 'apple', 'token': token},
+                              )
+                              .then((v) {
                                 if (v) {
-                                  // Get.offAll(()=>SubscriptionScreen());
-                                  Get.offAll(
-                                    () => NavigationScreen(),
-                                  );
+                                  Get.offAll(() => NavigationScreen());
                                 }
                               });
-                              // debugPrint(
-                              //   'Apple Sign-In successful: ${user.email}',
-                              // );
-                              // debugPrint(
-                              //   'Apple Display Name: ${user.displayName}',
-                              // );
-                              // debugPrint('Apple ID Token: $token');
-                              // return;
-                            },
-                          );
+                        },
+                      );
+                    } finally {
+                      // Dismiss if user cancelled Apple sheet or an error occurred
+                      dismissLoading();
+                    }
                   },
                   iconColor: AppColors.cFFFFFF,
                   imageUrl: Assets.icons.appleIcon.path,

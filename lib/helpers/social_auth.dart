@@ -14,7 +14,10 @@ class SocialAuthHelper {
   static Future<void> _handleLoginSuccess({
     required User? user,
     required String token,
+    String? userName,
     required Future<void> Function(User user, String token)? onSuccess,
+    Future<void> Function(User user, String token, String userName)?
+    onSuccessWithName,
   }) async {
     if (user == null) return;
 
@@ -23,16 +26,18 @@ class SocialAuthHelper {
     debugPrint("📧 Email: ${user.email}");
     debugPrint("🆔 UID: ${user.uid}");
 
-    if (onSuccess != null) await onSuccess(user, token);
+    if (onSuccessWithName != null) {
+      await onSuccessWithName(user, token, userName ?? '');
+    } else if (onSuccess != null) {
+      await onSuccess(user, token);
+    }
   }
-
-
-
 
   /// Apple Sign-In
   static Future<UserCredential?> signInWithApple({
     //required BuildContext context,
-    required Future<void> Function(User user, String token, String userName)? onSuccess,
+    required Future<void> Function(User user, String token, String userName)?
+    onSuccess,
   }) async {
     try {
       debugPrint("🍎 Starting Apple Sign-In...");
@@ -67,7 +72,7 @@ class SocialAuthHelper {
 
       String? getName() {
         if (apple.givenName == null && apple.familyName == null) {
-           return null;
+          return null;
         } else if (apple.givenName == null) {
           return apple.familyName;
         } else if (apple.familyName == null) {
@@ -77,14 +82,13 @@ class SocialAuthHelper {
         }
       }
 
-// TODO: uncomment this after implementing the onSuccess callback
-//       await _handleLoginSuccess(
-//         user: userCredential.user,
-//         token: apple.identityToken ?? '',
-// userName: getName() ,
-//         onSuccess: onSuccess,
-        
-//       );
+      await _handleLoginSuccess(
+        user: userCredential.user,
+        token: apple.identityToken ?? '',
+        userName: getName(),
+        onSuccess: null,
+        onSuccessWithName: onSuccess,
+      );
 
       return userCredential;
     } on SignInWithAppleAuthorizationException catch (e) {
@@ -105,6 +109,7 @@ class SocialAuthHelper {
       return null;
     }
   }
+
   /// Apple Sign-In
   // static Future<UserCredential?> signInWithApple({
   //   //required BuildContext context,

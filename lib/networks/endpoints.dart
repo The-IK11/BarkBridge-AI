@@ -68,4 +68,12 @@ final class Endpoints {
   static String tutorials() => "tutorial";
   static String contactUs() => "contact-us";
   static String aboutUs() => "about-us";
+
+  //Apple login
+
+ static String postAppleLogin() => "/apple-login";
+
+ //Analysis History
+  static String getAnalysisHistory(int perPage, int page) => "/pet-analyzer/history?per_page=$perPage&page=$page";
+
 }

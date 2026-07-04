@@ -1,3 +1,4 @@
+import 'package:barkbridgeai/feature/analyzed%20history/model/analyzed_history_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:barkbridgeai/constants/app_constants.dart';
 import 'package:barkbridgeai/feature/dynamic_page/model/dynamic_page_model.dart';
@@ -250,6 +251,15 @@ PostRx postPetAnalyze = PostRx(
   },
 );
 
+// ============ Analyzer History ============
+
+GetRx<AnalyzedHistoryDataModel> getAnalysisHistoryRx =
+    GetRx<AnalyzedHistoryDataModel>(
+      empty: AnalyzedHistoryDataModel(),
+      dataFetcher: BehaviorSubject<AnalyzedHistoryDataModel>(),
+
+      fromJson: AnalyzedHistoryDataModel.fromJson,
+    );
 // ============ FAQ ============
 
 GetRx<FaqScreenModel> getFaqRx = GetRx<FaqScreenModel>(
@@ -264,4 +274,21 @@ GetRx<DynamicPageModel> getDynamicPageRx = GetRx<DynamicPageModel>(
   empty: DynamicPageModel(),
   dataFetcher: BehaviorSubject<DynamicPageModel>(),
   fromJson: DynamicPageModel.fromJson,
+);
+PostRx postAppleLogin = PostRx(
+  empty: {},
+  dataFetcher: BehaviorSubject<Map<String, dynamic>>(),
+  endPoint: Endpoints.postAppleLogin(),
+  toastSetting: ToastSetting.both,
+  onSuccess: (data) async {
+    if (data['data'] != null && data['data']['token'] != null) {
+      DioSingleton.instance.update(data['data']['token']);
+      await appData.write(kKeyAccessToken, data['data']['token']);
+      await appData.write(kKeyIsLoggedIn, true);
+    }
+    // Password reset initiated successfully
+  },
+  onError: (message) async {
+    // Error message will be displayed automatically via toast
+  },
 );

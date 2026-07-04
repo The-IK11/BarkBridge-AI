@@ -120,4 +120,6 @@ final class GetRx<T> extends RxResponseInt<T> {
       return false;
     }
   }
+
+  void fetchData() {}
 }

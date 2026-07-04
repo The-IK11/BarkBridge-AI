@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:barkbridgeai/common_widgets/loading_indicators.dart';
 import 'package:barkbridgeai/constants/app_constants.dart';
 import 'package:barkbridgeai/helpers/di.dart';
+import 'package:barkbridgeai/helpers/navigation_service.dart';
 import 'package:barkbridgeai/helpers/social_auth.dart';
 import 'package:barkbridgeai/helpers/url_lunch.dart';
 import 'package:barkbridgeai/navigation_screen.dart';
@@ -283,48 +285,57 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height: 30.h),
 
               // Social Buttons
-              if (Platform.isIOS) ...[
-                CustomButton(
-                  buttonType: ButtonType.secondary,
-                  text: "Sign in with Apple",
-                  onPressed: () async {
+              CustomButton(
+                buttonType: ButtonType.secondary,
+                text: "Sign in with Apple",
+                onPressed: () async {
+                  // Manually track and control the loading dialog so we can
+                  // dismiss it ourselves before Get.offAll() — preventing
+                  // Navigator.pop() from closing NavigationScreen.
+                  bool isDialogOpen = false;
+
+                  void showLoading() {
+                    isDialogOpen = true;
+                    showDialog(
+                      context: NavigationService.context,
+                      barrierDismissible: false,
+                      builder: (ctx) => loadingIndicatorCircle(context: ctx),
+                    ).then((_) => isDialogOpen = false);
+                  }
+
+                  void dismissLoading() {
+                    if (isDialogOpen) {
+                      isDialogOpen = false;
+                      NavigationService.goBack;
+                    }
+                  }
+
+                  showLoading();
+                  try {
                     await SocialAuthHelper.signInWithApple(
                       onSuccess: (user, token, userName) async {
-                        await Future(() async {
-                          //TODO: uncomment this when use apple sign in
-                          // await postAppleSignIn.postData(
-                          //   data: {
-                          //     'name': userName,
-                          //     'provider': 'apple',
-                          //     'token': token,
-                          //     "role": selectedRoleForGoogleSignIn,
-                          //   },
-                          // );
-                          // return RevenueCatService().loginUser(
-                          //   user.email!,
-                          // );
-                        }).waitingForFutureWithoutBg().then((v) {
-                          if (v) {
-                            // Get.offAll(()=>SubscriptionScreen());
-                            Get.offAll(() => NavigationScreen());
-                          }
-                        });
-                        // debugPrint(
-                        //   'Apple Sign-In successful: ${user.email}',
-                        // );
-                        // debugPrint(
-                        //   'Apple Display Name: ${user.displayName}',
-                        // );
-                        // debugPrint('Apple ID Token: $token');
-                        // return;
+                        // Dismiss Apple-auth loading before API loading starts
+                        dismissLoading();
+                        await postAppleLogin
+                            .postData(
+                              data: {'provider': 'apple', 'token': token},
+                            )
+                            .then((v) {
+                              if (v) {
+                                Get.offAll(() => NavigationScreen());
+                              }
+                            });
                       },
                     );
-                  },
-                  iconColor: AppColors.cFFFFFF,
-                  imageUrl: Assets.icons.appleIcon.path,
-                ),
-                SizedBox(height: 16.h),
-              ],
+                  } finally {
+                    // Dismiss if user cancelled Apple sheet or an error occurred
+                    dismissLoading();
+                  }
+                },
+                iconColor: AppColors.cFFFFFF,
+                imageUrl: Assets.icons.appleIcon.path,
+              ),
+              SizedBox(height: 16.h),
               CustomButton(
                 buttonType: ButtonType.secondary,
                 text: "Sign in with Google",
