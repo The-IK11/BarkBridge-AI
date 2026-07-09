@@ -33,12 +33,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool deleteAccountSelected = false;
   late TextEditingController deleteReasonController;
 
+  // ── Subscription state ──────────────────────────────────────────────────
+  bool _isSubscriber = false;
+  bool _isCheckingSubscription = true;
+
   @override
   void initState() {
     super.initState();
     deleteReasonController = TextEditingController();
     // Fetch user data when screen loads
     getUserData.fetch();
+    // Check RevenueCat subscription status
+    _checkSubscription();
+  }
+
+  Future<void> _checkSubscription() async {
+    try {
+      final hasSubscription =
+          await RevenueCatService().hasActiveSubscription();
+      if (mounted) {
+        setState(() {
+          _isSubscriber = hasSubscription;
+          _isCheckingSubscription = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('⚠️ ProfileScreen: Could not check subscription: $e');
+      if (mounted) setState(() => _isCheckingSubscription = false);
+    }
   }
 
   @override
@@ -223,17 +245,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(height: 25.h),
-                    InkWell(
-                      onTap: () {
-                        Get.to(() => PlanAndPricingScreen());
-                      },
-                      child: Image.asset(
-                        Assets.images.upgradePlanImage.path,
-                        // width: double.infinity,
-                        // height: 120.h,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    // ── Plan / Premium banner ────────────────────────────
+                    _buildPlanBanner(),
                     SizedBox(height: 25.h),
                   ],
                 ),
@@ -543,6 +556,142 @@ class _ProfileScreenState extends State<ProfileScreen> {
         //   ),
         // ),
       ],
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  //  PLAN BANNER — switches between premium card and upgrade image
+  // ─────────────────────────────────────────────────────────────────────────
+  Widget _buildPlanBanner() {
+    // While checking, show a subtle shimmer placeholder
+    if (_isCheckingSubscription) {
+      return Container(
+        height: 100.h,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.r),
+          color: AppColors.c778DFF.withValues(alpha: 0.08),
+          border: Border.all(
+            color: AppColors.c778DFF.withValues(alpha: 0.15),
+          ),
+        ),
+        child: Center(
+          child: SizedBox(
+            width: 24.w,
+            height: 24.w,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(AppColors.c778DFF),
+            ),
+          ),
+        ),
+      );
+    }
+
+    if (_isSubscriber) {
+      // ── PRO MEMBER card ──────────────────────────────────────────────
+      return GestureDetector(
+        onTap: () => Get.to(() => PlanAndPricingScreen()),
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 20.w),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.r),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF1A1060),
+                AppColors.c3B53FF,
+                Color(0xFF2606ED),
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.c3B53FF.withValues(alpha: 0.4),
+                blurRadius: 20,
+                spreadRadius: 2,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              // Crown icon
+              Image.asset(
+                Assets.icons.whiteCrownIcon.path,
+                width: 38.w,
+                height: 38.h,
+              ),
+              SizedBox(width: 14.w),
+
+              // Text info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 3.h,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.r),
+                        color: AppColors.cDAA356.withValues(alpha: 0.2),
+                        border: Border.all(
+                          color: AppColors.cDAA356.withValues(alpha: 0.5),
+                        ),
+                      ),
+                      child: Text(
+                        '★  PRO MEMBER',
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.cDAA356,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                    Text(
+                      'Active Subscription',
+                      style: TextFontStyle.textstyle16cFFFFFFManrope500
+                          .copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      'Tap to manage your plan or buy extra scans',
+                      style: TextFontStyle.textstyle15c5465A6Manrope400
+                          .copyWith(
+                        color: AppColors.cC2C2C2,
+                        fontSize: 11.sp,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Arrow
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Colors.white.withValues(alpha: 0.6),
+                size: 16.sp,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // ── FREE user: show upgrade banner image ─────────────────────────────
+    return GestureDetector(
+      onTap: () => Get.to(() => PlanAndPricingScreen()),
+      child: Image.asset(
+        Assets.images.upgradePlanImage.path,
+        fit: BoxFit.cover,
+      ),
     );
   }
 

@@ -14,6 +14,7 @@ import 'package:barkbridgeai/helpers/navigation_service.dart';
 import 'package:barkbridgeai/services/credits_manager.dart';
 import 'package:barkbridgeai/services/revenuecat_service/revenue_cat_service.dart';
 import 'package:barkbridgeai/services/revenuecat_service/revenue_cut_constent.dart';
+import 'package:barkbridgeai/feature/plansAndPricing/screens/widgets/premium_active_screen.dart';
 
 /// Enum representing each subscription plan tier.
 enum PlanType { free, starter, value, proMonthly }
@@ -30,8 +31,13 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
   PlanType _selectedPlan = PlanType.proMonthly;
   bool _isPurchasing = false;
 
+  // ── Subscription status check ──
+  bool _isCheckingSubscription = true;
+  bool _isSubscriber = false;
+
   // ── Dynamic pricing from RevenueCat ──
   bool _isLoadingPrices = true;
+
   /// Maps a platform-specific product ID → its StoreProduct (contains localized priceString)
   final Map<String, StoreProduct> _storeProducts = {};
 
@@ -44,6 +50,25 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
       vsync: this,
       duration: const Duration(seconds: 2),
     )..repeat();
+    _checkSubscriptionAndLoadPrices();
+  }
+
+  /// Check if the user has an active subscription, then load prices.
+  Future<void> _checkSubscriptionAndLoadPrices() async {
+    try {
+      final hasSubscription =
+          await RevenueCatService().hasActiveSubscription();
+      if (mounted) {
+        setState(() {
+          _isSubscriber = hasSubscription;
+          _isCheckingSubscription = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('⚠️ Could not check subscription status: $e');
+      if (mounted) setState(() => _isCheckingSubscription = false);
+    }
+    // Always load prices (needed even on premium screen for credit-pack purchases)
     _loadPrices();
   }
 
@@ -197,7 +222,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
         case PurchaseResult.error:
           if (mounted) {
             Get.snackbar(
-              'Purchase Failed',
+              'Purchase Cancelled',
               'Something went wrong. Please try again.',
               snackPosition: SnackPosition.TOP,
               backgroundColor: Colors.red.withValues(alpha: 0.9),
@@ -236,8 +261,8 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
       switch (result) {
         case RestoreResult.success:
           // For restore, check if user has active subscription and grant credits
-          final hasSubscription =
-              await RevenueCatService().hasActiveSubscription();
+          final hasSubscription = await RevenueCatService()
+              .hasActiveSubscription();
           if (hasSubscription) {
             CreditsManager.instance.addCredits(100);
           }
@@ -304,224 +329,242 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
           child: Icon(Icons.close, color: Colors.white, size: 20.sp),
         ),
       ),
-      child: _isLoadingPrices
+      // ── While subscription status is being verified, show loading ──
+      child: _isCheckingSubscription
           ? _buildLoadingState()
-          : Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.sp),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: kToolbarHeight + 60.h),
+          // ── Premium user → show the dedicated premium screen ──
+          : _isSubscriber
+              ? const PremiumActiveScreen()
+              // ── Free / non-subscriber → show the upgrade flow ──
+              : _isLoadingPrices
+                  ? _buildLoadingState()
+                  : Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.sp),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: kToolbarHeight + 60.h),
 
-              // ── Crown icon ──
-              Center(
-                child: Image.asset(
-                  Assets.icons.whiteCrownIcon.path,
-                  width: 80.w,
-                  height: 80.h,
-                ),
-              ),
-              SizedBox(height: 8.h),
+                    // ── Crown icon ──
+                    Center(
+                      child: Image.asset(
+                        Assets.icons.whiteCrownIcon.path,
+                        width: 80.w,
+                        height: 80.h,
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
 
-              // ── Free tier teaser + Credits counter ──
-              Center(
-                child: ValueListenableBuilder<int>(
-                  valueListenable: CreditsManager.instance.creditsNotifier,
-                  builder: (context, credits, _) {
-                    return Column(
-                      children: [
-                        Text(
-                          "Start with 3 free scans",
-                          style: TextFontStyle.textstyle15c5465A6Manrope400
-                              .copyWith(
-                                color: AppColors.c778DFF,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 8.h,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.r),
-                            color: AppColors.c3B53FF.withValues(alpha: 0.15),
-                            border: Border.all(
-                              color: AppColors.c778DFF.withValues(alpha: 0.4),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                    // ── Free tier teaser + Credits counter ──
+                    Center(
+                      child: ValueListenableBuilder<int>(
+                        valueListenable:
+                            CreditsManager.instance.creditsNotifier,
+                        builder: (context, credits, _) {
+                          return Column(
                             children: [
-                              Icon(
-                                Icons.bolt_rounded,
-                                color: AppColors.cDAA356,
-                                size: 18.sp,
-                              ),
-                              SizedBox(width: 6.w),
                               Text(
-                                "$credits scans remaining",
+                                "Start with 3 free scans",
                                 style: TextFontStyle
-                                    .textstyle16cFFFFFFManrope500
+                                    .textstyle15c5465A6Manrope400
                                     .copyWith(
+                                      color: AppColors.c778DFF,
                                       fontSize: 14.sp,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: FontWeight.w500,
                                     ),
                               ),
+                              SizedBox(height: 8.h),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16.w,
+                                  vertical: 8.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.r),
+                                  color: AppColors.c3B53FF.withValues(
+                                    alpha: 0.15,
+                                  ),
+                                  border: Border.all(
+                                    color: AppColors.c778DFF.withValues(
+                                      alpha: 0.4,
+                                    ),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.bolt_rounded,
+                                      color: AppColors.cDAA356,
+                                      size: 18.sp,
+                                    ),
+                                    SizedBox(width: 6.w),
+                                    Text(
+                                      "$credits scans remaining",
+                                      style: TextFontStyle
+                                          .textstyle16cFFFFFFManrope500
+                                          .copyWith(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+
+                    _dividerLine(),
+                    SizedBox(height: 20.h),
+
+                    // ══════════════════════════════════════════════
+                    //  PRO MONTHLY HERO CARD — $19.99/month
+                    // ══════════════════════════════════════════════
+                    _buildProMonthlyCard(),
+
+                    SizedBox(height: 20.h),
+                    _dividerLine(),
+                    SizedBox(height: 20.h),
+
+                    // ── Section title ──
+                    Text(
+                      "CREDIT PACKS",
+                      style: TextFontStyle.textstyle16c5465A6Manrope500,
+                    ),
+                    SizedBox(height: 16.h),
+
+                    // ══════════════════════════════════════════════
+                    //  STARTER PACK — dynamic price, 10 scans
+                    // ══════════════════════════════════════════════
+                    _buildCreditPackCard(
+                      planType: PlanType.starter,
+                      title: "Starter Pack",
+                      scans: "10 Scans",
+                      price: _priceFor(PlanType.starter, fallback: '\$5.99'),
+                      priceSubtitle: "/One-time purchase",
+                      badge: null,
+                    ),
+                    SizedBox(height: 14.h),
+
+                    // ══════════════════════════════════════════════
+                    //  VALUE PACK — dynamic price, 25 scans
+                    // ══════════════════════════════════════════════
+                    _buildCreditPackCard(
+                      planType: PlanType.value,
+                      title: "Value Pack",
+                      scans: "25 Scans",
+                      price: _priceFor(PlanType.value, fallback: '\$9.99'),
+                      priceSubtitle: "/One-time purchase",
+                      badge: "MOST POPULAR",
+                    ),
+
+                    SizedBox(height: 24.h),
+
+                    // ── CTA Button ──
+                    CustomButton(
+                      text: _isPurchasing ? "Processing..." : _ctaLabel,
+                      onPressed: _isPurchasing
+                          ? () {}
+                          : () => _handlePurchase(),
+                    ),
+
+                    SizedBox(height: 16.h),
+
+                    // ── Continue with Free ──
+                    if (_selectedPlan != PlanType.free)
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() => _selectedPlan = PlanType.free);
+                          },
+                          child: Text(
+                            "Continue with Free (3 scans)",
+                            style: TextFontStyle.textstyle15c5465A6Manrope400
+                                .copyWith(
+                                  fontSize: 14.sp,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: AppColors.c5465A6,
+                                ),
+                          ),
+                        ),
+                      ),
+
+                    SizedBox(height: 12.h),
+
+                    // ══════════════════════════════════════════════
+                    //  COMPLIANCE DISCLOSURE TEXT
+                    //  Required by Apple App Store & Google Play
+                    // ══════════════════════════════════════════════
+                    _buildComplianceDisclosure(),
+
+                    SizedBox(height: 16.h),
+
+                    // ── Restore Purchases ──
+                    Center(
+                      child: TextButton(
+                        onPressed: _isPurchasing
+                            ? null
+                            : () => _handleRestore(),
+                        child: Text(
+                          "Restore Purchases",
+                          style: TextFontStyle.textstyle15c5465A6Manrope400
+                              .copyWith(
+                                fontSize: 13.sp,
+                                color: AppColors.c778DFF,
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 4.h),
+
+                    // ── Privacy Policy • Terms of Use ──
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            // TODO: Open Privacy Policy URL
+                          },
+                          child: Text(
+                            "Privacy Policy",
+                            style: TextFontStyle.textstyle15c5465A6Manrope400
+                                .copyWith(fontSize: 12.sp),
+                          ),
+                        ),
+                        SizedBox(width: 20.w),
+                        Container(
+                          height: 5.h,
+                          width: 5.h,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.c2400FF,
+                          ),
+                        ),
+                        SizedBox(width: 20.w),
+                        TextButton(
+                          onPressed: () {
+                            // TODO: Open Terms of Use URL
+                          },
+                          child: Text(
+                            "Terms of Use",
+                            style: TextFontStyle.textstyle15c5465A6Manrope400
+                                .copyWith(fontSize: 12.sp),
                           ),
                         ),
                       ],
-                    );
-                  },
+                    ),
+                    SizedBox(height: 24.h),
+                  ],
                 ),
               ),
-              SizedBox(height: 16.h),
-
-              _dividerLine(),
-              SizedBox(height: 20.h),
-
-              // ══════════════════════════════════════════════
-              //  PRO MONTHLY HERO CARD — $19.99/month
-              // ══════════════════════════════════════════════
-              _buildProMonthlyCard(),
-
-              SizedBox(height: 20.h),
-              _dividerLine(),
-              SizedBox(height: 20.h),
-
-              // ── Section title ──
-              Text(
-                "CREDIT PACKS",
-                style: TextFontStyle.textstyle16c5465A6Manrope500,
-              ),
-              SizedBox(height: 16.h),
-
-              // ══════════════════════════════════════════════
-              //  STARTER PACK — dynamic price, 10 scans
-              // ══════════════════════════════════════════════
-              _buildCreditPackCard(
-                planType: PlanType.starter,
-                title: "Starter Pack",
-                scans: "10 Scans",
-                price: _priceFor(PlanType.starter, fallback: '\$5.99'),
-                priceSubtitle: "/One-time purchase",
-                badge: null,
-              ),
-              SizedBox(height: 14.h),
-
-              // ══════════════════════════════════════════════
-              //  VALUE PACK — dynamic price, 25 scans
-              // ══════════════════════════════════════════════
-              _buildCreditPackCard(
-                planType: PlanType.value,
-                title: "Value Pack",
-                scans: "25 Scans",
-                price: _priceFor(PlanType.value, fallback: '\$9.99'),
-                priceSubtitle: "/One-time purchase",
-                badge: "MOST POPULAR",
-              ),
-
-              SizedBox(height: 24.h),
-
-              // ── CTA Button ──
-              CustomButton(
-                text: _isPurchasing ? "Processing..." : _ctaLabel,
-                onPressed: _isPurchasing ? () {} : () => _handlePurchase(),
-              ),
-
-              SizedBox(height: 16.h),
-
-              // ── Continue with Free ──
-              if (_selectedPlan != PlanType.free)
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() => _selectedPlan = PlanType.free);
-                    },
-                    child: Text(
-                      "Continue with Free (3 scans)",
-                      style: TextFontStyle.textstyle15c5465A6Manrope400
-                          .copyWith(
-                            fontSize: 14.sp,
-                            decoration: TextDecoration.underline,
-                            decorationColor: AppColors.c5465A6,
-                          ),
-                    ),
-                  ),
-                ),
-
-              SizedBox(height: 12.h),
-
-              // ══════════════════════════════════════════════
-              //  COMPLIANCE DISCLOSURE TEXT
-              //  Required by Apple App Store & Google Play
-              // ══════════════════════════════════════════════
-              _buildComplianceDisclosure(),
-
-              SizedBox(height: 16.h),
-
-              // ── Restore Purchases ──
-              Center(
-                child: TextButton(
-                  onPressed: _isPurchasing ? null : () => _handleRestore(),
-                  child: Text(
-                    "Restore Purchases",
-                    style: TextFontStyle.textstyle15c5465A6Manrope400.copyWith(
-                      fontSize: 13.sp,
-                      color: AppColors.c778DFF,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 4.h),
-
-              // ── Privacy Policy • Terms of Use ──
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      // TODO: Open Privacy Policy URL
-                    },
-                    child: Text(
-                      "Privacy Policy",
-                      style: TextFontStyle.textstyle15c5465A6Manrope400
-                          .copyWith(fontSize: 12.sp),
-                    ),
-                  ),
-                  SizedBox(width: 20.w),
-                  Container(
-                    height: 5.h,
-                    width: 5.h,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.c2400FF,
-                    ),
-                  ),
-                  SizedBox(width: 20.w),
-                  TextButton(
-                    onPressed: () {
-                      // TODO: Open Terms of Use URL
-                    },
-                    child: Text(
-                      "Terms of Use",
-                      style: TextFontStyle.textstyle15c5465A6Manrope400
-                          .copyWith(fontSize: 12.sp),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 24.h),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
@@ -825,7 +868,8 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
                               style: TextFontStyle.textstyle16c5465A6Manrope500
                                   .copyWith(
                                     color: AppColors.cC2C2C2,
-                                    fontSize: 13.sp,
+                                    fontSize: 10.sp,
+                                    fontWeight: FontWeight.w700,
                                   ),
                             ),
                           ),
