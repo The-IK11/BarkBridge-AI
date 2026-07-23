@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.barkbridgeai.app</string>
+	<string>com.barkbridge.app</string>
 	<key>PROJECT_ID</key>
 	<string>barkbridgeai-a76e5</string>
 	<key>STORAGE_BUCKET</key>
