@@ -28,6 +28,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
     with SingleTickerProviderStateMixin {
   PlanType _selectedPlan = PlanType.proMonthly;
   bool _isPurchasing = false;
+  bool _hasActiveSubscription = false;
 
   late AnimationController _shimmerController;
 
@@ -38,6 +39,16 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
       vsync: this,
       duration: const Duration(seconds: 2),
     )..repeat();
+    _checkSubscriptionStatus();
+  }
+
+  Future<void> _checkSubscriptionStatus() async {
+    final active = await RevenueCatService().hasActiveSubscription();
+    if (mounted) {
+      setState(() {
+        _hasActiveSubscription = active;
+      });
+    }
   }
 
   @override
@@ -56,7 +67,9 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
       case PlanType.value:
         return "Buy Value Pack — \$9.99";
       case PlanType.proMonthly:
-        return "Subscribe for \$19.99/month";
+        return _hasActiveSubscription
+            ? "Already Taken"
+            : "Subscribe for \$19.99/month";
     }
   }
 
@@ -99,6 +112,10 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
   Future<void> _handlePurchase() async {
     if (_isPurchasing) return;
 
+    if (_selectedPlan == PlanType.proMonthly && _hasActiveSubscription) {
+      return;
+    }
+
     // Free plan — just navigate back
     if (_selectedPlan == PlanType.free) {
       NavigationService.goBack;
@@ -119,6 +136,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
         case PurchaseResult.success:
           final credits = _getCreditsForPlan(_selectedPlan);
           CreditsManager.instance.addCredits(credits);
+          await _checkSubscriptionStatus();
           if (mounted) {
             Get.snackbar(
               '✅ Purchase Successful',
@@ -134,6 +152,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
           debugPrint('Purchase cancelled by user');
           break;
         case PurchaseResult.alreadyPurchased:
+          await _checkSubscriptionStatus();
           if (mounted) {
             Get.snackbar(
               'Already Purchased',
@@ -197,11 +216,12 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
       switch (result) {
         case RestoreResult.success:
           // For restore, check if user has active subscription and grant credits
-          final hasSubscription =
-              await RevenueCatService().hasActiveSubscription();
+          final hasSubscription = await RevenueCatService()
+              .hasActiveSubscription();
           if (hasSubscription) {
             CreditsManager.instance.addCredits(100);
           }
+          await _checkSubscriptionStatus();
           if (mounted) {
             Get.snackbar(
               '✅ Restored',
@@ -499,22 +519,44 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
         padding: EdgeInsets.symmetric(vertical: 24.w, horizontal: 16.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24.r),
-          gradient: const LinearGradient(
-            colors: [AppColors.c3B53FF, AppColors.c2606ED, AppColors.c3B53FF],
-          ),
+          gradient: _hasActiveSubscription
+              ? const LinearGradient(
+                  colors: [
+                    Color(0xFF1F1A0F), // Rich dark gold charcoal
+                    Color(0xFF332712), // Deep antique gold
+                    Color(0xFF1F1A0F),
+                  ],
+                )
+              : const LinearGradient(
+                  colors: [
+                    AppColors.c3B53FF,
+                    AppColors.c2606ED,
+                    AppColors.c3B53FF,
+                  ],
+                ),
           border: Border.all(
-            color: isSelected ? AppColors.c778DFF : Colors.transparent,
-            width: isSelected ? 2.w : 0,
+            color: _hasActiveSubscription
+                ? AppColors.cDAA356
+                : (isSelected ? AppColors.c778DFF : Colors.transparent),
+            width: (_hasActiveSubscription || isSelected) ? 2.w : 0,
           ),
-          boxShadow: isSelected
+          boxShadow: _hasActiveSubscription
               ? [
                   BoxShadow(
-                    color: AppColors.c3B53FF.withValues(alpha: 0.5),
-                    blurRadius: 20,
-                    spreadRadius: 2,
+                    color: AppColors.cDAA356.withValues(alpha: 0.3),
+                    blurRadius: 24,
+                    spreadRadius: 3,
                   ),
                 ]
-              : [],
+              : (isSelected
+                    ? [
+                        BoxShadow(
+                          color: AppColors.c3B53FF.withValues(alpha: 0.5),
+                          blurRadius: 20,
+                          spreadRadius: 2,
+                        ),
+                      ]
+                    : []),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -524,53 +566,103 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "PRO MONTHLY",
+                  _hasActiveSubscription
+                      ? "PRO MONTHLY ACTIVATED"
+                      : "PRO MONTHLY",
                   style: TextFontStyle.textstyle16cFFFFFFManrope500.copyWith(
-                    color: AppColors.cC2C2C2,
+                    color: _hasActiveSubscription
+                        ? AppColors.cDAA356
+                        : AppColors.cC2C2C2,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.5,
                   ),
                 ),
-                // ── Animated "BEST VALUE" badge ──
-                AnimatedBuilder(
-                  animation: _shimmerController,
-                  builder: (context, child) {
-                    return Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 4.h,
+                // ── Animated "BEST VALUE" badge or premium "ACTIVE" badge ──
+                if (_hasActiveSubscription)
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 4.h,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      gradient: const LinearGradient(
+                        colors: [
+                          AppColors.cDAA356,
+                          Color(0xFFFFF1C9),
+                          AppColors.cDAA356,
+                        ],
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.r),
-                        gradient: LinearGradient(
-                          begin: Alignment(
-                            -1.0 + 2.0 * _shimmerController.value,
-                            0,
-                          ),
-                          end: Alignment(
-                            1.0 + 2.0 * _shimmerController.value,
-                            0,
-                          ),
-                          colors: const [
-                            AppColors.cDAA356,
-                            Color(0xFFFFF1C9),
-                            AppColors.cDAA356,
-                          ],
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.cDAA356.withValues(alpha: 0.4),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
                         ),
-                      ),
-                      child: Text(
-                        "BEST VALUE",
-                        style: TextStyle(
-                          fontFamily: "Manrope",
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w800,
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.workspace_premium,
                           color: const Color(0xFF1A0A00),
-                          letterSpacing: 1.0,
+                          size: 12.sp,
                         ),
-                      ),
-                    );
-                  },
-                ),
+                        SizedBox(width: 4.w),
+                        Text(
+                          "ACTIVE",
+                          style: TextStyle(
+                            fontFamily: "Manrope",
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF1A0A00),
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  AnimatedBuilder(
+                    animation: _shimmerController,
+                    builder: (context, child) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 4.h,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.r),
+                          gradient: LinearGradient(
+                            begin: Alignment(
+                              -1.0 + 2.0 * _shimmerController.value,
+                              0,
+                            ),
+                            end: Alignment(
+                              1.0 + 2.0 * _shimmerController.value,
+                              0,
+                            ),
+                            colors: const [
+                              AppColors.cDAA356,
+                              Color(0xFFFFF1C9),
+                              AppColors.cDAA356,
+                            ],
+                          ),
+                        ),
+                        child: Text(
+                          "BEST VALUE",
+                          style: TextStyle(
+                            fontFamily: "Manrope",
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF1A0A00),
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
               ],
             ),
             SizedBox(height: 12.h),
@@ -581,14 +673,20 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
               children: [
                 Text(
                   "\$19.99",
-                  style: TextFontStyle.textstyle28cFFFFFFManrope700,
+                  style: TextFontStyle.textstyle28cFFFFFFManrope700.copyWith(
+                    color: _hasActiveSubscription
+                        ? AppColors.cDAA356
+                        : Colors.white,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 3.h),
                   child: Text(
                     "/Per Month",
                     style: TextFontStyle.textstyle16c5465A6Manrope500.copyWith(
-                      color: AppColors.cC2C2C2,
+                      color: _hasActiveSubscription
+                          ? AppColors.cDAA356.withValues(alpha: 0.7)
+                          : AppColors.cC2C2C2,
                     ),
                   ),
                 ),
@@ -597,10 +695,22 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
             SizedBox(height: 4.h),
 
             // ── Features ──
-            _premiumFacility("100 scans per month"),
-            _premiumFacility("Monthly usage counter reset"),
-            _premiumFacility("Premium features unlocked"),
-            _premiumFacility("Priority support"),
+            _premiumFacility(
+              "100 scans per month",
+              isGold: _hasActiveSubscription,
+            ),
+            _premiumFacility(
+              "Monthly usage counter reset",
+              isGold: _hasActiveSubscription,
+            ),
+            _premiumFacility(
+              "Premium features unlocked",
+              isGold: _hasActiveSubscription,
+            ),
+            _premiumFacility(
+              "Priority support",
+              isGold: _hasActiveSubscription,
+            ),
 
             // ── Selection indicator ──
             if (isSelected)
@@ -613,25 +723,37 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
                       vertical: 6.h,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
+                      color: _hasActiveSubscription
+                          ? AppColors.cDAA356.withValues(alpha: 0.2)
+                          : Colors.white.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(20.r),
+                      border: _hasActiveSubscription
+                          ? Border.all(
+                              color: AppColors.cDAA356.withValues(alpha: 0.5),
+                              width: 1,
+                            )
+                          : null,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           Icons.check_circle,
-                          color: Colors.white,
+                          color: _hasActiveSubscription
+                              ? AppColors.cDAA356
+                              : Colors.white,
                           size: 16.sp,
                         ),
                         SizedBox(width: 6.w),
                         Text(
-                          "Selected",
+                          _hasActiveSubscription ? "Activated" : "Selected",
                           style: TextStyle(
                             fontFamily: "Manrope",
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: _hasActiveSubscription
+                                ? AppColors.cDAA356
+                                : Colors.white,
                           ),
                         ),
                       ],
@@ -867,16 +989,20 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
     );
   }
 
-  Widget _premiumFacility(String title) {
+  Widget _premiumFacility(String title, {bool isGold = false}) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       dense: true,
       visualDensity: const VisualDensity(vertical: -2),
-      leading: Assets.icons.bubbleTickIcon.image(width: 22.w, height: 22.h),
+      leading: Assets.icons.bubbleTickIcon.image(
+        width: 22.w,
+        height: 22.h,
+        color: isGold ? AppColors.cDAA356 : null,
+      ),
       title: Text(
         title,
         style: TextFontStyle.textstyle16c5465A6Manrope500.copyWith(
-          color: AppColors.cFFFFFF,
+          color: isGold ? const Color(0xFFFFF1C9) : AppColors.cFFFFFF,
           fontSize: 14.sp,
         ),
       ),
