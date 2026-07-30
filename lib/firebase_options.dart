@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '971263030513',
     projectId: 'barkbridgeai-a76e5',
     storageBucket: 'barkbridgeai-a76e5.firebasestorage.app',
-    iosBundleId: 'com.barkbridgeai.app',
+    iosBundleId: 'com.barkbridge.app',
   );
 }
