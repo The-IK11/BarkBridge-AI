@@ -138,22 +138,25 @@ class _SignInScreenState extends State<SignInScreen> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
 
-                      await Future(() async{ await postLogin
-                          .postData(
-                            data: {
-                              "email": emailController.text,
-                              "password": passwordController.text,
-                            },
-                          );
+                      await Future(() async {
+                        final isSuccess = await postLogin.postData(
+                          data: {
+                            "email": emailController.text,
+                            "password": passwordController.text,
+                          },
+                        );
 
-                           return RevenueCatService().loginUser(
-                              appData.read(kKeyUserID).toString()
-                            );
-                          } )
-                     
+                        if (isSuccess) {
+                          await RevenueCatService().loginUser(
+                            appData.read(kKeyUserID).toString(),
+                          );
+                          return true;
+                        }
+                        return false;
+                      })
                           .waitingForFutureWithoutBg()
                           .then((v) {
-                            if (v) {
+                            if (v == true) {
                               Get.offAll(() => NavigationScreen());
                             }
                           });
@@ -214,17 +217,22 @@ class _SignInScreenState extends State<SignInScreen> {
                           // Dismiss Apple-auth loading before API loading starts
                           dismissLoading();
 
-                          await Future(()async{
-                              await postAppleLogin
-                              .postData(
-                                data: {'provider': 'apple', 'token': token},
-                              );
+                          await Future(() async {
+                            final isSuccess = await postAppleLogin.postData(
+                              data: {'provider': 'apple', 'token': token},
+                            );
 
-                              return RevenueCatService().loginUser(appData.read(kKeyUserID).toString());
+                            if (isSuccess) {
+                              await RevenueCatService().loginUser(
+                                appData.read(kKeyUserID).toString(),
+                              );
+                              return true;
+                            }
+                            return false;
                           })
                               .waitingForFutureWithoutBg()
                               .then((v) {
-                                if (v) {
+                                if (v == true) {
                                   Get.offAll(() => NavigationScreen());
                                 }
                               });
@@ -256,21 +264,26 @@ class _SignInScreenState extends State<SignInScreen> {
                         log("Google Sign-In Payload: $payload");
                         // Hit the API like this
 
-                      await    Future(()async{
+                      await Future(() async {
+                        final isSuccess = await postSocialLogin.postData(
+                          data: payload,
+                        );
 
-                         await postSocialLogin
-                            .postData(data: payload);
-
-                            return RevenueCatService().loginUser(appData.read(kKeyUserID).toString());
+                        if (isSuccess) {
+                          await RevenueCatService().loginUser(
+                            appData.read(kKeyUserID).toString(),
+                          );
+                          return true;
+                        }
+                        return false;
                       })
-                       
-                            .waitingForFutureWithoutBg()
-                            .then((v) {
-                              if (v) {
-                                Get.to(() => NavigationScreen());
-                                appData.write(kGoogle, true);
-                              }
-                            });
+                          .waitingForFutureWithoutBg()
+                          .then((v) {
+                            if (v == true) {
+                              Get.to(() => NavigationScreen());
+                              appData.write(kGoogle, true);
+                            }
+                          });
                       },
                     );
                   },

@@ -49,6 +49,7 @@ final class Endpoints {
 
   // User Profile
   static String getUserData() => "/user";
+  static String getUserCredit() => "/user/credit";
   static String postUpdateUserData() => "/user/update";
   static String postDeleteAccount() => "/user/delete-account";
   static String postLogout() => "/user/logout";

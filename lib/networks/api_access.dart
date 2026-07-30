@@ -13,6 +13,7 @@ import 'package:barkbridgeai/networks/endpoints.dart';
 import 'package:barkbridgeai/feature/profile/model/profile_model.dart';
 import 'package:barkbridgeai/feature/profile/model/ai_response_model.dart';
 import 'package:barkbridgeai/feature/faqAndTermsOfService/model/faq_screen_model.dart';
+import 'package:barkbridgeai/feature/home/model/get_credits_model.dart';
 
 // PostOnboardingRx postOnboardingRX = PostOnboardingRx(
 //   empty: {},
@@ -57,6 +58,7 @@ PostRx postRegisterOtpVerify = PostRx(
       DioSingleton.instance.update(data['data']['token']);
       await appData.write(kKeyAccessToken, data['data']['token']);
       await appData.write(kKeyIsLoggedIn, true);
+      await appData.write(kKeyUserID, data['data']['id']);
     }
   },
   onError: (message) async {
@@ -165,6 +167,13 @@ GetRx<GetProfileDataModel> getUserData = GetRx<GetProfileDataModel>(
   dataFetcher: BehaviorSubject<GetProfileDataModel>(),
   endpoint: Endpoints.getUserData(),
   fromJson: GetProfileDataModel.fromJson,
+);
+
+GetRx<GetCreditsModel> getUserCredit = GetRx<GetCreditsModel>(
+  empty: GetCreditsModel(),
+  dataFetcher: BehaviorSubject<GetCreditsModel>(),
+  endpoint: Endpoints.getUserCredit(),
+  fromJson: GetCreditsModel.fromJson,
 );
 
 PostRx postUpdateUser = PostRx(

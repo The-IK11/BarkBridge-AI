@@ -11,6 +11,9 @@ import 'package:barkbridgeai/gen/colors.gen.dart';
 import 'package:barkbridgeai/helpers/loading_helper.dart';
 import 'package:barkbridgeai/navigation_screen.dart';
 import 'package:barkbridgeai/networks/api_access.dart';
+import 'package:barkbridgeai/constants/app_constants.dart';
+import 'package:barkbridgeai/helpers/di.dart';
+import 'package:barkbridgeai/services/revenuecat_service/revenue_cat_service.dart';
 
 class VerificationScreen extends StatefulWidget {
   final String verificationType; // "signup" or "reset_password"
@@ -140,19 +143,26 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         }
                       });
                 } else {
-                  await postRegisterOtpVerify
-                      .postData(
-                        data: {
-                          "otp": _controllers.map((c) => c.text).join(),
-                          "email": widget.email,
-                        },
-                      )
-                      .waitingForFutureWithoutBg()
-                      .then((v) {
-                        if (v) {
-                          Get.offAll(NavigationScreen());
-                        }
-                      });
+                  await Future(() async {
+                    final isSuccess = await postRegisterOtpVerify.postData(
+                      data: {
+                        "otp": _controllers.map((c) => c.text).join(),
+                        "email": widget.email,
+                      },
+                    );
+
+                    if (isSuccess) {
+                      await RevenueCatService().loginUser(
+                        appData.read(kKeyUserID).toString(),
+                      );
+                      return true;
+                    }
+                    return false;
+                  }).waitingForFutureWithoutBg().then((v) {
+                    if (v == true) {
+                      Get.offAll(() => NavigationScreen());
+                    }
+                  });
                 }
               },
             ),

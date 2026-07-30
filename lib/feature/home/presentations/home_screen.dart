@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +13,8 @@ import 'package:barkbridgeai/feature/home/presentations/file_upload_speed_screen
 import 'package:barkbridgeai/gen/assets.gen.dart';
 import 'package:barkbridgeai/gen/colors.gen.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:barkbridgeai/networks/api_access.dart';
+import 'package:barkbridgeai/feature/home/model/get_credits_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,6 +52,12 @@ class _HomeScreenState extends State<HomeScreen> {
       debugPrint("Error picking video: $e");
       // Optional: Show a snackbar if permission is denied
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserCredit.fetch();
   }
 
   @override
@@ -159,61 +168,95 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
 
-            //Credit Box
             // Credit Box
             SizedBox(height: 20.h),
-            Container(
-              height: 64.h,
-              width: 167,
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                color: Color(0xFF031F5A).withAlpha(70),
-                border: Border.all(
-                  color: const Color.fromARGB(185, 80, 100, 200).withAlpha(80),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        // height: 50.h,
-                        // width: 50.w,
+            StreamBuilder<GetCreditsModel>(
+              stream: getUserCredit.getStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return ShimmerGlassContainer(
+                    height: 64.h,
+                    width: 167.w,
+                    borderRadius: BorderRadius.circular(20.r),
+                    child: Center(
+                      child: SizedBox(
+                        height: 20.h,
+                        width: 20.w,
                         child: CircularProgressIndicator(
-                          value: 0.75,
-                          strokeWidth: 3.w,
+                          strokeWidth: 2.w,
                           valueColor: AlwaysStoppedAnimation<Color>(
                             Color(0xFF0454CB),
                           ),
-                          backgroundColor: AppColors.c778DFF.withAlpha(50),
                         ),
                       ),
-                      Text(
-                        "190",
-                        style: TextFontStyle.textstyle20cFFFFFFManrope600
-                            .copyWith(
-                              fontSize: 12.sp,
-                              color: AppColors.cFFFFFF,
-                            ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 16.w),
-                  Expanded(
-                    child: Text(
-                      "Credit Left",
-                      style: TextFontStyle.textstyle11cB8BBCCManrope400
-                          .copyWith(
-                            fontSize: 14.sp,
+                    ),
+                  );
+                }
 
-                            color: const Color.fromARGB(255, 106, 122, 219),
+                final model = snapshot.data;
+                final credits = model?.data?.credits ?? 0;
+                final freeCredits = model?.data?.freeCredit ?? 0;
+                final total = credits + freeCredits;
+
+                if (total == 0) {
+                  return ShimmerGlassContainer(
+                    height: 64.h,
+                    width: 260.w,
+                    borderRadius: BorderRadius.circular(20.r),
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 12.h,
+                        ),
+                        child: Text(
+                          "Please buy credits for more translating",
+                          textAlign: TextAlign.center,
+                          style: TextFontStyle.textstyle11cB8BBCCManrope400
+                              .copyWith(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                                color: const Color.fromARGB(255, 106, 122, 219),
+                              ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+
+                return ShimmerGlassContainer(
+                  height: 64.h,
+                  width: 180.w,
+                  borderRadius: BorderRadius.circular(20.r),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 12.h,
+                    ),
+                    child: Row(
+                      children: [
+                        SpinningGlowRing(total: total),
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          child: Text(
+                            "Credit Left",
+                            style: TextFontStyle.textstyle11cB8BBCCManrope400
+                                .copyWith(
+                                  fontSize: 13.sp,
+                                  color: const Color.fromARGB(
+                                    255,
+                                    106,
+                                    122,
+                                    219,
+                                  ),
+                                ),
                           ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ],
         ),
@@ -287,6 +330,200 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class SpinningGlowRing extends StatefulWidget {
+  final int total;
+  const SpinningGlowRing({super.key, required this.total});
+
+  @override
+  State<SpinningGlowRing> createState() => _SpinningGlowRingState();
+}
+
+class _SpinningGlowRingState extends State<SpinningGlowRing>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Container(
+          width: 52.w,
+          height: 52.h,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF0454CB).withAlpha(120),
+                blurRadius: 10.r,
+                spreadRadius: 1.r,
+              ),
+            ],
+          ),
+          child: Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.transparent,
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // Rotating gradient border
+                RotationTransition(
+                  turns: _controller,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: SweepGradient(
+                        colors: [
+                          const Color(0xFF0454CB),
+                          const Color(0xFF778DFF).withAlpha(100),
+                          const Color(0xFF0454CB),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // Inner solid circle matching background
+                Container(
+                  width: 44.w,
+                  height: 44.h,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFF031F5A), // Match the background
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(4.sp),
+                      child: Text(
+                        "${widget.total}",
+                        style: TextFontStyle.textstyle20cFFFFFFManrope600
+                            .copyWith(
+                              fontSize: 12.sp,
+                              color: AppColors.cFFFFFF,
+                            ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ShimmerGlassContainer extends StatefulWidget {
+  final Widget child;
+  final double height;
+  final double width;
+  final BorderRadius borderRadius;
+
+  const ShimmerGlassContainer({
+    super.key,
+    required this.child,
+    required this.height,
+    required this.width,
+    required this.borderRadius,
+  });
+
+  @override
+  State<ShimmerGlassContainer> createState() => _ShimmerGlassContainerState();
+}
+
+class _ShimmerGlassContainerState extends State<ShimmerGlassContainer>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _shimmerController;
+
+  @override
+  void initState() {
+    super.initState();
+    _shimmerController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _shimmerController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _shimmerController,
+      builder: (context, child) {
+        return ClipRRect(
+          borderRadius: widget.borderRadius,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              height: widget.height,
+              width: widget.width,
+              decoration: BoxDecoration(
+                borderRadius: widget.borderRadius,
+                color: const Color(0xFF031F5A).withAlpha(40),
+                border: Border.all(
+                  color: Colors.white.withAlpha(25),
+                  width: 1.w,
+                ),
+              ),
+              child: Stack(
+                children: [
+                  // Shimmer shine highlight line
+                  Positioned.fill(
+                    child: FractionallySizedBox(
+                      alignment: Alignment(
+                        -2.0 + (_shimmerController.value * 4.0),
+                        0.0,
+                      ),
+                      widthFactor: 0.5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.transparent,
+                              Colors.white.withAlpha(35),
+                              Colors.transparent,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Content
+                  Positioned.fill(child: widget.child),
+                ],
+              ),
             ),
           ),
         );

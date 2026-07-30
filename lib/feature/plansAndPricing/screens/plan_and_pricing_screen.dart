@@ -13,6 +13,9 @@ import 'package:barkbridgeai/helpers/navigation_service.dart';
 import 'package:barkbridgeai/services/credits_manager.dart';
 import 'package:barkbridgeai/services/revenuecat_service/revenue_cat_service.dart';
 import 'package:barkbridgeai/services/revenuecat_service/revenue_cut_constent.dart';
+import 'package:purchases_flutter/purchases_flutter.dart' hide PurchaseResult;
+import 'package:barkbridgeai/networks/api_access.dart';
+import 'package:barkbridgeai/feature/home/model/get_credits_model.dart';
 
 /// Enum representing each subscription plan tier.
 enum PlanType { free, starter, value, proMonthly }
@@ -30,6 +33,10 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
   bool _isPurchasing = false;
   bool _hasActiveSubscription = false;
 
+  String _starterPackPrice = "\$5.99";
+  String _valuePackPrice = "\$9.99";
+  String _proMonthlyPrice = "\$19.99";
+
   late AnimationController _shimmerController;
 
   @override
@@ -40,6 +47,8 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
       duration: const Duration(seconds: 2),
     )..repeat();
     _checkSubscriptionStatus();
+    _loadProductPrices();
+    getUserCredit.fetch();
   }
 
   Future<void> _checkSubscriptionStatus() async {
@@ -48,6 +57,39 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
       setState(() {
         _hasActiveSubscription = active;
       });
+    }
+  }
+
+  Future<void> _loadProductPrices() async {
+    try {
+      final offerings = await RevenueCatService().getOfferings();
+      if (offerings != null) {
+        if (offerings.current != null) {
+          _mapPackages(offerings.current!.availablePackages);
+        }
+        for (final offering in offerings.all.values) {
+          _mapPackages(offering.availablePackages);
+        }
+      }
+    } catch (e) {
+      debugPrint("Error loading product prices: $e");
+    }
+  }
+
+  void _mapPackages(List<Package> packages) {
+    for (final pkg in packages) {
+      final id = pkg.storeProduct.identifier;
+      final priceStr = pkg.storeProduct.priceString;
+      if (id == RevenueCutConstent.credits10ProductId ||
+          id == RevenueCutConstent.credits10AppStoreId) {
+        if (mounted) setState(() => _starterPackPrice = priceStr);
+      } else if (id == RevenueCutConstent.credits25ProductId ||
+          id == RevenueCutConstent.credits25AppStoreId) {
+        if (mounted) setState(() => _valuePackPrice = priceStr);
+      } else if (id == RevenueCutConstent.monthlyProductId ||
+          id == RevenueCutConstent.monthlyAppStoreId) {
+        if (mounted) setState(() => _proMonthlyPrice = priceStr);
+      }
     }
   }
 
@@ -63,13 +105,13 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
       case PlanType.free:
         return "Continue with Free";
       case PlanType.starter:
-        return "Buy Starter Pack — \$5.99";
+        return "Buy Starter Pack — $_starterPackPrice";
       case PlanType.value:
-        return "Buy Value Pack — \$9.99";
+        return "Buy Value Pack — $_valuePackPrice";
       case PlanType.proMonthly:
         return _hasActiveSubscription
             ? "Already Taken"
-            : "Subscribe for \$19.99/month";
+            : "Subscribe for $_proMonthlyPrice/month";
     }
   }
 
@@ -137,6 +179,9 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
           final credits = _getCreditsForPlan(_selectedPlan);
           CreditsManager.instance.addCredits(credits);
           await _checkSubscriptionStatus();
+          Future.delayed(const Duration(seconds: 5), () {
+            getUserCredit.fetch();
+          });
           if (mounted) {
             Get.snackbar(
               '✅ Purchase Successful',
@@ -305,9 +350,16 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
 
               // ── Free tier teaser + Credits counter ──
               Center(
-                child: ValueListenableBuilder<int>(
-                  valueListenable: CreditsManager.instance.creditsNotifier,
-                  builder: (context, credits, _) {
+                child: StreamBuilder<GetCreditsModel>(
+                  stream: getUserCredit.getStream,
+                  builder: (context, snapshot) {
+                    final model = snapshot.data;
+                    final credits = model?.data?.credits ?? 0;
+                    final freeCredits = model?.data?.freeCredit ?? 0;
+                    final totalCredits = model != null
+                        ? (credits + freeCredits)
+                        : CreditsManager.instance.creditsNotifier.value;
+
                     return Column(
                       children: [
                         Text(
@@ -342,7 +394,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
                               ),
                               SizedBox(width: 6.w),
                               Text(
-                                "$credits scans remaining",
+                                "$totalCredits scans remaining",
                                 style: TextFontStyle
                                     .textstyle16cFFFFFFManrope500
                                     .copyWith(
@@ -386,7 +438,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
                 planType: PlanType.starter,
                 title: "Starter Pack",
                 scans: "10 Scans",
-                price: "\$5.99",
+                price: _starterPackPrice,
                 priceSubtitle: "/One-time purchase",
                 badge: null,
               ),
@@ -399,7 +451,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
                 planType: PlanType.value,
                 title: "Value Pack",
                 scans: "25 Scans",
-                price: "\$9.99",
+                price: _valuePackPrice,
                 priceSubtitle: "/One-time purchase",
                 badge: "MOST POPULAR",
               ),
@@ -672,7 +724,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "\$19.99",
+                  _proMonthlyPrice,
                   style: TextFontStyle.textstyle28cFFFFFFManrope700.copyWith(
                     color: _hasActiveSubscription
                         ? AppColors.cDAA356

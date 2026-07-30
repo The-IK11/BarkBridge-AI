@@ -25,6 +25,7 @@ import 'package:barkbridgeai/gen/assets.gen.dart';
 import 'package:barkbridgeai/gen/colors.gen.dart';
 import 'package:barkbridgeai/helpers/loading_helper.dart';
 import 'package:barkbridgeai/networks/api_access.dart';
+import 'package:barkbridgeai/services/revenuecat_service/revenue_cat_service.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -316,12 +317,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onSuccess: (user, token, userName) async {
                         // Dismiss Apple-auth loading before API loading starts
                         dismissLoading();
-                        await postAppleLogin
-                            .postData(
-                              data: {'provider': 'apple', 'token': token},
-                            )
+                        await Future(() async {
+                          final isSuccess = await postAppleLogin.postData(
+                            data: {'provider': 'apple', 'token': token},
+                          );
+
+                          if (isSuccess) {
+                            await RevenueCatService().loginUser(
+                              appData.read(kKeyUserID).toString(),
+                            );
+                            return true;
+                          }
+                          return false;
+                        })
+                            .waitingForFutureWithoutBg()
                             .then((v) {
-                              if (v) {
+                              if (v == true) {
                                 Get.offAll(() => NavigationScreen());
                               }
                             });
@@ -352,11 +363,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       };
 
                       // Hit the API like this
-                      await postSocialLogin
-                          .postData(data: payload)
+                      await Future(() async {
+                        final isSuccess = await postSocialLogin.postData(
+                          data: payload,
+                        );
+
+                        if (isSuccess) {
+                          await RevenueCatService().loginUser(
+                            appData.read(kKeyUserID).toString(),
+                          );
+                          return true;
+                        }
+                        return false;
+                      })
                           .waitingForFutureWithoutBg()
                           .then((v) {
-                            if (v) {
+                            if (v == true) {
                               Get.to(() => NavigationScreen());
                               appData.write(kGoogle, true);
                             }

@@ -12,7 +12,52 @@
           "package_name": "com.barkbridgeai.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "971263030513-6l457aami6dcgdjiuf397bho5hp8ns1q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.barkbridgeai.app",
+            "certificate_hash": "76a0856f292c4299782946ac12c2bf4f3a713842"
+          }
+        },
+        {
+          "client_id": "971263030513-c2squt382ln0bhaji97a42lfdi5cac7s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.barkbridgeai.app",
+            "certificate_hash": "08d080308d42624bf4a63002ac135d848c7dc276"
+          }
+        },
+        {
+          "client_id": "971263030513-e4ktl9m13bgo815skl8okrha7g9p3emq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.barkbridgeai.app",
+            "certificate_hash": "c090d78ca9961f2708f5b13a0eae5af62c1e5949"
+          }
+        },
+        {
+          "client_id": "971263030513-u51qsevoc2unqh8k2uchrlc1t7vljd0l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.barkbridgeai.app",
+            "certificate_hash": "4394fb29f1e2c11d2d669371c3f64be4af512482"
+          }
+        },
+        {
+          "client_id": "971263030513-uatdfcmr031rroegk77olb8fc8t33a6p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.barkbridgeai.app",
+            "certificate_hash": "9a7eb28196f72239afc5202117ba60e152c9d974"
+          }
+        },
+        {
+          "client_id": "971263030513-6aa63sadu0l2b5qsqd6uotq0jsomubtd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBmks1b_uxCwEaO3G5eILpk7jGPXUnK9ZQ"
@@ -20,7 +65,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "971263030513-6aa63sadu0l2b5qsqd6uotq0jsomubtd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "971263030513-78d00lhi1c15cj9hsou7jr6b7ffrhjq0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.barkbridgeai.app"
+              }
+            }
+          ]
         }
       }
     }

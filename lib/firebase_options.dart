@@ -59,10 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAWNyg-KBK5UrNEF_t0HMCUybHTjFYk6Hs',
-    appId: '1:971263030513:ios:839ec0b4568b6d750ea550',
+    appId: '1:971263030513:ios:014ffa9c9a7bee780ea550',
     messagingSenderId: '971263030513',
     projectId: 'barkbridgeai-a76e5',
     storageBucket: 'barkbridgeai-a76e5.firebasestorage.app',
+    androidClientId: '971263030513-6l457aami6dcgdjiuf397bho5hp8ns1q.apps.googleusercontent.com',
+    iosClientId: '971263030513-8l9ibelfd3q3p4dl6fviaqo4khrnkfnu.apps.googleusercontent.com',
     iosBundleId: 'com.barkbridge.app',
   );
 }
