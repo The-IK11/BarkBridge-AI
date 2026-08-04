@@ -121,22 +121,28 @@ class RevenueCatService {
       final entitlement = customerInfo.entitlements.all[monthlyProEntitlement];
 
       if (entitlement != null && entitlement.isActive) {
+        final productId = entitlement.productIdentifier;
+
+        // If the entitlement was unlocked by a consumable credit pack (due to RevenueCat dashboard mapping)
+        if (productId == credits10ProductId ||
+            productId == credits25ProductId ||
+            productId == RevenueCutConstent.credits10AppStoreId ||
+            productId == RevenueCutConstent.credits25AppStoreId) {
+          // Check if they actually have any active subscriptions
+          if (customerInfo.activeSubscriptions.isNotEmpty) {
+            debugPrint(
+              '✅ User has active subscriptions: ${customerInfo.activeSubscriptions}',
+            );
+            return true;
+          }
+
+          debugPrint(
+            '⚠️ Premium entitlement unlocked by consumable ($productId). Ignoring.',
+          );
+          return false;
+        }
+
         debugPrint('✅ User has active $monthlyProEntitlement subscription');
-        return true;
-      }
-
-      // Check if ANY entitlement is active (for flexibility in testing)
-      final hasAnyActive = customerInfo.entitlements.all.values.any(
-        (e) => e.isActive,
-      );
-
-      if (hasAnyActive) {
-        debugPrint(
-          '⚠️ User has active entitlement but not "$monthlyProEntitlement"',
-        );
-        debugPrint(
-          '   Active entitlements: ${customerInfo.entitlements.all.keys.where((k) => customerInfo.entitlements.all[k]?.isActive ?? false).join(", ")}',
-        );
         return true;
       }
 

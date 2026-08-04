@@ -9,7 +9,8 @@ import 'package:barkbridgeai/constants/text_font_style.dart';
 import 'package:barkbridgeai/gen/assets.gen.dart';
 import 'package:barkbridgeai/gen/colors.gen.dart';
 import 'package:barkbridgeai/helpers/navigation_service.dart';
-import 'package:barkbridgeai/services/credits_manager.dart';
+import 'package:barkbridgeai/networks/api_access.dart';
+import 'package:barkbridgeai/feature/home/model/get_credits_model.dart';
 import 'package:barkbridgeai/services/revenuecat_service/revenue_cat_service.dart';
 import 'package:barkbridgeai/services/revenuecat_service/revenue_cut_constent.dart';
 
@@ -44,6 +45,7 @@ class _PremiumActiveScreenState extends State<PremiumActiveScreen>
       duration: const Duration(seconds: 2),
     )..repeat();
     _loadPrices();
+    getUserCredit.fetch();
   }
 
   Future<void> _loadPrices() async {
@@ -124,7 +126,9 @@ class _PremiumActiveScreenState extends State<PremiumActiveScreen>
 
       switch (result) {
         case PurchaseResult.success:
-          CreditsManager.instance.addCredits(credits);
+          Future.delayed(const Duration(seconds: 5), () {
+            getUserCredit.fetch();
+          });
           if (mounted) {
             Get.snackbar(
               '✅ Purchase Successful',
@@ -471,9 +475,11 @@ class _PremiumActiveScreenState extends State<PremiumActiveScreen>
   // ─────────────────────────────────────────────────────────────────────────
   Widget _buildCreditsCounter() {
     return Center(
-      child: ValueListenableBuilder<int>(
-        valueListenable: CreditsManager.instance.creditsNotifier,
-        builder: (context, credits, _) {
+      child: StreamBuilder<GetCreditsModel>(
+        stream: getUserCredit.getStream,
+        builder: (context, snapshot) {
+          final model = snapshot.data;
+          final credits = (model?.data?.credits ?? 0) + (model?.data?.freeCredit ?? 0);
           return Column(
             children: [
               Text(

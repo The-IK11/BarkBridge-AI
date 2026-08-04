@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:barkbridgeai/helpers/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -77,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      child: Padding(
+      child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.sp),
         child: Column(
           children: [
@@ -258,6 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+            SizedBox(height: 50.h),
           ],
         ),
       ),

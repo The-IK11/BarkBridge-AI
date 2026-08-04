@@ -193,9 +193,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 .copyWith(color: AppColors.c2707EE),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                urlLunch(
-                                  "https://barkbridgeai.tech/page/privacy-policy",
-                                );
+                                urlLunch("$baseUrl/page/privacy-policy");
                                 // Handle Privacy Policy tap
                               },
                           ),
@@ -211,9 +209,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                urlLunch(
-                                  "https://barkbridgeai.tech/page/terms-conditions",
-                                );
+                                urlLunch("$baseUrl/page/terms-conditions");
                                 // Handle & tap if needed
                               },
                           ),
@@ -329,13 +325,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             return true;
                           }
                           return false;
-                        })
-                            .waitingForFutureWithoutBg()
-                            .then((v) {
-                              if (v == true) {
-                                Get.offAll(() => NavigationScreen());
-                              }
-                            });
+                        }).waitingForFutureWithoutBg().then((v) {
+                          if (v == true) {
+                            Get.offAll(() => NavigationScreen());
+                          }
+                        });
                       },
                     );
                   } finally {
@@ -375,14 +369,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return true;
                         }
                         return false;
-                      })
-                          .waitingForFutureWithoutBg()
-                          .then((v) {
-                            if (v == true) {
-                              Get.to(() => NavigationScreen());
-                              appData.write(kGoogle, true);
-                            }
-                          });
+                      }).waitingForFutureWithoutBg().then((v) {
+                        if (v == true) {
+                          Get.to(() => NavigationScreen());
+                          appData.write(kGoogle, true);
+                        }
+                      });
                     },
                   );
                 },

@@ -34,7 +34,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Initialize credits manager (loads saved credits, grants 3 free on first install)
-  CreditsManager.instance.init();
+  //CreditsManager.instance.init();
 
   // Initialize RevenueCat SDK
   try {

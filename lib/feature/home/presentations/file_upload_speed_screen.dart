@@ -236,6 +236,7 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
             child: OutlinedButton(
               onPressed: _uploadComplete
                   ? () {
+                      getUserCredit.fetch();
                       NavigationService.navigateToWithArgs(
                         Routes.aiResponseScreen,
                         {"isAIResponseScreen": true},

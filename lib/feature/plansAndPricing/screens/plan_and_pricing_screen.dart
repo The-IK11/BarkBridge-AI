@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:barkbridgeai/helpers/url_lunch.dart';
+import 'package:barkbridgeai/networks/endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -155,6 +157,13 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
     if (_isPurchasing) return;
 
     if (_selectedPlan == PlanType.proMonthly && _hasActiveSubscription) {
+      Get.snackbar(
+        'Already Subscribed',
+        'You already have an active Monthly Pro subscription.',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.orange.withValues(alpha: 0.9),
+        colorText: Colors.white,
+      );
       return;
     }
 
@@ -177,7 +186,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
       switch (result) {
         case PurchaseResult.success:
           final credits = _getCreditsForPlan(_selectedPlan);
-          CreditsManager.instance.addCredits(credits);
+          //   CreditsManager.instance.addCredits(credits);
           await _checkSubscriptionStatus();
           Future.delayed(const Duration(seconds: 5), () {
             getUserCredit.fetch();
@@ -263,10 +272,13 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
           // For restore, check if user has active subscription and grant credits
           final hasSubscription = await RevenueCatService()
               .hasActiveSubscription();
-          if (hasSubscription) {
-            CreditsManager.instance.addCredits(100);
-          }
+          // if (hasSubscription) {
+          //   CreditsManager.instance.addCredits(100);
+          // }
           await _checkSubscriptionStatus();
+          Future.delayed(const Duration(seconds: 5), () {
+            getUserCredit.fetch();
+          });
           if (mounted) {
             Get.snackbar(
               '✅ Restored',
@@ -358,7 +370,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
                     final freeCredits = model?.data?.freeCredit ?? 0;
                     final totalCredits = model != null
                         ? (credits + freeCredits)
-                        : CreditsManager.instance.creditsNotifier.value;
+                        : 0;
 
                     return Column(
                       children: [
@@ -461,9 +473,9 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
               // ── CTA Button ──
               CustomButton(
                 text: _isPurchasing ? "Processing..." : _ctaLabel,
-                onPressed: _isPurchasing ? () {} : () => _handlePurchase(),
+                //   onPressed: _isPurchasing ? () {} : () => _handlePurchase(),
+                onPressed: _handlePurchase,
               ),
-
               SizedBox(height: 16.h),
 
               // ── Continue with Free ──
@@ -518,7 +530,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
                 children: [
                   TextButton(
                     onPressed: () {
-                      // TODO: Open Privacy Policy URL
+                      urlLunch("$baseUrl/page/privacy-policy");
                     },
                     child: Text(
                       "Privacy Policy",
@@ -538,7 +550,7 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
                   SizedBox(width: 20.w),
                   TextButton(
                     onPressed: () {
-                      // TODO: Open Terms of Use URL
+                      urlLunch("$baseUrl/page/terms-conditions");
                     },
                     child: Text(
                       "Terms of Use",

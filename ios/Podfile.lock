@@ -90,30 +90,30 @@ PODS:
     - GTMSessionFetcher/Core
   - image_picker_ios (0.0.1):
     - Flutter
-  - libwebp (1.5.0):
-    - libwebp/demux (= 1.5.0)
-    - libwebp/mux (= 1.5.0)
-    - libwebp/sharpyuv (= 1.5.0)
-    - libwebp/webp (= 1.5.0)
-  - libwebp/demux (1.5.0):
+  - libwebp (1.6.0):
+    - libwebp/demux (= 1.6.0)
+    - libwebp/mux (= 1.6.0)
+    - libwebp/sharpyuv (= 1.6.0)
+    - libwebp/webp (= 1.6.0)
+  - libwebp/demux (1.6.0):
     - libwebp/webp
-  - libwebp/mux (1.5.0):
+  - libwebp/mux (1.6.0):
     - libwebp/demux
-  - libwebp/sharpyuv (1.5.0)
-  - libwebp/webp (1.5.0):
+  - libwebp/sharpyuv (1.6.0)
+  - libwebp/webp (1.6.0):
     - libwebp/sharpyuv
   - permission_handler_apple (9.3.0):
     - Flutter
   - PromisesObjC (2.4.1)
   - PromisesSwift (2.4.1):
     - PromisesObjC (= 2.4.1)
-  - purchases_flutter (9.16.1):
+  - purchases_flutter (10.3.0):
     - Flutter
-    - PurchasesHybridCommon (= 17.55.1)
-  - PurchasesHybridCommon (17.55.1):
-    - RevenueCat (= 5.67.1)
+    - PurchasesHybridCommon (= 18.15.1)
+  - PurchasesHybridCommon (18.15.1):
+    - RevenueCat (= 5.78.0)
   - RecaptchaInterop (101.0.0)
-  - RevenueCat (5.67.1)
+  - RevenueCat (5.78.0)
   - sign_in_with_apple (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -208,14 +208,14 @@ SPEC CHECKSUMS:
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
-  libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
+  libwebp: af5937a13536ef73f3784d69cc342b98961acf33
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
   PromisesSwift: 217dea0fd5d2ad65222a109c48698add13cc1c5b
-  purchases_flutter: b44fcb4ff5e68a4dfe53fd0c339683803b04dd2c
-  PurchasesHybridCommon: ecd9d7c586287625f1225b8de5e24c1021502270
+  purchases_flutter: 81d3b317261b26756edbe4d2cc2cfd4686359e68
+  PurchasesHybridCommon: eed735a411c1aee8c05d62933fa7c4a40ede4009
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
-  RevenueCat: 9357239a9f0978285e68983637b8a602e65c94f0
+  RevenueCat: f3641992451c1426da8d8d1466cec3bbdb765962
   sign_in_with_apple: 5e34677a4e74c5f42760f41b3bbe05343e84d171
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b

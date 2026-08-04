@@ -49,8 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _checkSubscription() async {
     try {
-      final hasSubscription =
-          await RevenueCatService().hasActiveSubscription();
+      final hasSubscription = await RevenueCatService().hasActiveSubscription();
       if (mounted) {
         setState(() {
           _isSubscriber = hasSubscription;
@@ -571,9 +570,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.r),
           color: AppColors.c778DFF.withValues(alpha: 0.08),
-          border: Border.all(
-            color: AppColors.c778DFF.withValues(alpha: 0.15),
-          ),
+          border: Border.all(color: AppColors.c778DFF.withValues(alpha: 0.15)),
         ),
         child: Center(
           child: SizedBox(
@@ -581,8 +578,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             height: 24.w,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(AppColors.c778DFF),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.c778DFF),
             ),
           ),
         ),
@@ -601,11 +597,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF1A1060),
-                AppColors.c3B53FF,
-                Color(0xFF2606ED),
-              ],
+              colors: [Color(0xFF1A1060), AppColors.c3B53FF, Color(0xFF2606ED)],
             ),
             boxShadow: [
               BoxShadow(
@@ -664,10 +656,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Text(
                       'Tap to manage your plan or buy extra scans',
                       style: TextFontStyle.textstyle15c5465A6Manrope400
-                          .copyWith(
-                        color: AppColors.cC2C2C2,
-                        fontSize: 11.sp,
-                      ),
+                          .copyWith(color: AppColors.cC2C2C2, fontSize: 11.sp),
                     ),
                   ],
                 ),
@@ -687,7 +676,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     // ── FREE user: show upgrade banner image ─────────────────────────────
     return GestureDetector(
-      onTap: () => Get.to(() => PlanAndPricingScreen()),
+      onTap: () async {
+        await Get.to(() => PlanAndPricingScreen());
+        _checkSubscription();
+      },
       child: Image.asset(
         Assets.images.upgradePlanImage.path,
         fit: BoxFit.cover,
