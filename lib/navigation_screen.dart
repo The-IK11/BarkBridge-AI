@@ -20,8 +20,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   // List of screens for the navigation
   final List<Widget> _screens = [
-  //  AiResponseScreen(isAIResponseScreen: false),
-  AnalyzedHistoryScreen(),
+    //  AiResponseScreen(isAIResponseScreen: false),
+    AnalyzedHistoryScreen(),
     HomeScreen(),
     ProfileScreen(),
   ];
@@ -84,13 +84,17 @@ class CustomBottomNavBar extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () => onTap(0),
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Image.asset(
-                        height: 25.h,
-                        width: 25.h,
-                        Assets.icons.resultIcon.path,
-                        color: currentIndex == 0 ? Colors.white : null,
+                    child: CircleAvatar(
+                      radius: 35.r,
+                      backgroundColor: Colors.transparent,
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Image.asset(
+                          height: 25.h,
+                          width: 25.h,
+                          Assets.icons.resultIcon.path,
+                          color: currentIndex == 0 ? Colors.white : null,
+                        ),
                       ),
                     ),
                   ),
@@ -103,13 +107,17 @@ class CustomBottomNavBar extends StatelessWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () => onTap(2),
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Image.asset(
-                        height: 25.h,
-                        width: 25.h,
-                        Assets.icons.profileIcon.path,
-                        color: currentIndex == 2 ? Colors.white : null,
+                    child: CircleAvatar(
+                      radius: 35.r,
+                      backgroundColor: Colors.transparent,
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Image.asset(
+                          height: 25.h,
+                          width: 25.h,
+                          Assets.icons.profileIcon.path,
+                          color: currentIndex == 2 ? Colors.white : null,
+                        ),
                       ),
                     ),
                   ),

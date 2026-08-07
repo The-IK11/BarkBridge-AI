@@ -89,7 +89,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         // backgroundColor: Colors.transparent,
         title: "Edit profile",
       ),
-      child: Padding(
+      child: SingleChildScrollView(
         padding: EdgeInsets.all(UIHelper.kDefaultPadding()),
         child: Form(
           key: key,
@@ -178,13 +178,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               // Phone Field
               _buildLabel("Your Phone Number(Optional)"),
               AuthCommonTextFormField(
+                keyBoardType: TextInputType.phone,
                 controller: phoneController,
                 hintText: "Type your number",
                 fillcolor: AppColors.cFFFFFF.withAlpha(8),
                 borderColor: AppColors.cE6E6E8,
                 radius: BorderRadius.circular(16.r),
               ),
-              Spacer(),
+              //  Spacer(),
+              SizedBox(height: 40.h),
               CustomButton(
                 text: "Update",
                 onPressed: () {
