@@ -934,15 +934,20 @@ class _PlanAndPricingScreenState extends State<PlanAndPricingScreen>
                             style: TextFontStyle.textstyle28cFFFFFFManrope700
                                 .copyWith(fontSize: 24.sp),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 2.h),
-                            child: Text(
-                              priceSubtitle,
-                              style: TextFontStyle.textstyle16c5465A6Manrope500
-                                  .copyWith(
-                                    color: AppColors.cC2C2C2,
-                                    fontSize: 13.sp,
-                                  ),
+                          Flexible(
+                            fit: FlexFit.tight,
+
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 2.h),
+                              child: Text(
+                                priceSubtitle,
+                                style: TextFontStyle
+                                    .textstyle16c5465A6Manrope500
+                                    .copyWith(
+                                      color: AppColors.cC2C2C2,
+                                      fontSize: 13.sp,
+                                    ),
+                              ),
                             ),
                           ),
                         ],
