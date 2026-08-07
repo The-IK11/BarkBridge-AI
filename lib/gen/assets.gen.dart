@@ -155,6 +155,9 @@ class $AssetsImagesGen {
 class $AssetsLottieGen {
   const $AssetsLottieGen();
 
+  /// File path: assets/lottie/Pepitos Pet.json
+  String get pepitosPet => 'assets/lottie/Pepitos Pet.json';
+
   /// File path: assets/lottie/Wede_Animation.json
   String get wedeAnimation => 'assets/lottie/Wede_Animation.json';
 
@@ -233,6 +236,7 @@ class $AssetsLottieGen {
 
   /// List of all assets
   List<String> get values => [
+    pepitosPet,
     wedeAnimation,
     addToCart,
     birdRing,
