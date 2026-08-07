@@ -29,7 +29,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           imageUrl: Assets.images.onboarding1Image.path,
           title: "Your Dog Is Talking to You",
           subtitle:
-              "Record a howl and turn it into a message you can understand",
+              "Record a howl and turn it into a message you can understand", 
         );
       case 1:
         return OnboardingWidget(

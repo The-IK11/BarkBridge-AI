@@ -14,6 +14,7 @@ import 'package:barkbridgeai/gen/colors.gen.dart';
 import 'package:barkbridgeai/helpers/ui_helpers.dart';
 import 'package:barkbridgeai/networks/api_access.dart';
 import 'package:barkbridgeai/networks/endpoints.dart';
+import 'package:barkbridgeai/services/cache_manager/history_cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -30,6 +31,7 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
   static const String baseUrl = 'https://barkbridgeai.tech/';
 
   final ScrollController _scrollController = ScrollController();
+  final HistoryCacheManager _cache = HistoryCacheManager.instance;
 
   // ── Accumulated list across all pages ──
   final List<AnalyzedHistoryScanItem> _allItems = [];
@@ -42,7 +44,15 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _fetchPage(page: 1, isRefresh: true);
+
+    // ── Restore from cache if available, otherwise fetch from API ──
+    if (_cache.hasData) {
+      _allItems.addAll(_cache.items);
+      _currentPage = _cache.currentPage;
+      _lastPage = _cache.lastPage;
+    } else {
+      _fetchPage(page: 1, isRefresh: true);
+    }
   }
 
   @override
@@ -84,6 +94,21 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
       _allItems.addAll(newItems);
       _currentPage = pagination?.currentPage ?? page;
       _lastPage = pagination?.lastPage ?? 1;
+
+      // ── Write back to cache ──
+      if (isRefresh) {
+        _cache.setInitialData(
+          items: _allItems,
+          currentPage: _currentPage,
+          lastPage: _lastPage,
+        );
+      } else {
+        _cache.appendPage(
+          items: newItems,
+          currentPage: _currentPage,
+          lastPage: _lastPage,
+        );
+      }
     });
   }
 
@@ -101,6 +126,7 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
 
   // ── Pull to refresh ────────────────────────────────────────────────────────
   Future<void> _onRefresh() async {
+    _cache.clearCache();
     await _fetchPage(page: 1, isRefresh: true);
   }
 

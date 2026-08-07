@@ -10,12 +10,24 @@ class VideoThumbnailHelper {
 
   static final Dio _dio = Dio();
 
+  /// In-memory cache so thumbnails survive widget rebuilds / navigation.
+  static final Map<String, Uint8List> _memoryCache = {};
+
+  /// Clear the in-memory thumbnail cache (e.g. on logout or pull-to-refresh).
+  static void clearCache() => _memoryCache.clear();
+
   static Future<Uint8List?> getThumbnailFromUrl({
     required String url,
     int timeMs = 0,
     int quality = 75,
     int maxWidth = 300,
   }) async {
+    // ── Return from memory cache instantly ──
+    if (_memoryCache.containsKey(url)) {
+      debugPrint('[Thumbnail] ⚡ Memory-cache hit: $url');
+      return _memoryCache[url];
+    }
+
     File? tempFile;
     try {
       debugPrint('[Thumbnail] ▶ Starting for URL: $url');
@@ -39,8 +51,12 @@ class VideoThumbnailHelper {
           },
         );
 
-        debugPrint('[Thumbnail] ✅ Download done. Status: ${response.statusCode}');
-        debugPrint('[Thumbnail] 📦 Bytes received: ${(response.data as List).length}');
+        debugPrint(
+          '[Thumbnail] ✅ Download done. Status: ${response.statusCode}',
+        );
+        debugPrint(
+          '[Thumbnail] 📦 Bytes received: ${(response.data as List).length}',
+        );
 
         await tempFile.writeAsBytes(response.data);
         debugPrint('[Thumbnail] ✅ Written to disk: ${tempFile.path}');
@@ -71,7 +87,11 @@ class VideoThumbnailHelper {
       if (bytes == null) {
         debugPrint('[Thumbnail] ❌ thumbnailData returned null');
       } else {
-        debugPrint('[Thumbnail] ✅ Thumbnail extracted! Size: ${bytes.length} bytes');
+        debugPrint(
+          '[Thumbnail] ✅ Thumbnail extracted! Size: ${bytes.length} bytes',
+        );
+        // ── Store in memory cache ──
+        _memoryCache[url] = bytes;
       }
 
       return bytes;

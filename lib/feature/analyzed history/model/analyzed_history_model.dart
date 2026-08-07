@@ -4,12 +4,7 @@ class AnalyzedHistoryDataModel {
   final AnalyzedHistoryPagination? data;
   final int? code;
 
-  AnalyzedHistoryDataModel({
-    this.success,
-    this.message,
-    this.data,
-    this.code,
-  });
+  AnalyzedHistoryDataModel({this.success, this.message, this.data, this.code});
 
   factory AnalyzedHistoryDataModel.fromJson(Map<String, dynamic> json) {
     return AnalyzedHistoryDataModel(
@@ -23,11 +18,11 @@ class AnalyzedHistoryDataModel {
   }
 
   Map<String, dynamic> toJson() => {
-        'success': success,
-        'message': message,
-        'data': data?.toJson(),
-        'code': code,
-      };
+    'success': success,
+    'message': message,
+    'data': data?.toJson(),
+    'code': code,
+  };
 }
 
 class AnalyzedHistoryPagination {
@@ -84,20 +79,20 @@ class AnalyzedHistoryPagination {
   }
 
   Map<String, dynamic> toJson() => {
-        'current_page': currentPage,
-        'data': data?.map((e) => e.toJson()).toList(),
-        'first_page_url': firstPageUrl,
-        'from': from,
-        'last_page': lastPage,
-        'last_page_url': lastPageUrl,
-        'links': links?.map((e) => e.toJson()).toList(),
-        'next_page_url': nextPageUrl,
-        'path': path,
-        'per_page': perPage,
-        'prev_page_url': prevPageUrl,
-        'to': to,
-        'total': total,
-      };
+    'current_page': currentPage,
+    'data': data?.map((e) => e.toJson()).toList(),
+    'first_page_url': firstPageUrl,
+    'from': from,
+    'last_page': lastPage,
+    'last_page_url': lastPageUrl,
+    'links': links?.map((e) => e.toJson()).toList(),
+    'next_page_url': nextPageUrl,
+    'path': path,
+    'per_page': perPage,
+    'prev_page_url': prevPageUrl,
+    'to': to,
+    'total': total,
+  };
 }
 
 class AnalyzedHistoryScanItem {
@@ -142,7 +137,10 @@ class AnalyzedHistoryScanItem {
       fileHash: json['file_hash'],
       filePath: json['file_path'],
       result: json['result'] != null
-          ? AnalyzedHistoryScanResult.fromJson(json['result'], json['media_type'])
+          ? AnalyzedHistoryScanResult.fromJson(
+              json['result'],
+              json['media_type'],
+            )
           : null,
       ipAddress: json['ip_address'],
       modelUsed: json['model_used'],
@@ -157,20 +155,20 @@ class AnalyzedHistoryScanItem {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'user_id': userId,
-        'media_type': mediaType,
-        'file_hash': fileHash,
-        'file_path': filePath,
-        'result': result?.toJson(),
-        'ip_address': ipAddress,
-        'model_used': modelUsed,
-        'estimated_tokens': estimatedTokens,
-        'blocked': blocked != null ? (blocked! ? 1 : 0) : null,
-        'block_reason': blockReason,
-        'created_at': createdAt,
-        'updated_at': updatedAt,
-      };
+    'id': id,
+    'user_id': userId,
+    'media_type': mediaType,
+    'file_hash': fileHash,
+    'file_path': filePath,
+    'result': result?.toJson(),
+    'ip_address': ipAddress,
+    'model_used': modelUsed,
+    'estimated_tokens': estimatedTokens,
+    'blocked': blocked != null ? (blocked! ? 1 : 0) : null,
+    'block_reason': blockReason,
+    'created_at': createdAt,
+    'updated_at': updatedAt,
+  };
 }
 
 class AnalyzedHistoryScanResult {
@@ -211,7 +209,9 @@ class AnalyzedHistoryScanResult {
   bool get isVideoResult => mediaType == 'video';
 
   factory AnalyzedHistoryScanResult.fromJson(
-      Map<String, dynamic> json, String? mediaType) {
+    Map<String, dynamic> json,
+    String? mediaType,
+  ) {
     return AnalyzedHistoryScanResult(
       mediaType: mediaType,
       confidenceScore: json['confidence_score'],
@@ -230,23 +230,32 @@ class AnalyzedHistoryScanResult {
       behavioralFlags: (json['behavioral_flags'] as List<dynamic>?)
           ?.map((e) => e.toString())
           .toList(),
-      enrichmentNeeds: json['enrichment_needs'],
+      enrichmentNeeds: _parseStringOrList(json['enrichment_needs']),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'confidence_score': confidenceScore,
-        'mood': mood,
-        'behavior': behavior,
-        'body_language': bodyLanguage?.toJson(),
-        'training_insight': trainingInsight,
-        'safety_assessment': safetyAssessment,
-        'activity': activity,
-        'energy_level': energyLevel,
-        'social_behavior': socialBehavior,
-        'behavioral_flags': behavioralFlags,
-        'enrichment_needs': enrichmentNeeds,
-      };
+    'confidence_score': confidenceScore,
+    'mood': mood,
+    'behavior': behavior,
+    'body_language': bodyLanguage?.toJson(),
+    'training_insight': trainingInsight,
+    'safety_assessment': safetyAssessment,
+    'activity': activity,
+    'energy_level': energyLevel,
+    'social_behavior': socialBehavior,
+    'behavioral_flags': behavioralFlags,
+    'enrichment_needs': enrichmentNeeds,
+  };
+
+  /// Safely parses a JSON value that may arrive as either a `String` or a
+  /// `List<dynamic>`. Lists are joined with newlines into a single string.
+  static String? _parseStringOrList(dynamic value) {
+    if (value == null) return null;
+    if (value is String) return value;
+    if (value is List) return value.map((e) => e.toString()).join('\n');
+    return value.toString();
+  }
 }
 
 class AnalyzedHistoryBodyLanguage {
@@ -275,12 +284,12 @@ class AnalyzedHistoryBodyLanguage {
   }
 
   Map<String, dynamic> toJson() => {
-        'ears': ears,
-        'eyes': eyes,
-        'tail': tail,
-        'mouth': mouth,
-        'overall_posture': overallPosture,
-      };
+    'ears': ears,
+    'eyes': eyes,
+    'tail': tail,
+    'mouth': mouth,
+    'overall_posture': overallPosture,
+  };
 }
 
 class AnalyzedHistoryPaginationLink {
@@ -289,12 +298,7 @@ class AnalyzedHistoryPaginationLink {
   final int? page;
   final bool? active;
 
-  AnalyzedHistoryPaginationLink({
-    this.url,
-    this.label,
-    this.page,
-    this.active,
-  });
+  AnalyzedHistoryPaginationLink({this.url, this.label, this.page, this.active});
 
   factory AnalyzedHistoryPaginationLink.fromJson(Map<String, dynamic> json) {
     return AnalyzedHistoryPaginationLink(
@@ -306,9 +310,9 @@ class AnalyzedHistoryPaginationLink {
   }
 
   Map<String, dynamic> toJson() => {
-        'url': url,
-        'label': label,
-        'page': page,
-        'active': active,
-      };
+    'url': url,
+    'label': label,
+    'page': page,
+    'active': active,
+  };
 }
