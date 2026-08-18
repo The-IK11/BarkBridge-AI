@@ -1,6 +1,7 @@
 import 'package:barkbridgeai/constants/app_constants.dart';
 import 'package:barkbridgeai/helpers/di.dart';
 import 'package:barkbridgeai/helpers/social_auth.dart';
+import 'package:barkbridgeai/services/cache_manager/history_cache_manager.dart';
 import 'package:barkbridgeai/services/revenuecat_service/revenue_cat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -379,6 +380,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       .then((v) {
                                         deleteReasonController.clear();
                                         if (v) {
+                                          HistoryCacheManager.instance.clearCache();
                                           Get.offAll(() => SignInScreen());
                                         }
                                       });
@@ -461,6 +463,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .then((v) {
                                   if (v) {
                                     RevenueCatService().logoutUser();
+                                    HistoryCacheManager.instance.clearCache();
                                     Get.offAll(() => SignInScreen());
                                   }
                                 });

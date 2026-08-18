@@ -43,6 +43,8 @@ void main() async {
     debugPrint('⚠️ RevenueCat init failed (non-fatal): $e');
   }
 
+
+
   runApp(const MyApp());
 }
 

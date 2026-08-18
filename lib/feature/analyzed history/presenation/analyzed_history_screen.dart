@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -19,6 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:lottie/lottie.dart';
+
+import '../../../gen/assets.gen.dart';
 
 class AnalyzedHistoryScreen extends StatefulWidget {
   const AnalyzedHistoryScreen({super.key});
@@ -114,7 +116,8 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
 
   // ── Scroll listener ────────────────────────────────────────────────────────
   void _onScroll() {
-    final isAtBottom = _scrollController.position.pixels >=
+    final isAtBottom =
+        _scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200;
 
     final hasMorePages = _currentPage < _lastPage;
@@ -133,10 +136,7 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return GlowBackground(
-      appBar: CustomAppBar(
-        title: "Analyzed History",
-        showBackButton: false,
-      ),
+      appBar: CustomAppBar(title: "Analyzed History", showBackButton: false),
       child: SafeArea(
         child: RefreshIndicator(
           onRefresh: _onRefresh,
@@ -148,17 +148,28 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
               if (_isRefreshing && _allItems.isEmpty) {
                 return const WaitingWidget();
               }
-      
+
               // ── Empty state ──
               if (_allItems.isEmpty) {
                 return Center(
-                  child: Text(
-                    "No analysis data available",
-                    style: TextFontStyle.textstyle14cFFFFFFManrope500,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+
+                    children: [
+                      SizedBox(
+                        height: 180.h,
+                        width: 250.w,
+                        child: Lottie.asset(Assets.lottie.emptyDog),
+                      ),
+                      Text(
+                        "No analysis data available",
+                        style: TextFontStyle.textstyle14cFFFFFFManrope500,
+                      ),
+                    ],
                   ),
                 );
               }
-      
+
               // ── List ──
               return CustomScrollView(
                 controller: _scrollController,
@@ -179,11 +190,9 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
                       },
                     ),
                   ),
-      
+
                   // ── Bottom loader ──
-                  SliverToBoxAdapter(
-                    child: _buildBottomLoader(),
-                  ),
+                  SliverToBoxAdapter(child: _buildBottomLoader()),
                 ],
               );
             },
@@ -206,7 +215,9 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
     }
 
     // Show "no more data" hint when all pages loaded
-    if (_currentPage >= _lastPage && _allItems.isNotEmpty &&_allItems.length >= 10) {
+    if (_currentPage >= _lastPage &&
+        _allItems.isNotEmpty &&
+        _allItems.length >= 10) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h),
         child: Center(
@@ -226,11 +237,7 @@ class HistoryCard extends StatefulWidget {
   final AnalyzedHistoryScanItem item;
   final String baseUrl;
 
-  const HistoryCard({
-    super.key,
-    required this.item,
-    required this.baseUrl,
-  });
+  const HistoryCard({super.key, required this.item, required this.baseUrl});
 
   @override
   State<HistoryCard> createState() => _HistoryCardState();
@@ -256,9 +263,12 @@ class _HistoryCardState extends State<HistoryCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => AnalyzedHistoryDetailsScreen(isAIResponseScreen: true,
-        aiResponse: widget.item,
-        ));
+        Get.to(
+          () => AnalyzedHistoryDetailsScreen(
+            isAIResponseScreen: true,
+            aiResponse: widget.item,
+          ),
+        );
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20.r),
@@ -271,7 +281,12 @@ class _HistoryCardState extends State<HistoryCard> {
               color: Colors.lightBlue.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20.r),
               border: Border.all(
-                color: const Color.fromARGB(251, 33, 75, 243).withValues(alpha: 0.3),
+                color: const Color.fromARGB(
+                  251,
+                  33,
+                  75,
+                  243,
+                ).withValues(alpha: 0.3),
                 width: 1.5,
               ),
             ),
@@ -322,7 +337,10 @@ class _HistoryCardState extends State<HistoryCard> {
           child: SizedBox(
             width: 24,
             height: 24,
-            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Colors.white,
+            ),
           ),
         ),
       );
@@ -332,7 +350,11 @@ class _HistoryCardState extends State<HistoryCard> {
       return const ColoredBox(
         color: Colors.black26,
         child: Center(
-          child: Icon(Icons.videocam_off_rounded, color: Colors.white54, size: 32),
+          child: Icon(
+            Icons.videocam_off_rounded,
+            color: Colors.white54,
+            size: 32,
+          ),
         ),
       );
     }

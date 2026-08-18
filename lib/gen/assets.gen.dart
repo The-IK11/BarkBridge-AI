@@ -155,6 +155,12 @@ class $AssetsImagesGen {
 class $AssetsLottieGen {
   const $AssetsLottieGen();
 
+  /// File path: assets/lottie/Empty-Search.json
+  String get emptySearch => 'assets/lottie/Empty-Search.json';
+
+  /// File path: assets/lottie/Happy Dog.json
+  String get happyDog => 'assets/lottie/Happy Dog.json';
+
   /// File path: assets/lottie/Pepitos Pet.json
   String get pepitosPet => 'assets/lottie/Pepitos Pet.json';
 
@@ -172,6 +178,9 @@ class $AssetsLottieGen {
 
   /// File path: assets/lottie/cart_is_empty.json
   String get cartIsEmpty => 'assets/lottie/cart_is_empty.json';
+
+  /// File path: assets/lottie/empty_dog.json
+  String get emptyDog => 'assets/lottie/empty_dog.json';
 
   /// File path: assets/lottie/empty_screen.json
   String get emptyScreen => 'assets/lottie/empty_screen.json';
@@ -236,12 +245,15 @@ class $AssetsLottieGen {
 
   /// List of all assets
   List<String> get values => [
+    emptySearch,
+    happyDog,
     pepitosPet,
     wedeAnimation,
     addToCart,
     birdRing,
     cameraBackground,
     cartIsEmpty,
+    emptyDog,
     emptyScreen,
     favourite,
     hamburger,

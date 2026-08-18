@@ -127,6 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     AuthCommonTextFormField(
                       validator: passwordValidator,
                       controller: passwordController,
+                      isObscure: true,
                       hintText: "Type your password",
                       fillcolor: AppColors.cFFFFFF.withAlpha(8),
                       radius: BorderRadius.circular(16.r),
@@ -280,66 +281,66 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ],
               ),
               SizedBox(height: 30.h),
+              if (Platform.isIOS)
+                // Social Buttons
+                CustomButton(
+                  buttonType: ButtonType.secondary,
+                  text: "Sign in with Apple",
+                  onPressed: () async {
+                    // Manually track and control the loading dialog so we can
+                    // dismiss it ourselves before Get.offAll() — preventing
+                    // Navigator.pop() from closing NavigationScreen.
+                    bool isDialogOpen = false;
 
-              // Social Buttons
-              CustomButton(
-                buttonType: ButtonType.secondary,
-                text: "Sign in with Apple",
-                onPressed: () async {
-                  // Manually track and control the loading dialog so we can
-                  // dismiss it ourselves before Get.offAll() — preventing
-                  // Navigator.pop() from closing NavigationScreen.
-                  bool isDialogOpen = false;
-
-                  void showLoading() {
-                    isDialogOpen = true;
-                    showDialog(
-                      context: NavigationService.context,
-                      barrierDismissible: false,
-                      builder: (ctx) => loadingIndicatorCircle(context: ctx),
-                    ).then((_) => isDialogOpen = false);
-                  }
-
-                  void dismissLoading() {
-                    if (isDialogOpen) {
-                      isDialogOpen = false;
-                      NavigationService.goBack;
+                    void showLoading() {
+                      isDialogOpen = true;
+                      showDialog(
+                        context: NavigationService.context,
+                        barrierDismissible: false,
+                        builder: (ctx) => loadingIndicatorCircle(context: ctx),
+                      ).then((_) => isDialogOpen = false);
                     }
-                  }
 
-                  showLoading();
-                  try {
-                    await SocialAuthHelper.signInWithApple(
-                      onSuccess: (user, token, userName) async {
-                        // Dismiss Apple-auth loading before API loading starts
-                        dismissLoading();
-                        await Future(() async {
-                          final isSuccess = await postAppleLogin.postData(
-                            data: {'provider': 'apple', 'token': token},
-                          );
+                    void dismissLoading() {
+                      if (isDialogOpen) {
+                        isDialogOpen = false;
+                        NavigationService.goBack;
+                      }
+                    }
 
-                          if (isSuccess) {
-                            await RevenueCatService().loginUser(
-                              appData.read(kKeyUserID).toString(),
+                    showLoading();
+                    try {
+                      await SocialAuthHelper.signInWithApple(
+                        onSuccess: (user, token, userName) async {
+                          // Dismiss Apple-auth loading before API loading starts
+                          dismissLoading();
+                          await Future(() async {
+                            final isSuccess = await postAppleLogin.postData(
+                              data: {'provider': 'apple', 'token': token},
                             );
-                            return true;
-                          }
-                          return false;
-                        }).waitingForFutureWithoutBg().then((v) {
-                          if (v == true) {
-                            Get.offAll(() => NavigationScreen());
-                          }
-                        });
-                      },
-                    );
-                  } finally {
-                    // Dismiss if user cancelled Apple sheet or an error occurred
-                    dismissLoading();
-                  }
-                },
-                iconColor: AppColors.cFFFFFF,
-                imageUrl: Assets.icons.appleIcon.path,
-              ),
+
+                            if (isSuccess) {
+                              await RevenueCatService().loginUser(
+                                appData.read(kKeyUserID).toString(),
+                              );
+                              return true;
+                            }
+                            return false;
+                          }).waitingForFutureWithoutBg().then((v) {
+                            if (v == true) {
+                              Get.offAll(() => NavigationScreen());
+                            }
+                          });
+                        },
+                      );
+                    } finally {
+                      // Dismiss if user cancelled Apple sheet or an error occurred
+                      dismissLoading();
+                    }
+                  },
+                  iconColor: AppColors.cFFFFFF,
+                  imageUrl: Assets.icons.appleIcon.path,
+                ),
               SizedBox(height: 16.h),
               CustomButton(
                 buttonType: ButtonType.secondary,
