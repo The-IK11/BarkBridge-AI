@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:barkbridgeai/common_widgets/auth_common_text_form_field.dart';
+import 'package:barkbridgeai/common_widgets/phone_field_with_code.dart';
 import 'package:barkbridgeai/common_widgets/custom_button.dart';
 import 'package:barkbridgeai/common_widgets/custom_toast.dart';
 import 'package:barkbridgeai/common_widgets/glow_background.dart';
@@ -39,26 +40,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  final GlobalKey<PhoneFieldWithCodeState> _phoneFieldKey =
+      GlobalKey<PhoneFieldWithCodeState>();
 
   @override
   void initState() {
     super.initState();
-    nameController;
-    emailController;
-    phoneController;
-    passwordController;
-    confirmPasswordController;
   }
 
   @override
   void dispose() {
     nameController.dispose();
     emailController.dispose();
-    phoneController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
@@ -112,14 +108,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(height: 20.h),
                     // Phone Number Field
                     _buildLabel("Phone Number(Optional)"),
-                    AuthCommonTextFormField(
-                      keyBoardType: TextInputType.phone,
-                      //   validator: validatePhoneNumber,
-                      controller: phoneController,
-                      hintText: "Enter your phone number",
-                      fillcolor: AppColors.cFFFFFF.withAlpha(8),
+                    PhoneFieldWithCode(
+                      key: _phoneFieldKey,
+                      fillColor: AppColors.cFFFFFF.withAlpha(8),
                       radius: BorderRadius.circular(16.r),
-                      //isObscure: true,
                     ),
                     SizedBox(height: 20.h),
                     // Phone Number Field
@@ -235,14 +227,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       );
                       return; // Stop further execution if terms are not agreed
                     }
+                    final phone =
+                        _phoneFieldKey.currentState?.fullPhoneNumber ?? '';
                     await postRegister
                         .postData(
                           data: {
                             "name": nameController.text,
                             "email": emailController.text,
-                            "phone": phoneController.text.isEmpty
-                                ? null
-                                : phoneController.text,
+                            "phone": phone.isEmpty ? null : phone,
                             "password": passwordController.text,
                             "password_confirmation":
                                 confirmPasswordController.text,

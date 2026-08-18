@@ -5,6 +5,7 @@ import 'package:barkbridgeai/common_widgets/custom_app_bar.dart';
 import 'package:barkbridgeai/common_widgets/custom_button.dart';
 import 'package:barkbridgeai/common_widgets/custom_network_image.dart';
 import 'package:barkbridgeai/common_widgets/glow_background.dart';
+import 'package:barkbridgeai/common_widgets/phone_field_with_code.dart';
 import 'package:barkbridgeai/constants/text_font_style.dart';
 import 'package:barkbridgeai/constants/validator.dart';
 import 'package:barkbridgeai/feature/profile/model/profile_model.dart';
@@ -27,7 +28,8 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController nameController;
   late TextEditingController emailController;
-  late TextEditingController phoneController;
+  final GlobalKey<PhoneFieldWithCodeState> _phoneFieldKey =
+      GlobalKey<PhoneFieldWithCodeState>();
 
   File? _pickedImage;
   final _imagePicker = ProfileImagePicker();
@@ -38,25 +40,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     // Initialize controllers with user data
     nameController = TextEditingController(text: widget.userData?.name ?? '');
     emailController = TextEditingController(text: widget.userData?.email ?? '');
-    phoneController = TextEditingController(text: widget.userData?.phone ?? '');
   }
 
   @override
   void dispose() {
     nameController.dispose();
     emailController.dispose();
-    phoneController.dispose();
     super.dispose();
   }
 
   Future<void> _updateProfile() async {
     final name = nameController.text.trim();
-    final phone = phoneController.text.trim();
-
-    // Validate inputs
+    final phone = _phoneFieldKey.currentState?.fullPhoneNumber ?? '';
 
     // Prepare data for API
-    final Map<String, dynamic> updateData = {'name': name, 'phone': phone};
+    final Map<String, dynamic> updateData = {
+      'name': name,
+      'phone': phone.isEmpty ? null : phone,
+    };
 
     // Add avatar if a new image was picked
     if (_pickedImage != null) {
@@ -177,11 +178,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               SizedBox(height: 25.h),
               // Phone Field
               _buildLabel("Your Phone Number(Optional)"),
-              AuthCommonTextFormField(
-                keyBoardType: TextInputType.phone,
-                controller: phoneController,
-                hintText: "Type your number",
-                fillcolor: AppColors.cFFFFFF.withAlpha(8),
+              PhoneFieldWithCode(
+                key: _phoneFieldKey,
+                initialFullPhone: widget.userData?.phone,
+                fillColor: AppColors.cFFFFFF.withAlpha(8),
                 borderColor: AppColors.cE6E6E8,
                 radius: BorderRadius.circular(16.r),
               ),
