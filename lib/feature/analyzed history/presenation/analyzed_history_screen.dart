@@ -17,7 +17,6 @@ import 'package:barkbridgeai/services/cache_manager/history_cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../gen/assets.gen.dart';
@@ -47,14 +46,15 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
 
-    // ── Restore from cache if available, otherwise fetch from API ──
+    // ── Restore from cache if available for instant display ──
     if (_cache.hasData) {
       _allItems.addAll(_cache.items);
       _currentPage = _cache.currentPage;
       _lastPage = _cache.lastPage;
-    } else {
-      _fetchPage(page: 1, isRefresh: true);
     }
+
+    // ── Always fetch latest data from API on screen entry ──
+    _fetchPage(page: 1, isRefresh: true);
   }
 
   @override
@@ -80,7 +80,7 @@ class _AnalyzedHistoryScreenState extends State<AnalyzedHistoryScreen> {
     );
 
     final response = getAnalysisHistoryRx.getStream.value;
-    final pagination = response?.data;
+    final pagination = response.data;
     final newItems = pagination?.data ?? [];
 
     setState(() {
