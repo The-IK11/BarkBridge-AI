@@ -140,7 +140,7 @@ class _UploadMediaScreenState extends State<FileUploadSpeedScreen>
       ),
       child: Column(
         children: [
-          SizedBox(height: kToolbarHeight + 30.h),
+          SizedBox(height: kToolbarHeight + 50.h),
 
           // Title Text
           Padding(
