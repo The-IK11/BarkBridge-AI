@@ -27,30 +27,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         return OnboardingWidget(
           key: ValueKey(0),
           imageUrl: Assets.images.onboarding1Image.path,
-          title: "Your Dog Is Talking to You",
+          title: "Understand Your Dog's Behavior",
           subtitle:
-              "Record a howl and turn it into a message you can understand", 
+              "Record a dog video and use AI to explore what the behavior may indicate",
         );
       case 1:
         return OnboardingWidget(
           key: ValueKey(1),
           imageUrl: Assets.images.onboarding2Image.path,
-          title: "Hear What Your Dog Means",
-          subtitle: "Turn dog howls into real understanding",
+          title: "Explore Your Dog's Behavior",
+          subtitle:
+              "AI analyzes your dog's video to identify possible behavioral cues.",
         );
       case 2:
         return OnboardingWidget(
           key: ValueKey(2),
           imageUrl: Assets.images.onboarding3Image.path,
-          title: "Every Howl Has a Meaning",
-          subtitle: "Record your dog’s voice and discover what they want.",
+          title: "Discover AI-Powered Insights",
+          subtitle:
+              "Analyze your dog's sounds, movement, and behavior for possible insights.",
         );
       case 3:
         return OnboardingWidget(
           key: ValueKey(3),
           imageUrl: Assets.images.onboarding4Image.path,
-          title: "Dogs Speak. We Translate.",
-          subtitle: "Record a howl and uncover the message behind it.",
+          title: "Better Understand Your Dog",
+          subtitle:
+              "Upload or record a video to explore possible interpretations of your dog's behavior.",
         );
       default:
         return const SizedBox.shrink();

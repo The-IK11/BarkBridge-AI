@@ -43,8 +43,6 @@ void main() async {
     debugPrint('⚠️ RevenueCat init failed (non-fatal): $e');
   }
 
-
-
   runApp(const MyApp());
 }
 
@@ -116,7 +114,7 @@ class UtilScreenMobile extends StatelessWidget {
             },
             navigatorKey: NavigationService.navigatorKey,
             onGenerateRoute: RouteGenerator.generateRoute,
-            home: Loading(), //
+            home: OnboardingScreen(), //
           ),
         );
       },

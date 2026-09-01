@@ -173,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             _staggered(
               1,
               Text(
-                "Translating Dog Sounds",
+                "AI Dog Behavior Analysis",
                 style: TextFontStyle.textstyle20cFFFFFFManrope600.copyWith(
                   fontSize: 35.sp,
                   letterSpacing: 4,
@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             _staggered(
               2,
               Text(
-                "Capture the howl to hear what your dog wants to say",
+                "Explore your dog's behavior through video",
                 style: TextFontStyle.textstyle16c5465A6Manrope500.copyWith(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
